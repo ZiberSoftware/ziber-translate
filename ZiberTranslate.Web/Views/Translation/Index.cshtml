@@ -1,0 +1,30 @@
+﻿@model ZiberTranslate.Web.ViewModels.TranslationsViewModel
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@section scripts {
+<script src="@Url.Content("~/Scripts/translations.js")"></script>
+}
+
+@Html.ActionLink("Review changes", "Index", "Changeset")
+
+<ul>
+    <li>
+        <a href="#">@Model.NeedsReviewing</a>
+    </li>
+    <li>
+        <a href="#">@Model.NeedsTranslations</a>
+    </li>
+    <li>
+        <a href="#">@Model.Reviewed</a>
+    </li>
+</ul>
+
+<table class="translations">
+    @foreach(var t in Model.Translations)
+    {
+        Html.RenderPartial("TranslationRow", t);
+    }
+</table>

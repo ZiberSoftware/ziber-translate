@@ -1,0 +1,146 @@
+body
+{
+    font-size: .85em;font-family: arial;a
+    color: #232323;
+    background-color: #fff;
+}
+
+header,
+footer,
+nav,
+section {
+    display: block;
+}
+
+table 
+{
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+table.translations
+{ 
+    width: 100%;
+    color: #333;
+    font-size: 12px;
+}
+
+table.translations th, table.translations td 
+{
+    border-bottom: 1px dotted #CCC;
+    padding: 5px;
+    vertical-align: middle;
+}
+table.translations th.key 
+{
+    width: 250px;
+}
+table.translations td.translation .edit
+{
+    padding: 5px 7px;
+    display: block;
+    margin: 0pt;
+}
+table.translations td.translation .field 
+{
+    padding: 4px 5px 3px;
+    margin: : 0pt;
+    height: auto;
+    border-radius: 3px;
+    border: 1px solid #A0A6B3;
+    color: #717B80;
+    background-color: #FFF;
+}
+table.translations td.translation textarea 
+{
+    display: block;
+    width: 100%;
+    border: none;
+    background-color: transparent;
+    font-size: 12px;
+    font-family: arial;
+}
+
+table.translations td.spacer 
+{
+    width: 24px;
+}
+
+table.translations td.translation .edit:hover
+{
+    background-color: #FFFFDD;
+    border-radius: 3px;
+    border: 1px solid #CCC;
+    padding: 4px 6px;
+}
+
+table.translations td.actions a
+{
+    display: none;
+    background-image: url('images/edit_actions.png');
+    text-indent: -4000px;
+}
+table.translations tr:hover .view-actions a { display: inline-block; }
+table.translations td.actions .unapprove 
+{
+    width: 16px;
+    height: 16px;
+    background-position: -27px -27px;
+    display: inline-block;
+}
+table.translations td.actions .approve 
+{
+    width: 16px;
+    height: 16px;
+    background-position: -0px -27px;
+}
+table.translations td.actions .delete 
+{
+    width: 16px;
+    height: 16px;
+    background-position: -0px -0px;
+    display: inline-block;
+}
+table.translations td.actions .delete:hover 
+{
+    background-position: -27px -0px;
+}
+
+table.translations .spacer span
+{
+    display: block;
+    float: right;
+    width: 16px;
+    height: 16px;
+    background-image: url('images/arrows.png');
+}
+table.translations .spacer span.vote-count 
+{
+    background-image: none;
+    background-color: #004400;
+    color: #FFF;
+    float: left;
+    display: block;
+    font-size: 8px;
+    margin-top: 10px;
+    margin-left: -5px;
+    padding:0 3px;
+    width: auto;
+    height: auto;
+}
+table.translations .spacer.reviewed span {
+    background-position: -27px -0px;
+}
+
+table.translations ins 
+{
+    background-color: #AAFFAA;
+    text-decoration: none;
+}
+
+table.translations del 
+{
+    background-color: #FFAAAA;
+    color: #AA6666;
+    text-decoration: line-throught;
+}

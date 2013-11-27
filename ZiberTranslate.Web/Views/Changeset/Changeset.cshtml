@@ -1,0 +1,31 @@
+﻿@model ZiberTranslate.Web.ViewModels.ChangesetViewModel
+@{
+    ViewBag.Title = "Changeset";
+}
+@section scripts {
+<script src="@Url.Content("~/Scripts/translations.js")"></script>
+}
+
+
+<h2>Changeset</h2>
+<div id="translations">
+@if(Model.Changes.Any())
+{
+    foreach (var g in Model.Changes.GroupBy(x => new { x.SetId, x.Language, x.SetName }))
+    {
+        <h1>@g.Key.SetName (@g.Key.Language)</h1>
+        <table class="translations">
+            @foreach (var translation in g)
+            {
+                Html.RenderPartial("TranslationRow", translation);
+            }
+        </table>
+    }
+    using(Html.BeginForm("Submit", "Changeset"))
+    {
+        <input type="submit"/>
+    }
+}
+    
+    @Html.ActionLink("Verder met vertalen", "Index", "Home")
+</div>

@@ -1,0 +1,16 @@
+﻿@model ZiberTranslate.Web.ViewModels.ReviewViewModel
+           
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<ul>
+    @foreach (var changedSet in Model.ChangedSets)
+    {
+        <li>
+            <a href="@Url.Action("Set", new { id = changedSet.SetId, language = changedSet.Language})">@changedSet.SetName (@changedSet.Language)</a>
+        </li>
+    }
+</ul>
