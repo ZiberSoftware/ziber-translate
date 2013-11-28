@@ -46,7 +46,7 @@ namespace ZiberTranslate.Web
         private static void BuildSchema(NHibernate.Cfg.Configuration config)
         {
             var export = new SchemaExport(config);
-            export.SetOutputFile(@"d:\output.sql");
+            export.SetOutputFile(@"c:\output.sql");
             export.Execute(true, false, false);
         }
 
