@@ -183,3 +183,5 @@ $RECYCLE.BIN/
 #Nuget files
 packages/*
 !packages/repositories.config
+
+App_Data/*
