@@ -36,5 +36,11 @@ namespace ZiberTranslate.Web.Controllers
 
             return RedirectToAction("Index", "Home");
         }
+
+        public ActionResult Logout()
+        { 
+          FormsAuthentication.SignOut();
+          return RedirectToAction("Login");
+        }
     }
 }
