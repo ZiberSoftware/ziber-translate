@@ -9,5 +9,8 @@
 }
 
 <h2>Welkom op Translate.ziber.nl</h2>
-<button onclick=>Logout</button>
+
+
+@Html.ActionLink("Logout", "Logout", "Security")
+
 @{Html.RenderAction("Index", "TranslateSet");}
