@@ -55,6 +55,8 @@ TestResult.xml
 # Chutzpah Test files
 _Chutzpah*
 
+
+Global.asax
 # Visual C++ cache files
 ipch/
 *.aps
