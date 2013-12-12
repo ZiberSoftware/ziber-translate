@@ -1,0 +1,14 @@
+﻿@model ZiberTranslate.Web.ViewModels.TranslateSetsViewModel
+
+@{
+    ViewBag.Title = "GermanTranslate";
+}
+
+<h2>Duitse vertalingen</h2>
+
+<ul id="translate-sets">
+    @foreach (var set in Model.Sets)
+    {
+        <li><a href="@Url.RouteUrl("Translations", new { setId = set.Id, language = "de" })">@set.Name</a></li>
+    }
+</ul>

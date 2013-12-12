@@ -78,7 +78,7 @@ build/
 *.log
 *.scc
 
-Global.asax
+Global.asax.cs
 
 # Visual C++ cache files
 ipch/

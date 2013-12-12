@@ -7,7 +7,7 @@ using NHibernate.Linq;
 
 namespace ZiberTranslate.Web.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class HomeController : BaseController
     {
         public ActionResult Index()

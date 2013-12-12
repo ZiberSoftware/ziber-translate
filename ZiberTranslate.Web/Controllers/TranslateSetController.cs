@@ -9,10 +9,21 @@ using NHibernate;
 
 namespace ZiberTranslate.Web.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class TranslateSetController : BaseController
     {
         public ActionResult Index()
+        {
+            //var sets = Global.CurrentSession.QueryOver<TranslateSet>()
+            //            .List();
+
+            //var vm = new TranslateSetsViewModel();
+            //vm.Sets = sets;
+
+            return View("Index");
+        }
+
+        public ActionResult English()
         {
             var sets = Global.CurrentSession.QueryOver<TranslateSet>()
                         .List();
@@ -20,7 +31,18 @@ namespace ZiberTranslate.Web.Controllers
             var vm = new TranslateSetsViewModel();
             vm.Sets = sets;
 
-            return View("Index", vm);
+            return View("EnglishTranslate", vm);
+        }
+
+        public ActionResult German()
+        {
+            var sets = Global.CurrentSession.QueryOver<TranslateSet>()
+                        .List();
+
+            var vm = new TranslateSetsViewModel();
+            vm.Sets = sets;
+
+            return View("GermanTranslate",vm);
         }
     }
 }

@@ -213,6 +213,8 @@
   <ItemGroup>
     <None Include="Properties\PublishProfiles\RELEASE.pubxml" />
     <None Include="Properties\PublishProfiles\ZiberNET.pubxml" />
+    <Content Include="Views\TranslateSet\EnglishTranslate.cshtml" />
+    <Content Include="Views\TranslateSet\GermanTranslate.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

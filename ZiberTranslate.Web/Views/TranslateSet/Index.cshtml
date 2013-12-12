@@ -3,11 +3,10 @@
 @{
     ViewBag.Title = "Index";
 }
+<h3>Naar welke taal wilt u vertalen?</h3>
 
-<ul id="translate-sets">
-@foreach (var set in Model.Sets)
-{
-    <li><a href="@Url.RouteUrl("Translations", new { setId = set.Id, language = "en" })">@set.Name (engels)</a></li>
-    <li><a href="@Url.RouteUrl("Translations", new { setId = set.Id, language = "de" })">@set.Name (duits)</a></li>
-}
+<ul>
+    <li>@Html.ActionLink("English", "English", "TranslateSet")</li>
+    <li>@Html.ActionLink("German", "German", "TranslateSet")</li>
 </ul>
+

@@ -89,7 +89,7 @@ namespace ZiberTranslate.Web.Controllers
 
             return translations;
         }
-
+        
         [HttpPost]
         public ActionResult Update(int id, string language, string value)
         {
