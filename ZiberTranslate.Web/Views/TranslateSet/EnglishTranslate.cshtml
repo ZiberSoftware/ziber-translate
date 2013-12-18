@@ -9,6 +9,6 @@
 <ul id="translate-sets">
     @foreach (var set in Model.Sets)
     {
-        <li><a href="@Url.RouteUrl("Translations", new { setId = set.Id, language = "en" })">@set.Name</a></li>
+        <li><a href="@Url.RouteUrl("Translations", new { setId = set.Id, language = "en" })">@set.Name (EN)</a></li>
     }
 </ul>

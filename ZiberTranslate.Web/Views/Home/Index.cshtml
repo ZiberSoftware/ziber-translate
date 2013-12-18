@@ -13,4 +13,11 @@
 @Html.ActionLink("Login", "Login", "Security")
 @Html.ActionLink("Logout", "Logout", "Security")
 
+@using (Html.BeginForm())
+{
+    <p>
+        Search: @Html.TextBox("SearchString") <br />
+        <input type="submit" value="Search" />
+    </p>
+}
 @{Html.RenderAction("Index", "TranslateSet");}

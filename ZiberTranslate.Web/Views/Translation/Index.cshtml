@@ -12,24 +12,46 @@
 @Html.ActionLink("Logout", "Logout", "Security")
 <br />
 <br />
+
 @Html.ActionLink("Review changes", "Index", "Changeset")
+    
 
+        <ol class="stats">
+            <li class="needs-review">
+                <dl>
+                    <dt>
+                        Needs Review
+                    </dt>
+                    <dd>
+                        <a href="#">@Model.NeedsReviewing</a>
+                    </dd>
+                </dl>
+            </li>
+            <li class="untranslated">
+                <dl>    
+                    <dt>
+                        Needs Translation
+                    </dt>
+                    <dd>
+                        <a href="#">@Model.NeedsTranslations</a>
+                    </dd>
+                </dl>
+            </li>
+            <li class="reviewed">
+                <dl>
+                    <dt>
+                        Reviewed
+                    </dt>
+                    <dd>
+                        <a href="#">@Model.Reviewed</a>
+                    </dd> 
+                </dl>
+            </li>
+        </ol>    
 
-<ul>
-    <li>
-        <a href="#">@Model.NeedsReviewing</a>
-    </li>
-    <li>
-        <a href="#">@Model.NeedsTranslations</a>
-    </li>
-    <li>
-        <a href="#">@Model.Reviewed</a>
-    </li>
-</ul>
-
-<table class="translations">
-    @foreach(var t in Model.Translations)
-    {
-        Html.RenderPartial("TranslationRow", t);
-    }
-</table>
+        <table id="table" class="translations">
+            @foreach(var t in Model.Translations)
+            {
+                Html.RenderPartial("TranslationRow", t);
+            }
+        </table>

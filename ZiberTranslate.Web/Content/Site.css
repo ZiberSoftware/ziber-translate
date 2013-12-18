@@ -1,21 +1,33 @@
 body
 {
-    font-size: .85em;font-family: arial;a
+    font-size: .85em;font-family: arial;
     color: #232323;
     background-color: #fff;
+    text-rendering:optimizeLegibility;
 }
 
 header,
 footer,
 nav,
-section {
+section,
+dl 
+{
     display: block;
+    margin:0px;
+}
+
+ol, li, ul
+{
+    list-style: none;
+    margin: 0px;
 }
 
 table 
 {
     border-collapse: collapse;
     border-spacing: 0;
+    display: inline-block;
+    top:10px;
 }
 
 table.translations
@@ -143,4 +155,92 @@ table.translations del
     background-color: #FFAAAA;
     color: #AA6666;
     text-decoration: line-throught;
+}
+
+ol.stats
+{
+    margin: 0;
+}
+
+.stats li
+{
+    float: left;
+    list-style: none;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    margin-top:20px;
+}
+
+.stats dl
+{
+    margin:0px;
+}
+
+.stats dt
+{
+    text-transform: uppercase;
+    font-size: 10px;
+    color: #aaa;
+    padding-left: 40px;
+}
+
+.stats dd a
+{
+    display:block;
+	width:80px;
+	padding:0 15px;
+	text-decoration:none;
+	background-color:#eee;
+	font-size:24px;
+	text-align:center;
+	height:38px;
+	line-height:38px;
+	color:#999;
+	border:solid 2px #ccc
+}
+
+.stats .reviewed dt
+{
+	color:#19b20e;
+}
+
+.stats .needs-review dt
+{
+	color:#d4d00d;
+}
+
+.stats .untranslated dt
+{
+	color:#f57305;
+}
+
+.stats .selected dd a
+{
+	border:solid 1px #3F7ABE;
+	color:#fff!important
+}
+
+.stats .untranslated dd a:hover,.stats .untranslated.selected dd a
+{
+	border:solid 1px #ccc;
+	background-color:#f57305;
+}
+
+.stats .reviewed dd a:hover,.stats .reviewed.selected dd a
+{
+	border:solid 1px #ccc;
+	background-color:#19b20e;
+}
+
+.stats .needs-review dd a:hover, .stats .needs-review.selected dd a 
+{
+    border: solid 1px #ccc;
+    background-color:#d4d00d;
+}
+
+.stats dd a:hover
+{
+	border:solid 1px #ccc;
+	background-color:#0087CC;
+	color:#fff!important
 }

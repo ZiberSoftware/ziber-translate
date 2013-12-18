@@ -110,7 +110,6 @@ alter table [TranslationVote]  drop constraint FKDBDA00CFA6B2BC2A
         Id INT IDENTITY NOT NULL,
        Name NVARCHAR(255) null,
        EmailAddress NVARCHAR(255) null,
-       Password NVARCHAR(255) null,
        Salt NVARCHAR(255) null,
        Hash NVARCHAR(255) null,
        Rank INT null,

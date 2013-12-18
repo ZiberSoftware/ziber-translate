@@ -183,5 +183,17 @@ namespace ZiberTranslate.Web.Controllers
             return RedirectToAction("Index", new { id = 0 });
         }
 
+        public ActionResult SearchByName(string searchString)
+        {
+            var searchByName = DbSession.QueryOver<Translation>()
+                               .Where(x => x.Value.Contains(searchString));
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                return View(searchByName);
+            }
+            else
+                return View();
+        }
     }
 }
