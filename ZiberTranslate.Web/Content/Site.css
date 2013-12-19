@@ -1,6 +1,7 @@
 body
 {
-    font-size: .85em;font-family: arial;
+    font-size: .85em;
+    font-family: arial;
     color: #232323;
     background-color: #fff;
     text-rendering:optimizeLegibility;
@@ -16,10 +17,40 @@ dl
     margin:0px;
 }
 
-ol, li, ul
+ol, li, ul, a
 {
+    text-decoration: none;
     list-style: none;
     margin: 0px;
+}
+
+#signup
+{
+  margin: 0; 
+  margin-left: 40%; 
+  margin-right: 40%;
+  margin-top: 50px; 
+  padding-top: 10px; 
+  width: 20%; 
+  height: 160px; 
+  position: absolute; 
+  background: #FBFBF0; 
+  border: solid #000000 2px; 
+  z-index: 9; 
+  font-family: arial; 
+  visibility: hidden; 
+}
+
+#UserSearch
+{
+    width:200px;
+}
+
+.search
+{
+    display: block;
+    right:5px;
+    position:absolute;
 }
 
 table 
@@ -159,7 +190,8 @@ table.translations del
 
 ol.stats
 {
-    margin: 0;
+    clear: left;
+    margin: 0px;
 }
 
 .stats li
@@ -214,10 +246,20 @@ ol.stats
 	color:#f57305;
 }
 
+.stats .selected.all dt{
+	color:#888
+}
+
 .stats .selected dd a
 {
 	border:solid 1px #3F7ABE;
 	color:#fff!important
+}
+
+.stats .all.selected dd a
+{
+	border:solid 1px #990;
+	background-color:#666
 }
 
 .stats .untranslated dd a:hover,.stats .untranslated.selected dd a

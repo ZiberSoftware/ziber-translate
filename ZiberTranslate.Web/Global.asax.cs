@@ -46,15 +46,15 @@ namespace ZiberTranslate.Web
         private static void BuildSchema(NHibernate.Cfg.Configuration config)
         {
             var export = new SchemaExport(config);
-            //export.SetOutputFile(@"c:\output.sql");
-            export.SetOutputFile(@"C:\Users\Gebruiker\Desktop\Kilian's stuff\ZiberTranslate\ziber-translate\output.sql");
+            export.SetOutputFile(@"c:\output.sql");
+            //export.SetOutputFile(@"C:\Users\Gebruiker\Desktop\Kilian's stuff\ZiberTranslate\ziber-translate\output.sql");
             export.Execute(true, false, false);
         }
 
         private static ISessionFactory CreateSessionFactory()
         {
             var cfg = Fluently.Configure()
-                .Database(MsSqlConfiguration.MsSql2008.ConnectionString(x => x.FromConnectionStringWithKey("Resources")))
+                .Database(MsSqlConfiguration.MsSql2000.ConnectionString(x => x.FromConnectionStringWithKey("Resources")))
                 .Mappings(x => x.FluentMappings.AddFromAssemblyOf<Models.Translation>())
                 .BuildConfiguration();
 

@@ -5,19 +5,23 @@
 }
 
 @section Scripts {
-
+<script src="@Url.Content("~/Scripts/search-watermark.js")"></script>
 }
 
 <h1>Welkom op Translate.ziber.nl</h1>
 
 @Html.ActionLink("Login", "Login", "Security")
+|
 @Html.ActionLink("Logout", "Logout", "Security")
 
+<div class="search">
 @using (Html.BeginForm())
 {
-    <p>
-        Search: @Html.TextBox("SearchString") <br />
+    <p class="search">
+        <input type="text" id="UserSearch"  /><br />
         <input type="submit" value="Search" />
     </p>
 }
+</div>
+
 @{Html.RenderAction("Index", "TranslateSet");}

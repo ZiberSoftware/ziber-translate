@@ -60,14 +60,31 @@ namespace ZiberTranslate.Web.Controllers
 
             FormsAuthentication.SetAuthCookie(emailAddress, false);
 
+
+
             if (!string.IsNullOrWhiteSpace(returnUrl))
             {
-                return new RedirectResult(returnUrl);
+                new RedirectResult(returnUrl);
+                return Redirect(returnUrl);
             }
-
-            return RedirectToAction("Index", "Home");
+            else
+            {
+                returnUrl = Server.UrlEncode(Request.Url.PathAndQuery);
+                return Redirect(returnUrl);
+            }
         }
         
+        //public ActionResult Signup(string emailSignup, string passwordSignup, string confirmPassword)
+        //{
+        //    var NUMBER_OF_ITERATIONS = 1337;
+        //    var salt = "c4x2J66hVK2ptF6MrrEG3h6yTGCUTtZ6U6erf+rTFvfLjiNqBrr0vzTyCre7ZLZTP430YBoC1+97MSsyAX6wUzc=";
+        //    var saltBytes = Encoding.UTF8.GetBytes(salt);
+        //    var pbkdf2 = new Rfc2898DeriveBytes(passwordSignup, saltBytes, NUMBER_OF_ITERATIONS);
+        //    var key = pbkdf2.GetBytes(128);
+        //    var hashKey = Convert.ToBase64String(key);
+
+        //}
+
         public ActionResult Logout()
         { 
           FormsAuthentication.SignOut();

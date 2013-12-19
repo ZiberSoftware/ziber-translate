@@ -17,6 +17,7 @@ namespace ZiberTranslate.Web.ViewModels
         public int NeedsTranslations { get; set; }
         public int NeedsReviewing { get; set; }
         public int Reviewed { get; set; }
+        public int AllTranslations { get; set; }
 
         public class TranslationDTO
         {

@@ -23,7 +23,8 @@ namespace ZiberTranslate.Web.Controllers
             vm.Reviewed = set.Reviewed;
             vm.NeedsReviewing = set.NeedsReviewing;
             vm.NeedsTranslations = set.NeedsTranslations;
-            
+            vm.AllTranslations = set.AllTranslations;
+
             if (categoryId.HasValue)
                 TempData["categoryId"] = categoryId.Value;
 

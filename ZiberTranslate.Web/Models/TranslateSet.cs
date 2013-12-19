@@ -17,6 +17,7 @@ namespace ZiberTranslate.Web.Models
         public virtual int NeedsReviewing { get; set; }
         public virtual int NeedsTranslations { get; set; }
         public virtual int Reviewed { get; set; }
+        public virtual int AllTranslations { get; set; }
         public virtual string InternalSetName { get; set; }
 
         public virtual Iesi.Collections.Generic.ISet<TranslateKey> TranslateKeys { get; set; }
@@ -37,6 +38,7 @@ namespace ZiberTranslate.Web.Models
             Map(x => x.NeedsReviewing);
             Map(x => x.NeedsTranslations);
             Map(x => x.Reviewed);
+            Map(x => x.AllTranslations);
             Map(x => x.InternalSetName);
 
             HasMany(x => x.TranslateKeys)

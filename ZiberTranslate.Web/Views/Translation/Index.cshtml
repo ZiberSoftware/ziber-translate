@@ -5,13 +5,21 @@
 }
 
 @section scripts {
-<script src="@Url.Content("~/Scripts/translations.js")"></script>
+<script src="@Url.Content("~/Scripts/translationsLoggedIn.js")"></script>
 }
 
 <h2></h2>
+@Html.ActionLink("Login", "Login", "Security")
+|
 @Html.ActionLink("Logout", "Logout", "Security")
 <br />
 <br />
+
+<h3>
+    <a href="/">HOME</a>
+    >>
+    <a href="javascript:javascript:history.go(-1)">CATEGORIEN</a>
+</h3>
 
 @Html.ActionLink("Review changes", "Index", "Changeset")
     
@@ -45,6 +53,16 @@
                     <dd>
                         <a href="#">@Model.Reviewed</a>
                     </dd> 
+                </dl>
+            </li>
+            <li class="selected all">
+                <dl>
+                    <dt>
+                        All
+                    </dt>
+                    <dd>
+                        <a href="#">@Model.AllTranslations</a>
+                    </dd>
                 </dl>
             </li>
         </ol>    
