@@ -49,14 +49,14 @@ namespace ZiberTranslate.Web.Controllers
             var neutralTranslations = DbSession.QueryOver<Translation>()
                 .Where(Restrictions.On<Translation>(x => x.Key).IsIn(changes.Select(x => x.Key).ToArray()))
                 .And(x => x.Language == LanguageService.GetNeutralLanguage())
-                .And(x => x.NeedsReviewing == false)
+                .And(x => x.NeedsAdminReviewing == false)
                 .OrderBy(x => x.Votes).Desc
                 .Future();
 
             var leadingTranslations = DbSession.QueryOver<Translation>()
                 .Where(Restrictions.On<Translation>(x => x.Key).IsIn(changes.Select(x => x.Key).ToArray()))
                 .And(x => x.IsPublished)
-                .And(x => x.NeedsReviewing == false)
+                .And(x => x.NeedsAdminReviewing == false)
                 .OrderBy(x => x.Votes).Desc
                 .Future();
 
@@ -103,7 +103,7 @@ namespace ZiberTranslate.Web.Controllers
                 foreach (var translation in changes.ToList())
                 {
                     translation.IsPublished = true;
-                    translation.NeedsReviewing = true;
+                    translation.NeedsAdminReviewing = true;
 
                     DbSession.Update(translation);
                 }
@@ -118,7 +118,6 @@ namespace ZiberTranslate.Web.Controllers
 
                 t.Commit();
             }
-
 
             return RedirectToAction("Index");
         }

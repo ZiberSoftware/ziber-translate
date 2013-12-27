@@ -10,7 +10,6 @@ using NHibernate.Criterion;
 
 namespace ZiberTranslate.Web.Controllers
 {
-    [Authorize]
     public class TranslationController : BaseController
     {
         public ActionResult Index(int setId, string language, int? categoryId = null)
@@ -41,21 +40,21 @@ namespace ZiberTranslate.Web.Controllers
 
             var neutralTranslations = DbSession.QueryOver<Translation>()
                 .Where(x => x.Language == LanguageService.GetNeutralLanguage())
-                .And(x => x.NeedsReviewing == false)
+                .And(x => x.NeedsAdminReviewing == false)
                 .OrderBy(x => x.Votes).Desc
                 .Future();
 
             var leadingTranslations = DbSession.QueryOver<Translation>()
                 .Where(x => x.Language == LanguageService.GetLanguageByIsoCode(language))
                 .And(x => x.IsPublished)
-                .And(x => x.NeedsReviewing == false)
+                .And(x => x.NeedsAdminReviewing == false)
                 .OrderBy(x => x.Votes).Desc
                 .Future();
 
             var userTranslations = DbSession.QueryOver<Translation>()
                 .Where(x => x.Language == LanguageService.GetLanguageByIsoCode(language))
                 .And(x => x.Translator == me)
-                .And(x => x.NeedsReviewing == false)
+                .And(x => x.NeedsAdminReviewing == false)
                 .OrderBy(x => x.Votes).Desc
                 .Future();
 
@@ -184,8 +183,9 @@ namespace ZiberTranslate.Web.Controllers
             return RedirectToAction("Index", new { id = 0 });
         }
 
-        public ActionResult SearchByName(string searchString)
+        public ActionResult SearchByName(int id, string language= "", string searchString = "")
         {
+            var searchByKey = TranslationService.FindByKey(id, language);
             var searchByName = DbSession.QueryOver<Translation>()
                                .Where(x => x.Value.Contains(searchString));
 

@@ -59,19 +59,13 @@ namespace ZiberTranslate.Web.Controllers
             }
 
             FormsAuthentication.SetAuthCookie(emailAddress, false);
-
-
-
+           
             if (!string.IsNullOrWhiteSpace(returnUrl))
-            {
-                new RedirectResult(returnUrl);
-                return Redirect(returnUrl);
+            {              
+                return new RedirectResult(returnUrl);
             }
-            else
-            {
-                returnUrl = Server.UrlEncode(Request.Url.PathAndQuery);
-                return Redirect(returnUrl);
-            }
+
+            return RedirectToAction("Index", "Home");
         }
         
         //public ActionResult Signup(string emailSignup, string passwordSignup, string confirmPassword)

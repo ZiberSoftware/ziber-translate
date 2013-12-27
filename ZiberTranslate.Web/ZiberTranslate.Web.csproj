@@ -165,7 +165,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\jsdiff.js" />
     <Content Include="Scripts\search-watermark.js" />
-    <Content Include="Scripts\translationsLoggedIn.js" />
+    <Content Include="Scripts\translations.js" />
     <Content Include="Scripts\underscore-min.js" />
     <Content Include="Scripts\backbone.js" />
     <Content Include="Scripts\jquery-1.7.2.min.js" />

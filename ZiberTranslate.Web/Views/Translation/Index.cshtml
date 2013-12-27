@@ -5,11 +5,22 @@
 }
 
 @section scripts {
-<script src="@Url.Content("~/Scripts/translationsLoggedIn.js")"></script>
+    <script>
+        window.loggedin = @(Context.User.Identity.IsAuthenticated.ToString().ToLower());
+    </script>
+    <script>
+        window.redirect = "@(Url.Action("Login", new { controller = "Security", returnUrl = this.Context.Request.Url.PathAndQuery }))";
+    </script>
+    <script type="text/javascript">
+        function previousPage() {
+            window.history.go("http://localhost:54195/TranslateSet/")
+        }
+    </script>
+<script src="@Url.Content("~/Scripts/translations.js")"></script>
 }
 
 <h2></h2>
-@Html.ActionLink("Login", "Login", "Security")
+@Html.ActionLink("Login", "Login", new { controller = "Security", returnUrl = this.Context.Request.Url.PathAndQuery })
 |
 @Html.ActionLink("Logout", "Logout", "Security")
 <br />
@@ -18,7 +29,7 @@
 <h3>
     <a href="/">HOME</a>
     >>
-    <a href="javascript:javascript:history.go(-1)">CATEGORIEN</a>
+    <a href="#" onclick="previousPage()">CATEGORIEN</a>
 </h3>
 
 @Html.ActionLink("Review changes", "Index", "Changeset")

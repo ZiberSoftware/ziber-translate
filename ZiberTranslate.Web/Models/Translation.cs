@@ -15,7 +15,7 @@ namespace ZiberTranslate.Web.Models
         public virtual int Votes { get; protected set; }
 
         public virtual bool IsPublished { get; set; }
-        public virtual bool NeedsReviewing { get; set; }
+        public virtual bool NeedsAdminReviewing { get; set; }
 
         public virtual object Clone()
         {
@@ -41,7 +41,7 @@ namespace ZiberTranslate.Web.Models
 
             Map(x => x.Value).CustomType("StringClob");
             Map(x => x.IsPublished);
-            Map(x => x.NeedsReviewing);
+            Map(x => x.NeedsAdminReviewing);
 
             Map(x => x.Votes)
                 .Generated.Always()

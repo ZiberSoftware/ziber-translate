@@ -32,7 +32,7 @@ namespace ZiberTranslate.Web.Services
 
             var translated = Global.CurrentSession.CreateCriteria<Translation>("t")
                 .Add(Restrictions.Eq("IsPublished", true))
-                .Add(Restrictions.Eq("NeedsReviewing", false))
+                .Add(Restrictions.Eq("NeedsAdminReviewing", false))
                 .Add(Subqueries.Exists(keys))
                 .Add(Restrictions.Eq("Language", language))
                 .SetProjection(Projections.RowCount())

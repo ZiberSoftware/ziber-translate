@@ -6,7 +6,7 @@
 
 <h2>Duitse vertalingen</h2>
 
-@Html.ActionLink("Login", "Login", "Security")
+@Html.ActionLink("Login", "Login", new { controller = "Security", returnUrl = this.Context.Request.Url.PathAndQuery })
 |
 @Html.ActionLink("Logout", "Logout", "Security")
 <br />

@@ -1,7 +1,7 @@
 ﻿
            
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Home";
 }
 
 @section Scripts {
@@ -10,7 +10,7 @@
 
 <h1>Welkom op Translate.ziber.nl</h1>
 
-@Html.ActionLink("Login", "Login", "Security")
+@Html.ActionLink("Login", "Login", new { controller = "Security", returnUrl = this.Context.Request.Url.PathAndQuery })
 |
 @Html.ActionLink("Logout", "Logout", "Security")
 
