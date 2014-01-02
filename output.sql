@@ -1,33 +1,33 @@
 
-    if exists (select 1 from sys.objects where object_id = OBJECT_ID(N'[FK5C0F21C325A1468B]') AND parent_object_id = OBJECT_ID('[TranslateCategory]'))
+    if exists (select 1 from sysobjects where id = OBJECT_ID(N'[FK5C0F21C325A1468B]') AND parent_obj = OBJECT_ID('[TranslateCategory]'))
 alter table [TranslateCategory]  drop constraint FK5C0F21C325A1468B
 
 
-    if exists (select 1 from sys.objects where object_id = OBJECT_ID(N'[FK5E629AF89BA534E7]') AND parent_object_id = OBJECT_ID('[TranslateKey]'))
+    if exists (select 1 from sysobjects where id = OBJECT_ID(N'[FK5E629AF89BA534E7]') AND parent_obj = OBJECT_ID('[TranslateKey]'))
 alter table [TranslateKey]  drop constraint FK5E629AF89BA534E7
 
 
-    if exists (select 1 from sys.objects where object_id = OBJECT_ID(N'[FK5E629AF825A1468B]') AND parent_object_id = OBJECT_ID('[TranslateKey]'))
+    if exists (select 1 from sysobjects where id = OBJECT_ID(N'[FK5E629AF825A1468B]') AND parent_obj = OBJECT_ID('[TranslateKey]'))
 alter table [TranslateKey]  drop constraint FK5E629AF825A1468B
 
 
-    if exists (select 1 from sys.objects where object_id = OBJECT_ID(N'[FK78B39D95509E6F0B]') AND parent_object_id = OBJECT_ID('[Translation]'))
+    if exists (select 1 from sysobjects where id = OBJECT_ID(N'[FK78B39D95509E6F0B]') AND parent_obj = OBJECT_ID('[Translation]'))
 alter table [Translation]  drop constraint FK78B39D95509E6F0B
 
 
-    if exists (select 1 from sys.objects where object_id = OBJECT_ID(N'[FK78B39D95FAE9197D]') AND parent_object_id = OBJECT_ID('[Translation]'))
+    if exists (select 1 from sysobjects where id = OBJECT_ID(N'[FK78B39D95FAE9197D]') AND parent_obj = OBJECT_ID('[Translation]'))
 alter table [Translation]  drop constraint FK78B39D95FAE9197D
 
 
-    if exists (select 1 from sys.objects where object_id = OBJECT_ID(N'[FK78B39D95BA33B491]') AND parent_object_id = OBJECT_ID('[Translation]'))
+    if exists (select 1 from sysobjects where id = OBJECT_ID(N'[FK78B39D95BA33B491]') AND parent_obj = OBJECT_ID('[Translation]'))
 alter table [Translation]  drop constraint FK78B39D95BA33B491
 
 
-    if exists (select 1 from sys.objects where object_id = OBJECT_ID(N'[FKDBDA00CFBA33B491]') AND parent_object_id = OBJECT_ID('[TranslationVote]'))
+    if exists (select 1 from sysobjects where id = OBJECT_ID(N'[FKDBDA00CFBA33B491]') AND parent_obj = OBJECT_ID('[TranslationVote]'))
 alter table [TranslationVote]  drop constraint FKDBDA00CFBA33B491
 
 
-    if exists (select 1 from sys.objects where object_id = OBJECT_ID(N'[FKDBDA00CFA6B2BC2A]') AND parent_object_id = OBJECT_ID('[TranslationVote]'))
+    if exists (select 1 from sysobjects where id = OBJECT_ID(N'[FKDBDA00CFA6B2BC2A]') AND parent_obj = OBJECT_ID('[TranslationVote]'))
 alter table [TranslationVote]  drop constraint FKDBDA00CFA6B2BC2A
 
 
@@ -75,6 +75,7 @@ alter table [TranslationVote]  drop constraint FKDBDA00CFA6B2BC2A
        NeedsReviewing INT null,
        NeedsTranslations INT null,
        Reviewed INT null,
+       AllTranslations INT null,
        InternalSetName NVARCHAR(255) null,
        primary key (Id)
     )
@@ -86,9 +87,9 @@ alter table [TranslationVote]  drop constraint FKDBDA00CFA6B2BC2A
 
     create table [Translation] (
         Id INT IDENTITY NOT NULL,
-       Value NVARCHAR(MAX) null,
+       Value NTEXT null,
        IsPublished BIT null,
-       NeedsReviewing BIT null,
+       NeedsAdminReviewing BIT null,
        Language_id INT null,
        Key_id INT null,
        Translator_id INT null,

@@ -8,12 +8,16 @@
     <script>
         window.loggedin = @(Context.User.Identity.IsAuthenticated.ToString().ToLower());
     </script>
-    <script>
-        window.redirect = "@(Url.Action("Login", new { controller = "Security", returnUrl = this.Context.Request.Url.PathAndQuery }))";
-    </script>
     <script type="text/javascript">
+        window.redirect = "@(Url.Action("Login", new { controller = "Security", returnUrl = this.Context.Request.Url.PathAndQuery }))";
+        window.prevPage = "@(Request.UrlReferrer.PathAndQuery)";
+
         function previousPage() {
-            window.history.go("http://localhost:54195/TranslateSet/")
+            
+            if (prevPage == redirect)
+                window.history.go(-3);
+            else
+                window.history.back();
         }
     </script>
 <script src="@Url.Content("~/Scripts/translations.js")"></script>

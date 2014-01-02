@@ -12,18 +12,7 @@ namespace ZiberTranslate.Web.Controllers
     //[Authorize]
     public class TranslateSetController : BaseController
     {
-        public ActionResult Index()
-        {
-            //var sets = Global.CurrentSession.QueryOver<TranslateSet>()
-            //            .List();
-
-            //var vm = new TranslateSetsViewModel();
-            //vm.Sets = sets;
-
-            return View("Index");
-        }
-
-        public ActionResult English()
+        public ActionResult Index(string language = "")
         {
             var sets = Global.CurrentSession.QueryOver<TranslateSet>()
                         .List();
@@ -31,18 +20,12 @@ namespace ZiberTranslate.Web.Controllers
             var vm = new TranslateSetsViewModel();
             vm.Sets = sets;
 
-            return View("EnglishTranslate", vm);
-        }
-
-        public ActionResult German()
-        {
-            var sets = Global.CurrentSession.QueryOver<TranslateSet>()
-                        .List();
-
-            var vm = new TranslateSetsViewModel();
-            vm.Sets = sets;
-
-            return View("GermanTranslate",vm);
+            if (language == "en")
+                return View("EnglishTranslate", vm);
+            else if (language == "de")
+                return View("GermanTranslate", vm);
+            else 
+                return View("Index");
         }
     }
 }
