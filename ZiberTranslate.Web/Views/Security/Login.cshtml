@@ -2,16 +2,6 @@
     ViewBag.Title = "Login";
 }
 
-<script language="JavaScript" type="text/javascript">
-    function signup(showhide) {
-        if (showhide == "show") {
-            document.getElementById('signup').style.visibility = "visible";
-        } else if (showhide == "hide") {
-            document.getElementById('signup').style.visibility = "hidden";
-        }
-    }
-</script>
-
 <h2>Login</h2>
 <p>Log in using your Media-Publisher account or your registered account</p>
 @using (Html.BeginForm())
@@ -28,20 +18,4 @@
     <input type="submit" value="Login" />
 }
 
-<div id="signup">
-    <center>
-        @using (Html.BeginForm())
-        {
-            @Html.Label("Emailaddress:")<br />
-            @Html.TextBox("EmailSignup")<br />
-            @Html.Label("Password:")<br />
-            @Html.Password("PasswordSignup")<br />
-            @Html.Label("Confirm Password:")<br />
-            @Html.Password("ConfirmPassword")<br />
-            <input type="submit" value="Sign up" />
-        }
-        <a href="javascript:signup('hide');">close</a>
-    </center>
-</div>
-
-<p><a href="javascript:signup('show');">Register</a></p>
+@Html.ActionLink("Register","Signup","Security")

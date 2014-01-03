@@ -30,17 +30,37 @@ namespace ZiberTranslate.Web.Services
                 .Add(Restrictions.EqProperty("s.Id", "t.Key.Id"))
                 .SetProjection(Projections.Id());
 
-            var translated = Global.CurrentSession.CreateCriteria<Translation>("t")
+            var needsReview = Global.CurrentSession.CreateCriteria<Translation>("t")
                 .Add(Restrictions.Eq("IsPublished", true))
                 .Add(Restrictions.Eq("NeedsAdminReviewing", false))
+                .Add(Restrictions.Eq("NeedsReview", true))
                 .Add(Subqueries.Exists(keys))
                 .Add(Restrictions.Eq("Language", language))
                 .SetProjection(Projections.RowCount())
                 .UniqueResult<int>();
 
+            var needsTranslation = Global.CurrentSession.CreateCriteria<Translation>("t")
+                .Add(Restrictions.Eq("IsPublished", true))
+                .Add(Restrictions.Eq("NeedsAdminReviewing", false))
+                .Add(Restrictions.Eq("NeedsTranslation", true))
+                .Add(Subqueries.Exists(keys))
+                .Add(Restrictions.Eq("Language", language))
+                .SetProjection(Projections.RowCount())
+                .UniqueResult<int>();
 
-            set.NeedsTranslations = keyCount - translated;
-            set.Reviewed = translated;
+            var reviewed = Global.CurrentSession.CreateCriteria<Translation>("t")
+                .Add(Restrictions.Eq("IsPublished", true))
+                .Add(Restrictions.Eq("NeedsAdminReviewing", false))
+                .Add(Restrictions.Eq("Reviewed", true))
+                .Add(Subqueries.Exists(keys))
+                .Add(Restrictions.Eq("Language", language))
+                .SetProjection(Projections.RowCount())
+                .UniqueResult<int>();
+
+            set.NeedsReviewing = needsReview;
+            set.NeedsTranslations = needsTranslation;
+            set.Reviewed = reviewed;
+            set.AllTranslations = keyCount;
 
             Global.CurrentSession.Update(set);
         }

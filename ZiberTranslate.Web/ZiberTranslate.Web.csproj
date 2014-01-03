@@ -216,6 +216,8 @@
     <None Include="Properties\PublishProfiles\ZiberNET.pubxml" />
     <Content Include="Views\TranslateSet\EnglishTranslate.cshtml" />
     <Content Include="Views\TranslateSet\GermanTranslate.cshtml" />
+    <Content Include="Views\Security\Succes.cshtml" />
+    <Content Include="Views\Security\Signup.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

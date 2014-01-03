@@ -9,7 +9,6 @@ namespace ZiberTranslate.Web.Models
     public class Translator : Entity
     {
         public virtual string Name { get; set; }
-
         public virtual string EmailAddress { get; set; }
         public virtual string Salt { get; set; }
         public virtual string Hash { get; set; }
@@ -17,6 +16,7 @@ namespace ZiberTranslate.Web.Models
         public virtual bool IsBlocked { get; set; }
 
         public virtual Iesi.Collections.Generic.ISet<Translation> Translations { get; set; }
+        public virtual Iesi.Collections.Generic.ISet<Translator> Translators { get; set; }
     }
 
     public class TranslatorMap : ClassMap<Translator>
