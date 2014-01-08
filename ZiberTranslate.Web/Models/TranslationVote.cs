@@ -14,7 +14,7 @@ namespace ZiberTranslate.Web.Models
         public virtual int Rank { get; set; }
 
         public virtual bool IsPublished { get; set; }
-        public virtual bool NeedsReviewing { get; set; }
+        public virtual bool NeedsAdminReviewing { get; set; }
     }
 
     public class TranslationVoteMap : ClassMap<TranslationVote>
@@ -26,7 +26,7 @@ namespace ZiberTranslate.Web.Models
             Map(x => x.CreatedAt);
             Map(x => x.Rank);
             Map(x => x.IsPublished);
-            Map(x => x.NeedsReviewing);
+            Map(x => x.NeedsAdminReviewing);
 
             References(x => x.Translator).Cascade.None();
             References(x => x.Translation).Cascade.None();

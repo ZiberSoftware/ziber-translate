@@ -111,7 +111,7 @@ namespace ZiberTranslate.Web.Controllers
                 foreach (var vote in votes.ToList())
                 {
                     vote.IsPublished = true;
-                    vote.NeedsReviewing = true;
+                    vote.NeedsAdminReviewing = true;
 
                     DbSession.Update(vote);
                 }

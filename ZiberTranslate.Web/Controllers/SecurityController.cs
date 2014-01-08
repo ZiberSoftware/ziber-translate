@@ -44,13 +44,12 @@ namespace ZiberTranslate.Web.Controllers
         public ActionResult Login(string emailAddress, string password, string returnUrl = "")
         {
             var NUMBER_OF_ITERATIONS = 1337;
-            //var salt = DbSession.QueryOver<Translator>()
-            //            .Where(x => x.EmailAddress == emailAddress)
-            //            .Fetch(x => x.Salt)
-            //            .Eager
-            //            .List<string>();
+            var salt = DbSession.QueryOver<Translator>()
+                        .Where(x => x.EmailAddress == emailAddress)
+                        .Select(x => x.Salt)
+                        .SingleOrDefault<string>();
                         
-            var salt = "c4x2J66hVK2ptF6MrrEG3h6yTGCUTtZ6U6erf+rTFvfLjiNqBrr0vzTyCre7ZLZTP430YBoC1+97MSsyAX6wUzc=";
+            //var salt = "c4x2J66hVK2ptF6MrrEG3h6yTGCUTtZ6U6erf+rTFvfLjiNqBrr0vzTyCre7ZLZTP430YBoC1+97MSsyAX6wUzc=";
             var saltBytes = Encoding.UTF8.GetBytes(salt);
             var pbkdf2 = new Rfc2898DeriveBytes(password, saltBytes, NUMBER_OF_ITERATIONS);
             var key = pbkdf2.GetBytes(128);

@@ -24,8 +24,8 @@ namespace ZiberTranslate.Web.Controllers
                 set = new TranslateSet
                 {
                     Name = "Ziber Websites",
-                    NeedsReviewing = 0,
-                    NeedsTranslations = 0,
+                    NeedsReview = 0,
+                    NeedsTranslation = 0,
                     Reviewed = 0
                 };
 

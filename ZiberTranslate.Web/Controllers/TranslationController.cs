@@ -20,8 +20,8 @@ namespace ZiberTranslate.Web.Controllers
             var vm = new ViewModels.TranslationsViewModel();
             vm.Translations = translations;
             vm.Reviewed = set.Reviewed;
-            vm.NeedsReviewing = set.NeedsReviewing;
-            vm.NeedsTranslations = set.NeedsTranslations;
+            vm.NeedsReview = set.NeedsReview;
+            vm.NeedsTranslation = set.NeedsTranslation;
             vm.AllTranslations = set.AllTranslations;
 
             if (categoryId.HasValue)
@@ -187,7 +187,8 @@ namespace ZiberTranslate.Web.Controllers
         {
             var searchByKey = TranslationService.FindByKey(id, language);
             var searchByName = DbSession.QueryOver<Translation>()
-                               .Where(x => x.Value.Contains(searchString));
+                               .Where(x => x.Value.Contains(searchString))
+                               .SingleOrDefault<string>();
 
             if (!String.IsNullOrEmpty(searchString))
             {

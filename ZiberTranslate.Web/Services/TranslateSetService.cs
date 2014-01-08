@@ -57,8 +57,8 @@ namespace ZiberTranslate.Web.Services
                 .SetProjection(Projections.RowCount())
                 .UniqueResult<int>();
 
-            set.NeedsReviewing = needsReview;
-            set.NeedsTranslations = needsTranslation;
+            set.NeedsReview = needsReview;
+            set.NeedsTranslation = needsTranslation;
             set.Reviewed = reviewed;
             set.AllTranslations = keyCount;
 

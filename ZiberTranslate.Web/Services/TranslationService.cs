@@ -59,6 +59,8 @@ namespace ZiberTranslate.Web.Services
                 else
                 {
                     translation.Value = value;
+                    translation.NeedsTranslation = false;
+                    translation.NeedsReview = true;
 
                     Global.CurrentSession.Update(translation);
                 }
@@ -72,6 +74,9 @@ namespace ZiberTranslate.Web.Services
                     translation.Language = LanguageService.GetLanguageByIsoCode(language);
                     translation.Value = value;
                     translation.IsPublished = false;
+                    translation.NeedsTranslation = true;
+                    translation.NeedsReview = false;
+                    translation.Reviewed = false;
                     translation.Translator = TranslatorService.FindByEmail(emailAddress);
 
                     Global.CurrentSession.Save(translation);
