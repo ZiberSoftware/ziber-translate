@@ -47,6 +47,7 @@ namespace ZiberTranslate.Web.Services
         {
             string emailAddress = HttpContext.Current.User.Identity.Name;
             var translator = TranslatorService.FindByEmail(emailAddress);
+            var translatorRank = TranslatorService.FetchRank(emailAddress);
             var translation = TranslationService.FindByKeyForTranslator(id, language, translator);
             var leading = TranslationService.FindByKey(id, language);
 
@@ -59,7 +60,6 @@ namespace ZiberTranslate.Web.Services
                 else
                 {
                     translation.Value = value;
-                    translation.NeedsTranslation = false;
                     translation.NeedsReview = true;
 
                     Global.CurrentSession.Update(translation);
@@ -67,21 +67,40 @@ namespace ZiberTranslate.Web.Services
             }
             else if(!string.IsNullOrWhiteSpace(value))
             {
-                if (leading == null || value != leading.Value)
+                if (translatorRank == 0)
                 {
-                    translation = new Translation();
-                    translation.Key = Global.CurrentSession.Load<TranslateKey>(id);
-                    translation.Language = LanguageService.GetLanguageByIsoCode(language);
-                    translation.Value = value;
-                    translation.IsPublished = false;
-                    translation.NeedsTranslation = true;
-                    translation.NeedsReview = false;
-                    translation.Reviewed = false;
-                    translation.Translator = TranslatorService.FindByEmail(emailAddress);
+                    if (leading == null || value != leading.Value)
+                    {
+                        translation = new Translation();
+                        translation.Key = Global.CurrentSession.Load<TranslateKey>(id);
+                        translation.Language = LanguageService.GetLanguageByIsoCode(language);
+                        translation.Value = value;
+                        translation.NeedsAdminReviewing = false;
+                        translation.IsPublished = false;                       
+                        translation.NeedsReview = true;
+                        translation.Translator = translator;
 
-                    Global.CurrentSession.Save(translation);
+                        Global.CurrentSession.Save(translation);
+                    }
+                    else { translation = leading; }
                 }
-                else { translation = leading; }
+                else
+                {
+                    if (leading == null || value != leading.Value)
+                    {
+                        translation = new Translation();
+                        translation.Key = Global.CurrentSession.Load<TranslateKey>(id);
+                        translation.Language = LanguageService.GetLanguageByIsoCode(language);
+                        translation.Value = value;
+                        translation.NeedsAdminReviewing = true;
+                        translation.IsPublished = false;
+                        translation.NeedsReview = true;
+                        translation.Translator = translator;
+
+                        Global.CurrentSession.Save(translation);
+                    }
+                    else { translation = leading; }
+                }
             }
             return translation;
         }

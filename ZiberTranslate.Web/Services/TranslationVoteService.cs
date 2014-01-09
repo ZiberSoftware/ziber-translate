@@ -13,18 +13,19 @@ namespace ZiberTranslate.Web.Services
             var voter = TranslatorService.FindByEmail(HttpContext.Current.User.Identity.Name);
             var vote = FindVote(translation, voter);
             if (vote == null)
-            {
-                vote = new TranslationVote()
-                {
-                    CreatedAt = DateTime.UtcNow,
-                    IsPublished = false,
-                    Rank = voter.Rank,
-                    Translation = translation,
-                    Translator = voter
-                };
-
+            {          
+                    vote = new TranslationVote()
+                    {
+                        CreatedAt = DateTime.UtcNow,
+                        IsPublished = false,
+                        Rank = voter.Rank,
+                        Translation = translation,
+                        Translator = voter
+                    };
+                
                 Global.CurrentSession.Save(vote);
             }
+            translation.NeedsReview = false;
         }
 
         public static void RemoveVote(Translation translation)

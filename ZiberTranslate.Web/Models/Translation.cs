@@ -17,8 +17,6 @@ namespace ZiberTranslate.Web.Models
         public virtual bool IsPublished { get; set; }
         public virtual bool NeedsAdminReviewing { get; set; }
         public virtual bool NeedsReview { get; set; }
-        public virtual bool NeedsTranslation { get; set; }
-        public virtual bool Reviewed { get; set; }
         public virtual object Clone()
         {
             var translation = new Translation()
@@ -45,8 +43,6 @@ namespace ZiberTranslate.Web.Models
             Map(x => x.IsPublished);
             Map(x => x.NeedsAdminReviewing);
             Map(x => x.NeedsReview);
-            Map(x => x.NeedsTranslation);
-            Map(x => x.Reviewed);
             Map(x => x.Votes)
                 .Generated.Always()
                 .Formula("(SELECT ISNULL(COUNT(*), 0) FROM TranslationVote v WHERE v.Translation_Id = Id AND v.IsPublished = 1)");

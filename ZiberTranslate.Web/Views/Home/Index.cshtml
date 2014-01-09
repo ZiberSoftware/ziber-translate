@@ -13,7 +13,8 @@
 @Html.ActionLink("Login", "Login", new { controller = "Security", returnUrl = this.Context.Request.Url.PathAndQuery })
 |
 @Html.ActionLink("Logout", "Logout", "Security")
-
+|
+@Html.ActionLink("Review user changes", "Index", "Admin")
 <div class="search">
 @using (Html.BeginForm())
 {

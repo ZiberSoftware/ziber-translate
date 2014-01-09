@@ -14,6 +14,14 @@ namespace ZiberTranslate.Web.Services
             return Global.CurrentSession.QueryOver<Translator>().Where(x => x.EmailAddress == emailAddress).SingleOrDefault();
         }
 
+        public static int FetchRank(string emailAddress)
+        {
+            return Global.CurrentSession.QueryOver<Translator>()
+                .Where(x => x.EmailAddress == emailAddress)
+                .Select(x => x.Rank)
+                .SingleOrDefault<int>();
+        }
+
         public static void UpdateRank(Translator translator)
         {
             var votes = Global.CurrentSession.QueryOver<TranslationVote>()

@@ -20,7 +20,7 @@ namespace ZiberTranslate.Web.Controllers
             TranslateKey key;
 
             var setsWithChanges = DbSession.CreateCriteria<Translation>()
-                .Add(Restrictions.Eq("NeedsReviewing", true))
+                .Add(Restrictions.Eq("NeedsAdminReviewing", true))
                 .CreateAlias("Key", "k")
                 .CreateAlias("k.Set", "s")
                 .CreateAlias("Language", "l")

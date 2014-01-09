@@ -32,7 +32,6 @@ namespace ZiberTranslate.Web.Services
 
             var needsReview = Global.CurrentSession.CreateCriteria<Translation>("t")
                 .Add(Restrictions.Eq("IsPublished", true))
-                .Add(Restrictions.Eq("NeedsAdminReviewing", false))
                 .Add(Restrictions.Eq("NeedsReview", true))
                 .Add(Subqueries.Exists(keys))
                 .Add(Restrictions.Eq("Language", language))
@@ -40,18 +39,7 @@ namespace ZiberTranslate.Web.Services
                 .UniqueResult<int>();
 
             var needsTranslation = Global.CurrentSession.CreateCriteria<Translation>("t")
-                .Add(Restrictions.Eq("IsPublished", true))
-                .Add(Restrictions.Eq("NeedsAdminReviewing", false))
-                .Add(Restrictions.Eq("NeedsTranslation", true))
-                .Add(Subqueries.Exists(keys))
-                .Add(Restrictions.Eq("Language", language))
-                .SetProjection(Projections.RowCount())
-                .UniqueResult<int>();
-
-            var reviewed = Global.CurrentSession.CreateCriteria<Translation>("t")
-                .Add(Restrictions.Eq("IsPublished", true))
-                .Add(Restrictions.Eq("NeedsAdminReviewing", false))
-                .Add(Restrictions.Eq("Reviewed", true))
+                .Add(Restrictions.Eq("IsPublished", false))
                 .Add(Subqueries.Exists(keys))
                 .Add(Restrictions.Eq("Language", language))
                 .SetProjection(Projections.RowCount())
@@ -59,7 +47,7 @@ namespace ZiberTranslate.Web.Services
 
             set.NeedsReview = needsReview;
             set.NeedsTranslation = needsTranslation;
-            set.Reviewed = reviewed;
+            set.Reviewed = keyCount - (needsReview + needsTranslation);
             set.AllTranslations = keyCount;
 
             Global.CurrentSession.Update(set);
