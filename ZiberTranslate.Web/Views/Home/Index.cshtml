@@ -1,4 +1,4 @@
-﻿
+﻿@model ZiberTranslate.Web.Models.Translator
            
 @{
     ViewBag.Title = "Home";
@@ -14,7 +14,14 @@
 |
 @Html.ActionLink("Logout", "Logout", "Security")
 |
-@Html.ActionLink("Review user changes", "Index", "Admin")
+@*@{
+    var user = Model.Rank;
+    if(user==0)
+    {
+        @Html.ActionLink("Review user changes", "Index", "Admin")
+    }   
+}
+    *@
 <div class="search">
 @using (Html.BeginForm())
 {

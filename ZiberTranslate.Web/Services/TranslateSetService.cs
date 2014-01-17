@@ -32,22 +32,25 @@ namespace ZiberTranslate.Web.Services
 
             var needsReview = Global.CurrentSession.CreateCriteria<Translation>("t")
                 .Add(Restrictions.Eq("IsPublished", true))
+                .Add(Restrictions.Eq("NeedsAdminReviewing", false))
                 .Add(Restrictions.Eq("NeedsReview", true))
                 .Add(Subqueries.Exists(keys))
                 .Add(Restrictions.Eq("Language", language))
                 .SetProjection(Projections.RowCount())
                 .UniqueResult<int>();
-
-            var needsTranslation = Global.CurrentSession.CreateCriteria<Translation>("t")
-                .Add(Restrictions.Eq("IsPublished", false))
+            
+            var reviewed = Global.CurrentSession.CreateCriteria<Translation>("t")
+                .Add(Restrictions.Eq("IsPublished", true))
+                .Add(Restrictions.Eq("NeedsAdminReviewing", false))
+                .Add(Restrictions.Eq("NeedsReview", false))
                 .Add(Subqueries.Exists(keys))
                 .Add(Restrictions.Eq("Language", language))
                 .SetProjection(Projections.RowCount())
                 .UniqueResult<int>();
 
             set.NeedsReview = needsReview;
-            set.NeedsTranslation = needsTranslation;
-            set.Reviewed = keyCount - (needsReview + needsTranslation);
+            set.NeedsTranslation = keyCount - (needsReview + reviewed);
+            set.Reviewed = reviewed;
             set.AllTranslations = keyCount;
 
             Global.CurrentSession.Update(set);

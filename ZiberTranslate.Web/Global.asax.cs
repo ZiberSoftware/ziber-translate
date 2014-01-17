@@ -43,13 +43,13 @@ namespace ZiberTranslate.Web
         }
 
 
-        private static void BuildSchema(NHibernate.Cfg.Configuration config)
-        {
-            var export = new SchemaExport(config);
-            export.SetOutputFile(@"c:\output.sql");
-            //export.SetOutputFile(@"C:\Users\Gebruiker\Desktop\Kilian's stuff\ZiberTranslate\ziber-translate\output.sql");
-            export.Execute(true, false, false);
-        }
+        //private static void BuildSchema(NHibernate.Cfg.Configuration config)
+        //{
+        //    var export = new SchemaExport(config);
+        //    export.SetOutputFile(@"c:\output.sql");
+        //    //export.SetOutputFile(@"C:\Users\Gebruiker\Desktop\Kilian's stuff\ZiberTranslate\ziber-translate\output.sql");
+        //    export.Execute(true, false, false);
+        //}
 
         private static ISessionFactory CreateSessionFactory()
         {
@@ -59,7 +59,7 @@ namespace ZiberTranslate.Web
                 .BuildConfiguration();
 
 #if DEBUG
-            BuildSchema(cfg);
+            //BuildSchema(cfg);
 #endif
 
             return cfg.BuildSessionFactory();

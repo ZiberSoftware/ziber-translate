@@ -12,8 +12,10 @@ namespace ZiberTranslate.Web.Services
         {
             var voter = TranslatorService.FindByEmail(HttpContext.Current.User.Identity.Name);
             var vote = FindVote(translation, voter);
-            if (vote == null)
-            {          
+            using (var t = Global.CurrentSession.BeginTransaction())
+            {
+                if (vote == null)
+                {
                     vote = new TranslationVote()
                     {
                         CreatedAt = DateTime.UtcNow,
@@ -22,10 +24,14 @@ namespace ZiberTranslate.Web.Services
                         Translation = translation,
                         Translator = voter
                     };
-                
-                Global.CurrentSession.Save(vote);
+
+                    Global.CurrentSession.Save(vote);
+                }
+                translation.NeedsReview = false;
+                Global.CurrentSession.Update(translation);
+
+                t.Commit();
             }
-            translation.NeedsReview = false;
         }
 
         public static void RemoveVote(Translation translation)

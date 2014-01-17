@@ -16,6 +16,9 @@ namespace ZiberTranslate.Web.Controllers
         {
             var translations = BuildTranslations(setId, language);
             var set = DbSession.Load<TranslateSet>(setId);
+            var lang = LanguageService.GetLanguageByIsoCode(language);
+
+            TranslateSetService.UpdateCounters(set, lang);
 
             var vm = new ViewModels.TranslationsViewModel();
             vm.Translations = translations;
@@ -54,7 +57,8 @@ namespace ZiberTranslate.Web.Controllers
             var userTranslations = DbSession.QueryOver<Translation>()
                 .Where(x => x.Language == LanguageService.GetLanguageByIsoCode(language))
                 .And(x => x.Translator == me)
-                .And(x => x.NeedsAdminReviewing == false)
+                .And(x => x.IsPublished == false)
+                .And(x => x.NeedsAdminReviewing == true)
                 .OrderBy(x => x.Votes).Desc
                 .Future();
 
@@ -113,8 +117,11 @@ namespace ZiberTranslate.Web.Controllers
 
         private ActionResult TranslationRow(int setId, string language, int keyId)
         {
+          
+
             var translations = BuildTranslations(setId, language);
 
+           
             return PartialView("TranslationRow", translations.Where(x => x.KeyId == keyId).SingleOrDefault());
         }
 
