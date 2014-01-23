@@ -1,4 +1,4 @@
-﻿@model ZiberTranslate.Web.Models.Translator
+﻿@model ZiberTranslate.Web.ViewModels.TranslationsViewModel
            
 @{
     ViewBag.Title = "Home";
@@ -9,19 +9,22 @@
 }
 
 <h1>Welkom op Translate.ziber.nl</h1>
-
-@Html.ActionLink("Login", "Login", new { controller = "Security", returnUrl = this.Context.Request.Url.PathAndQuery })
-|
-@Html.ActionLink("Logout", "Logout", "Security")
-|
-@*@{
-    var user = Model.Rank;
-    if(user==0)
-    {
-        @Html.ActionLink("Review user changes", "Index", "Admin")
-    }   
+@if (Context.User.Identity.IsAuthenticated)
+{ 
+<p>Logged in as: @(HttpContext.Current.User.Identity.Name)</p>
+<br />
+<br />
 }
-    *@
+@Html.ActionLink("Login", "Login", new { controller = "Security", returnUrl = this.Context.Request.Url.PathAndQuery })
+<p>|</p>
+@Html.ActionLink("Logout", "Logout", "Security")
+
+@if (Context.User.Identity.IsAuthenticated && Model.Rank == 0)
+{
+    <p>|</p>
+    @Html.ActionLink("Review user changes", "Index", "Admin")
+}
+
 <div class="search">
 @using (Html.BeginForm())
 {

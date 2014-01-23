@@ -16,7 +16,7 @@ namespace ZiberTranslate.Web.Controllers
         {
             var translations = BuildTranslations(setId, language);
             var set = DbSession.Load<TranslateSet>(setId);
-            var lang = LanguageService.GetLanguageByIsoCode(language);
+            var lang = LanguageService.GetLanguageByIsoCode(language);           
 
             TranslateSetService.UpdateCounters(set, lang);
 

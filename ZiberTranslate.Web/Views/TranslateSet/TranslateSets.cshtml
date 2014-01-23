@@ -4,7 +4,7 @@
     ViewBag.Title = "TranslateSets";
 }
 
-<h2>Duitse vertalingen</h2>
+<h2>@Model.Language.ToUpper() vertalingen</h2>
 
 @Html.ActionLink("Login", "Login", new { controller = "Security", returnUrl = this.Context.Request.Url.PathAndQuery })
 |
@@ -18,18 +18,10 @@
 
 
 <ul id="translate-sets">
-    @if (Model.Language == "en")
+
+    @foreach (var set in Model.Sets)
     {
-        foreach (var set in Model.Sets)
-        {
-            <li><a href="@Url.RouteUrl("Translations", new { setId = set.Id, language = "en"})">@set.Name (EN)</a></li>
-        }
+        <li><a href="@Url.RouteUrl("Translations", new { setId = set.Id, language = @Model.Language})">@set.Name (@Model.Language.ToUpper())</a></li>
     }
-    @if (Model.Language == "de")
-    {
-        foreach (var set in Model.Sets)
-        {
-            <li><a href="@Url.RouteUrl("Translations", new { setId = set.Id, language = "de"})">@set.Name (DE)</a></li>
-        }
-    }
+    
 </ul>

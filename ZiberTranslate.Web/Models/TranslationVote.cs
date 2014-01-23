@@ -12,7 +12,7 @@ namespace ZiberTranslate.Web.Models
         public virtual Translator Translator { get; set; }
         public virtual DateTime CreatedAt { get; set; }
         public virtual int Rank { get; set; }
-
+        public virtual bool NeedsAdminReviewing { get; set; }
         public virtual bool IsPublished { get; set; }
     }
 
@@ -21,7 +21,7 @@ namespace ZiberTranslate.Web.Models
         public TranslationVoteMap()
         {
             Id(x => x.Id).GeneratedBy.Native();
-
+            Map(x => x.NeedsAdminReviewing);
             Map(x => x.CreatedAt);
             Map(x => x.Rank);
             Map(x => x.IsPublished);

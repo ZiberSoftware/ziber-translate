@@ -17,29 +17,6 @@ namespace ZiberTranslate.Web.Controllers
             return View("Login");
         }
 
-        /*[HttpPost]
-        public ActionResult Login(string emailAddress, string password, string returnUrl = "")
-        {
-            var user = DbSession.QueryOver<Translator>()
-                .Where(x => x.EmailAddress == emailAddress).And(x => x.Password == password)
-                .SingleOrDefault();
-
-            if (user == null)
-            {
-                return RedirectToAction("Login");
-            }
-
-            FormsAuthentication.SetAuthCookie(emailAddress, false);
-
-            if (!string.IsNullOrWhiteSpace(returnUrl))
-            {
-                return new RedirectResult(returnUrl);
-            }
-
-            return RedirectToAction("Index", "Home");
-        }
-        */
- 
         [HttpPost]
         public ActionResult Login(string emailAddress, string password, string returnUrl = "")
         {

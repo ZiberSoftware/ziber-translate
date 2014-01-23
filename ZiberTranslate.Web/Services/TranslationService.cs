@@ -53,7 +53,7 @@ namespace ZiberTranslate.Web.Services
 
             return Global.CurrentSession.CreateCriteria<Translation>()
                 .Add(Subqueries.PropertyEq("Language", crit))
-                //.Add(Restrictions.IsNull("Translator"))
+                .Add(Restrictions.IsNull("Translator"))
                 .CreateAlias("Key", "k")
                 .Add(Restrictions.Eq("k.Id", id))
                 .UniqueResult<Translation>();
@@ -81,42 +81,24 @@ namespace ZiberTranslate.Web.Services
                     Global.CurrentSession.Update(translation);
                 }
             }
-            else if(!string.IsNullOrWhiteSpace(value))
+            else if (!string.IsNullOrWhiteSpace(value))
             {
-                if (translatorRank == 0)
-                {
-                    if (leading == null || value != leading.Value)
-                    {
-                        translation = new Translation();
-                        translation.Key = Global.CurrentSession.Load<TranslateKey>(id);
-                        translation.Language = LanguageService.GetLanguageByIsoCode(language);
-                        translation.Value = value;
-                        translation.NeedsAdminReviewing = false;
-                        translation.IsPublished = true;                       
-                        translation.NeedsReview = true;
-                        translation.Translator = translator;
 
-                        Global.CurrentSession.Save(translation);
-                    }
-                    else { translation = leading; }
-                }
-                else
+                if (leading == null || value != leading.Value)
                 {
-                    if (leading == null || value != leading.Value)
-                    {
-                        translation = new Translation();
-                        translation.Key = Global.CurrentSession.Load<TranslateKey>(id);
-                        translation.Language = LanguageService.GetLanguageByIsoCode(language);
-                        translation.Value = value;
-                        translation.NeedsAdminReviewing = true;
-                        translation.IsPublished = false;
-                        translation.NeedsReview = true;
-                        translation.Translator = translator;
+                    translation = new Translation();
+                    translation.Key = Global.CurrentSession.Load<TranslateKey>(id);
+                    translation.Language = LanguageService.GetLanguageByIsoCode(language);
+                    translation.Value = value;
+                    translation.NeedsAdminReviewing = true;
+                    translation.IsPublished = false;
+                    translation.NeedsReview = true;
+                    translation.Translator = translator;
 
-                        Global.CurrentSession.Save(translation);
-                    }
-                    else { translation = leading; }
+                    Global.CurrentSession.Save(translation);
                 }
+                else { translation = leading; }
+
             }
             return translation;
         }
@@ -127,11 +109,9 @@ namespace ZiberTranslate.Web.Services
 
             MailMessage mail = new MailMessage();
             mail.To.Add(emailAddress);
-            mail.From = new MailAddress("ziber.translate@gmail.com");
             mail.Subject = "Thanks for your contribution!";
-            mail.Body = "Thank you for translating or reviewing on ziber.translate.nl. You will be notified when your changes are accepted and made public. \n"+"Kind regards, the Ziber team.";
+            mail.Body = "Thank you for translating or reviewing on ziber.translate.nl. You will be notified when your changes are accepted and made public. \n" + "Kind regards, the Ziber team.";
             SmtpClient smtp = new SmtpClient();
-            smtp.EnableSsl = true;
             smtp.Send(mail);
         }
     }

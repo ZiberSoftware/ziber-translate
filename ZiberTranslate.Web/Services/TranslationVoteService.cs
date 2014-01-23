@@ -21,6 +21,7 @@ namespace ZiberTranslate.Web.Services
                         CreatedAt = DateTime.UtcNow,
                         IsPublished = false,
                         Rank = voter.Rank,
+                        NeedsAdminReviewing = true,
                         Translation = translation,
                         Translator = voter
                     };

@@ -19,12 +19,11 @@ namespace ZiberTranslate.Web.Controllers
 
             var vm = new TranslateSetsViewModel();
             vm.Sets = sets;
+            vm.Language = language;
 
-            if (language == "en")
-                return View("EnglishTranslate", vm);
-            else if (language == "de")
-                return View("GermanTranslate", vm);
-            else 
+            if (!string.IsNullOrWhiteSpace(language))
+                return View("TranslateSets", vm);
+            else
                 return View("Index");
         }
     }

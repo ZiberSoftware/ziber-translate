@@ -8,9 +8,15 @@ namespace ZiberTranslate.Web.ViewModels
     public class ReviewViewModel
     {
         public IEnumerable<SetWithReviews> ChangedSets { get; set; }
+        public IEnumerable<SetContent> Content { get; set; }
     }
 
-    public class SetWithReviews
+    public class SetContent : ViewModels.TranslationsViewModel.TranslationDTO
+    {
+        public string Language { get; set; }
+        public string SetName { get; set; }
+    }
+    public class  SetWithReviews
     {
         public int SetId { get; set; }
         public string SetName { get; set; }

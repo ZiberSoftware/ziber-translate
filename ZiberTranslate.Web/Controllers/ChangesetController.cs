@@ -27,14 +27,13 @@ namespace ZiberTranslate.Web.Controllers
         private IEnumerable<TranslationChange> BuildTranslations()
         {
             var me = TranslatorService.FindByEmail(HttpContext.User.Identity.Name);
-
+            
             var changes = DbSession.CreateCriteria<Translation>()
                 .Add(Restrictions.Eq("IsPublished", false))
                 .Add(Restrictions.Eq("Translator", me))
                 .CreateAlias("Key", "k")
                 .CreateAlias("k.Set", "s")
                 .Future<Translation>();
-
 
             var votedOn = DetachedCriteria.For<TranslationVote>()
                 .Add(Restrictions.Eq("IsPublished", false))
@@ -89,6 +88,7 @@ namespace ZiberTranslate.Web.Controllers
             using (var t = DbSession.BeginTransaction())
             {
                 var me = TranslatorService.FindByEmail(HttpContext.User.Identity.Name);
+                var rank = TranslatorService.FetchRank(HttpContext.User.Identity.Name);
 
                 var changes = DbSession.CreateCriteria<Translation>()
                     .Add(Restrictions.Eq("IsPublished", false))
@@ -107,7 +107,10 @@ namespace ZiberTranslate.Web.Controllers
                 foreach (var translation in changes.ToList())
                 {
                     translation.IsPublished = true;
-                    translation.NeedsAdminReviewing = true;
+                    if (rank == 0)
+                    {
+                        translation.NeedsAdminReviewing = false;
+                    }
 
                     DbSession.Update(translation);
                 }
@@ -115,7 +118,10 @@ namespace ZiberTranslate.Web.Controllers
                 foreach (var vote in votes.ToList())
                 {
                     vote.IsPublished = true;
-
+                    if (rank == 0)
+                    {
+                        vote.NeedsAdminReviewing = false;
+                    }
                     DbSession.Update(vote);
                 }
 

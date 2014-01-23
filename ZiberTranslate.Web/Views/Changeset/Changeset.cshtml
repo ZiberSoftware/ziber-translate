@@ -13,7 +13,7 @@
 {
     foreach (var g in Model.Changes.GroupBy(x => new { x.SetId, x.Language, x.SetName }))
     {
-        <h1>@g.Key.SetName (@g.Key.Language)</h1>
+        <h3>@g.Key.SetName (@g.Key.Language.ToUpper())</h3>
         <table class="translations">
             @foreach (var translation in g)
             {

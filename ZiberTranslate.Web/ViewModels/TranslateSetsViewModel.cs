@@ -9,5 +9,6 @@ namespace ZiberTranslate.Web.ViewModels
     public class TranslateSetsViewModel
     {
         public IEnumerable<TranslateSet> Sets { get; set; }
+        public string Language { get; set; }
     }
 }

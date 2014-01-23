@@ -17,6 +17,11 @@ dl
     margin:0px;
 }
 
+p
+{
+    display:inline;
+
+}
 ol, li, ul, a
 {
     text-decoration: none;

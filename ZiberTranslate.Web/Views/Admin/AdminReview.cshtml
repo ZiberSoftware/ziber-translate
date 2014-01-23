@@ -1,0 +1,14 @@
+﻿@model ZiberTranslate.Web.ViewModels.ReviewViewModel
+
+@{
+    ViewBag.Title = "AdminReview";
+}
+
+<h2>AdminReview</h2>
+
+<table id="table" class="translations">
+    @foreach (var t in Model.Content)
+    {
+        Html.RenderPartial("TranslationRow", t);
+    }
+</table>
