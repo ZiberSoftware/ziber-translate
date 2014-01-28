@@ -46,13 +46,13 @@ namespace ZiberTranslate.Web.Controllers
         public IEnumerable<SetContent> BuildSetContent()
         {
             var NeedAdminReview = DbSession.CreateCriteria<Translation>()
-                 .Add(Restrictions.Eq("NeedsAdminReview", true))
+                 .Add(Restrictions.Eq("NeedsAdminReviewing", true))
                  .CreateAlias("Key", "k")
                  .CreateAlias("k.Set", "s")
                  .Future<Translation>();
 
             var votedOn = DetachedCriteria.For<TranslationVote>()
-                .Add(Restrictions.Eq("NeedsAdminReview", true))                
+                .Add(Restrictions.Eq("NeedsAdminReviewing", true))                
                 .CreateAlias("Translation", "t")
                 .SetProjection(Projections.Property("t.Id"));
 
