@@ -27,8 +27,8 @@ namespace ZiberTranslate.Web.Controllers
                     .Add(Projections.Property("s.Id"), "SetId")
                     .Add(Projections.Property("s.Name"), "SetName")
                     .Add(Projections.Property("l.IsoCode"), "Language"))
-                .SetResultTransformer(Transformers.AliasToBean<SetWithReviews>())
-                .List<SetWithReviews>();
+                .SetResultTransformer(Transformers.AliasToBean<ViewModels.ReviewViewModel.SetWithReviews>())
+                .List<ViewModels.ReviewViewModel.SetWithReviews>();
 
             var vm = new ReviewViewModel() { ChangedSets = setsWithChanges.Distinct() };
 
@@ -43,7 +43,7 @@ namespace ZiberTranslate.Web.Controllers
 
         }
 
-        public IEnumerable<SetContent> BuildSetContent()
+        public IEnumerable<ViewModels.ReviewViewModel.SetContent> BuildSetContent()
         {
             var NeedAdminReview = DbSession.CreateCriteria<Translation>()
                  .Add(Restrictions.Eq("NeedsAdminReviewing", true))
@@ -81,7 +81,7 @@ namespace ZiberTranslate.Web.Controllers
                 let neutralTranslation = neutralTranslations.Where(x => x.Key == change.Key).FirstOrDefault()
                 let leadingTranslation = leadingTranslations.Where(x => x.Key == change.Key && x.Language == change.Language).FirstOrDefault()
                 let voted = votes.Any(x => x.Key == neutralTranslation.Key)
-                select new SetContent
+                select new ViewModels.ReviewViewModel.SetContent
                 {
                     KeyId = change.Key.Id,
                     TranslatorName = change.Translator.Name,
