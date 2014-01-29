@@ -8,13 +8,13 @@
 <script src="@Url.Content("~/Scripts/translations.js")"></script>
 }
 
-<h2>Index</h2>
+<h2>Sets with changes</h2>
 
 <ul>
     @foreach (var changedSet in Model.ChangedSets)
     {
         <li>
-            <a href="@Url.Action("Set", new { id = changedSet.SetId, language = changedSet.Language})">@changedSet.SetName (@changedSet.Language)</a>
+            <a href="@Url.Action("Set", new { SetId = changedSet.SetId, language = changedSet.Language})">@changedSet.SetName (@changedSet.Language)</a>
         </li>
     }
 </ul>

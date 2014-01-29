@@ -66,10 +66,16 @@
 
 		var text = this.$display.data('translation-text');
 		var leadingText = this.$display.data('translation-leading-text');
-		if (leadingText != text) {
-			var display = diffString(leadingText, text);
-			this.$display.html(display);
-		}
+		
+	    if (text == "")
+		{
+		    this.$display.html(leadingText);
+	    }
+
+	    else if (leadingText != text) {
+	        var display = diffString(leadingText, text);
+	        this.$display.html(display);
+	    }
 	}
 
 	Translation.prototype.approve = function (el) {

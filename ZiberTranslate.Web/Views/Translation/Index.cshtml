@@ -18,6 +18,10 @@
                 window.history.go(-3);
             else
                 window.history.back();
+            
+        }
+        function reloadPage() {
+            location.reload();
         }
     </script>
 <script src="@Url.Content("~/Scripts/translations.js")"></script>
@@ -34,7 +38,8 @@
     <a href="/">HOME</a>
     >>
     <a href="#" onclick="previousPage()">CATEGORIEN</a>
-    >> 
+    >>
+    <a href="#" onclick="reloadPage()">@Model.Name (@Model.Language.ToUpper())</a> 
 </h3>
 
 @Html.ActionLink("Review changes", "Index", "Changeset")

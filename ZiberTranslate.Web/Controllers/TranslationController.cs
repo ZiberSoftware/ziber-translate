@@ -16,12 +16,18 @@ namespace ZiberTranslate.Web.Controllers
         {
             var translations = BuildTranslations(setId, language);
             var set = DbSession.Load<TranslateSet>(setId);
+            var name = Global.CurrentSession.QueryOver<TranslateSet>()
+                .Where(x => x.Id == setId)
+                        .Select(x => x.Name)
+                        .SingleOrDefault<string>();
             var lang = LanguageService.GetLanguageByIsoCode(language);           
 
             TranslateSetService.UpdateCounters(set, lang);
 
             var vm = new ViewModels.TranslationsViewModel();
             vm.Translations = translations;
+            vm.Name = name;
+            vm.Language = language;
             vm.Reviewed = set.Reviewed;
             vm.NeedsReview = set.NeedsReview;
             vm.NeedsTranslation = set.NeedsTranslation;
@@ -84,7 +90,7 @@ namespace ZiberTranslate.Web.Controllers
                     KeyId = key.Id,
                     Term = neutralTranslation == null ? string.Empty : neutralTranslation.Value,
                     Value = userTranslation == null ? string.Empty : userTranslation.Value,
-                    LeadingValue = leadingTranslation == null ? string.Empty : leadingTranslation.Value,
+                    LeadingValue = leadingTranslation == null ? neutralTranslation.Value : leadingTranslation.Value,
                     Votes = leadingTranslation == null ? 0 : userTranslation.Votes,                    
                     Voted = votedOnKeys.Contains(key.Id),
                     SetId = id
