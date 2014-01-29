@@ -84,6 +84,8 @@ namespace ZiberTranslate.Web.Controllers
                 select new SetContent
                 {
                     KeyId = change.Key.Id,
+                    TranslatorName = change.Translator.Name,
+                    Rank = change.Translator.Rank,
                     SetId = change.Key.Set.Id,
                     SetName = change.Key.Set.Name,
                     Language = change.Language.IsoCode,

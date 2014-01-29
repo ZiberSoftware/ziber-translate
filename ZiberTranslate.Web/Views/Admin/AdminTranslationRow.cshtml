@@ -1,0 +1,44 @@
+﻿@model ZiberTranslate.Web.ViewModels.ReviewViewModel.SetContent
+@using ZiberTranslate.Web
+
+<tr class="translation" id="translation_key_@(Model.KeyId)">
+    <th class="key">@Model.Term</th>
+    <td class="spacer @(Model.Votes > 0 ? "reviewed" : string.Empty)">
+        <span>
+            @if (Model.Votes > 0)
+            {
+                <span class="vote-count">@Model.Votes</span>
+            }
+        </span>
+    </td>
+    <td class="translation">
+        <p class="edit" data-translation-key-id="@Model.KeyId" data-translation-text="@Model.Value" data-post-url="@Url.Action("Update", new { id = Model.KeyId })" data-translation-leading-text="@Model.LeadingValue">
+            @Model.Value
+        </p>
+        <div class="field" style="display: none;">
+            <textarea class="inline-edit" autocomplete="off">@Model.Value</textarea>
+        </div>
+    </td>
+    <td class="actions">
+        <span class="view-actions">
+            @if (Model.Differs)
+            {
+                <a href="@Url.Action("Destroy", new { id = Model.KeyId })" class="ajax delete" title="Undo changes">Undo changes</a>
+            }
+            else if (Model.Voted)
+            {
+                <a href="@Url.Action("Disapprove", new { id = Model.KeyId })" class="ajax unapprove" title="Remove approval">UnApprove</a>
+            }
+            else
+            {
+                <a href="@Url.Action("Approve", new { id = Model.KeyId })" class="ajax approve" title="Approve">Approve</a>
+            }
+        </span>
+        <span class="edit-actions" style="display:none;">
+            <input class="save" type="button" value="&gt;" />
+        </span>
+    </td>
+    <td>
+        @Model.TranslatorName
+    </td>
+</tr>

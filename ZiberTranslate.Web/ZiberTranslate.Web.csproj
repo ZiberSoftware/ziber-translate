@@ -222,6 +222,7 @@
     <Content Include="Views\Security\Succes.cshtml" />
     <Content Include="Views\Security\Signup.cshtml" />
     <Content Include="Views\Admin\AdminReview.cshtml" />
+    <Content Include="Views\Admin\AdminTranslationRow.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
