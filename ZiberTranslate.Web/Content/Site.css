@@ -163,6 +163,15 @@ table.translations td.actions .delete:hover
 {
     background-position: -27px -0px;
 }
+table.translations td.userinfo
+{
+    width: 175px;
+}
+
+table,translations td.userinfo2
+{
+    width: 50px;
+}
 
 table.translations .spacer span
 {
