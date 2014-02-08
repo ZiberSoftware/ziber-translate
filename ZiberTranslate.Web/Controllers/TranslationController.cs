@@ -72,7 +72,8 @@ namespace ZiberTranslate.Web.Controllers
             {
                 neutralTranslations = DbSession.QueryOver<Translation>()
                    .Where(x => x.Language == LanguageService.GetNeutralLanguage())
-                   .And(x => x.NeedsAdminReviewing == false)               
+                   .And(x => x.NeedsAdminReviewing == false)
+                    .And(x => x.NeedsReview == true)
                    .OrderBy(x => x.Votes).Desc
                    .Future();
 
