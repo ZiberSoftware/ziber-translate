@@ -8,9 +8,14 @@ namespace ZiberTranslate.Web.Services
 {
     public class LanguageService
     {
-        public static Language GetNeutralLanguage()
+        public static Language GetNeutralLanguage(string emailAddress)
         {
-            return GetLanguageByIsoCode("nl");
+            var defaultLang = Global.CurrentSession.QueryOver<Translator>()
+                .Where(x => x.EmailAddress == emailAddress)
+                .Select(x => x.NeutralLanguage)
+                .SingleOrDefault<string>();
+
+            return GetLanguageByIsoCode(defaultLang);
         }
 
         public static Language GetLanguageByIsoCode(string isoCode)

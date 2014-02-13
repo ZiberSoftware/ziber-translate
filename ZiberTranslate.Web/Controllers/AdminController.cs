@@ -44,15 +44,20 @@ namespace ZiberTranslate.Web.Controllers
 
         }
 
+        public ActionResult Submit (int[] TranslationId)
+        {
+            var translationsApproved = DbSession.CreateCriteria<Translation>()
+                .Add(Restrictions.Eq("Id",TranslationId))
+                .List<Translation>();
+
+
+
+            return RedirectToAction("Set");
+        }
+
         public IEnumerable<ViewModels.ReviewViewModel.SetContent> BuildSetContent(int id, string language)
         {
-            //var translationsNeedsReviewing = DbSession.QueryOver<Translation>()
-            //     .Where(x => x.Language == LanguageService.GetLanguageByIsoCode(language))
-            //     .And(x => x.IsPublished)
-            //     .And(x => x.NeedsAdminReviewing)
-            //     .Future();
-
-            var translationsNeedsReviewing = DbSession.CreateCriteria<Translation>()
+            var translationsNeedsAdminReviewing = DbSession.CreateCriteria<Translation>()
                 .CreateAlias("Key", "k")
                 .CreateAlias("Language", "l")
                 .Add(Restrictions.Eq("k.Set.Id", id))
@@ -70,45 +75,23 @@ namespace ZiberTranslate.Web.Controllers
                 .Add(Subqueries.PropertyIn("Id", votedOn))
                 .Future<Translation>();
 
-            //NeedAdminReview = NeedAdminReview.Concat(votes);
-
             var neutralTranslations = DbSession.QueryOver<Translation>()
-                .Where(Restrictions.On<Translation>(x => x.Key.Id).IsIn(translationsNeedsReviewing.Select(x => x.Key.Id).ToArray()))
-                .And(x => x.Language == LanguageService.GetNeutralLanguage())
+                .Where(Restrictions.On<Translation>(x => x.Key.Id).IsIn(translationsNeedsAdminReviewing.Select(x => x.Key.Id).ToArray()))
+                .And(x => x.Language == LanguageService.GetNeutralLanguage(HttpContext.User.Identity.Name))
                 .And(x => x.NeedsAdminReviewing == false)
                 .OrderBy(x => x.Votes).Desc
                 .Future();
 
             var leadingTranslations = DbSession.QueryOver<Translation>()
-                .Where(Restrictions.On<Translation>(x => x.Key.Id).IsIn(translationsNeedsReviewing.Select(x => x.Key.Id).ToArray()))
+                .Where(Restrictions.On<Translation>(x => x.Key.Id).IsIn(translationsNeedsAdminReviewing.Select(x => x.Key.Id).ToArray()))
                 .And(x => x.Language == LanguageService.GetLanguageByIsoCode(language))
                 .And(x => x.IsPublished)
                 .And(x => x.NeedsAdminReviewing == false)
                 .OrderBy(x => x.Votes).Desc
                 .Future();
 
-            //var translations = (
-            //    from translation in translationsNeedsReviewing
-            //    let neutralTranslation = neutralTranslations.Where(x => x.Key == translation.Key).Single()
-            //    let leadingTranslation = leadingTranslations.Where(x => x.Key == translation.Key).SingleOrDefault()
-            //    let voted = votes.Any(x => x.Key == translation.Key)
-            //    select new ReviewViewModel.SetContent
-            //    {
-            //        KeyId = translation.Key.Id,
-            //        SetId = id,
-            //        SetName = translation.Key.Set.Name,
-            //        Language = language,
-            //        TranslatorName = translation.Translator.Name,
-            //        Rank = translation.Translator.Rank,
-            //        Term = neutralTranslation == null ? string.Empty : neutralTranslation.Value,
-            //        LeadingValue = (leadingTranslation == null ? neutralTranslation.Value : leadingTranslation.Value),
-            //        Value = translation.Value,
-            //        Voted = voted
-            //    }
 
-            //).ToList();
-
-            foreach (var translation in translationsNeedsReviewing)
+            foreach (var translation in translationsNeedsAdminReviewing)
             {
                 var neutralTranslation = neutralTranslations.Where(x => x.Key == translation.Key).Single();
                 var leadingTranslation = leadingTranslations.Where(x => x.Key == translation.Key).SingleOrDefault();
@@ -125,6 +108,7 @@ namespace ZiberTranslate.Web.Controllers
                 c.LeadingValue = (leadingTranslation == null ? neutralTranslation.Value : leadingTranslation.Value);
                 c.Value = translation.Value;
                 c.Voted = voted;
+                c.TranslationId = translation.Id;
 
                 yield return c;
             }

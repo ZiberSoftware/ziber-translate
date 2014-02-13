@@ -10,7 +10,7 @@ using NHibernate.Linq;
 
 namespace ZiberTranslate.Web.Controllers
 {
-    //[Authorize]
+   
     public class HomeController : BaseController
     {
         public ActionResult Index()
@@ -29,6 +29,28 @@ namespace ZiberTranslate.Web.Controllers
 
             return View("Index", vm);
         }
+       
+        public ActionResult DefaultLanguage(string language="")
+        {
+            if (language == "")
+            {
+                return View("PickLanguage");
+            }
+            else
+            {
+                using (var t = DbSession.BeginTransaction())
+                {
+                    var me = TranslatorService.FindByEmail(HttpContext.User.Identity.Name);
 
+                    me.NeutralLanguage = language;
+
+                    Global.CurrentSession.Update(me);
+                    t.Commit();
+                }
+
+                return RedirectToAction("Index");
+            }
+            
+        }
     }
 }

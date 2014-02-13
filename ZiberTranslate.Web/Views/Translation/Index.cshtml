@@ -12,14 +12,6 @@
         window.redirect = "@(Url.Action("Login", new { controller = "Security", returnUrl = this.Context.Request.Url.PathAndQuery }))";
         window.prevPage = "@(Request.UrlReferrer.PathAndQuery)";
 
-        function previousPage() {
-            
-            if (prevPage == redirect)
-                window.history.go(-3);
-            else
-                window.history.back();
-            
-        }
         function reloadPage() {
             location.reload();
         }
@@ -37,7 +29,7 @@
 <h3>
     <a href="/">HOME</a>
     >>
-    <a href="#" onclick="previousPage()">CATEGORIEN</a>
+    <a href="/TranslateSet?language=@Model.Language">CATEGORIEN</a>
     >>
     <a href="#" onclick="reloadPage()">@Model.Name (@Model.Language.ToUpper())</a> 
 </h3>
@@ -52,7 +44,7 @@
                         Needs Review
                     </dt>
                     <dd>
-                        <a href="#">@Model.NeedsReview</a>
+                        <a href="@Url.RouteUrl("Translations", new {setId = @Model.SetId, language = @Model.Language, filter = "NeedsReview" })">@Model.NeedsReview</a>
                     </dd>
                 </dl>
             </li>
@@ -62,7 +54,7 @@
                         Needs Translation
                     </dt>
                     <dd>
-                        <a href="#">@Model.NeedsTranslation</a>
+                        <a href="@Url.RouteUrl("Translations", new {setId = @Model.SetId, language = @Model.Language, filter = "NeedsTranslation" })">@Model.NeedsTranslation</a>
                     </dd>
                 </dl>
             </li>
@@ -72,7 +64,7 @@
                         Reviewed
                     </dt>
                     <dd>
-                        <a href="#">@Model.Reviewed</a>
+                        <a href="@Url.RouteUrl("Translations", new {setId = @Model.SetId, language = @Model.Language, filter = "Reviewed" })">@Model.Reviewed</a>
                     </dd> 
                 </dl>
             </li>
@@ -82,7 +74,7 @@
                         All
                     </dt>
                     <dd>
-                        <a href="#">@Model.AllTranslations</a>
+                        <a href="@Url.RouteUrl("Translations", new {setId = @Model.SetId, language = @Model.Language, filter = "All" })">@Model.AllTranslations</a>
                     </dd>
                 </dl>
             </li>

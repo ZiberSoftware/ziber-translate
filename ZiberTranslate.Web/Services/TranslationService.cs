@@ -6,6 +6,8 @@ using System.Net.Mail;
 using System.Configuration;
 using ZiberTranslate.Web.Models;
 using NHibernate.Criterion;
+using ZiberTranslate.Web.Controllers;
+using System.Web.Mvc;
 
 namespace ZiberTranslate.Web.Services
 {
@@ -15,7 +17,6 @@ namespace ZiberTranslate.Web.Services
         {
             return Global.CurrentSession.QueryOver<Translation>().Where(x => x.Id == id).SingleOrDefault();
         }
-
 
         public static Translation FindByKeyForTranslator(int id, string language, Translator translator)
         {
@@ -113,6 +114,62 @@ namespace ZiberTranslate.Web.Services
             mail.Body = "Thank you for translating or reviewing on ziber.translate.nl. You will be notified when your changes are accepted and made public. \n" + "Kind regards, the Ziber team.";
             SmtpClient smtp = new SmtpClient();
             smtp.Send(mail);
+        }
+
+        public static  IEnumerable<Translation> FilteredKeys(int id, string language, FilterType filter )
+        {
+            switch (filter)
+            {
+                case FilterType.All:
+                    {
+
+                        return Global.CurrentSession.CreateCriteria<Translation>()
+                                .CreateAlias("Key", "k")                                
+                                .Add(Restrictions.Eq("k.Set.Id", id))                                
+                                .List<Translation>();
+                    }
+
+                case FilterType.NeedsReview:
+                    {
+                        return Global.CurrentSession.CreateCriteria<Translation>()
+                            .CreateAlias("Key", "k")
+                            .CreateAlias("Language", "l")
+                            .Add(Restrictions.Eq("k.Set.Id", id))
+                            .Add(Restrictions.Eq("NeedsReview", true))
+                            .Add(Restrictions.Eq("l.IsoCode", language))
+                            .List<Translation>();
+                    }
+
+                case FilterType.NeedsTranslation:
+                    {
+                        return Global.CurrentSession.CreateCriteria<Translation>()
+                            .CreateAlias("Key", "k")
+                            .CreateAlias("Language", "l")
+                            .Add(Restrictions.Eq("k.Set.Id", id))
+                            .Add(Restrictions.Eq("l.IsoCode", language))
+                            .List<Translation>();
+                    }
+
+                case FilterType.Reviewed:
+                    {
+                        return Global.CurrentSession.CreateCriteria<Translation>()
+                            .CreateAlias("Key", "k")
+                            .CreateAlias("Language", "l")
+                            .Add(Restrictions.Eq("k.Set.Id", id))
+                            .Add(Restrictions.Eq("NeedsReview", false))
+                            .Add(Restrictions.Eq("l.IsoCode", language))
+                            .List<Translation>();
+                    }
+
+                default:
+                    {
+                        return Global.CurrentSession.CreateCriteria<Translation>()
+                                .CreateAlias("Key", "k")
+                                .Add(Restrictions.Eq("k.Set.Id", id))
+                                .List<Translation>();
+                    }
+            }
+            
         }
     }
 }

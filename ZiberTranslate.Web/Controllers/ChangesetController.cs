@@ -49,7 +49,7 @@ namespace ZiberTranslate.Web.Controllers
 
             var neutralTranslations = DbSession.QueryOver<Translation>()
                 .Where(Restrictions.On<Translation>(x => x.Key).IsIn(changes.Select(x => x.Key).ToArray()))
-                .And(x => x.Language == LanguageService.GetNeutralLanguage())
+                .And(x => x.Language == LanguageService.GetNeutralLanguage(HttpContext.User.Identity.Name))
                 .And(x => x.NeedsAdminReviewing == false)
                 .OrderBy(x => x.Votes).Desc
                 .Future();

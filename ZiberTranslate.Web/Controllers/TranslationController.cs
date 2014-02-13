@@ -10,9 +10,17 @@ using NHibernate.Criterion;
 
 namespace ZiberTranslate.Web.Controllers
 {
+    public enum FilterType
+    {
+        All,
+        NeedsReview,
+        NeedsTranslation,
+        Reviewed
+    }
+
     public class TranslationController : BaseController
     {
-        public ActionResult Index(int setId, string language, string filter, int? categoryId = null)
+        public ActionResult Index(int setId, string language, FilterType filter, int? categoryId = null)
         {
             var translations = BuildTranslations(setId, language, filter);
             var set = DbSession.Load<TranslateSet>(setId);
@@ -40,141 +48,65 @@ namespace ZiberTranslate.Web.Controllers
             return View("Index", vm);
         }
 
-        private IEnumerable<ViewModels.TranslationsViewModel.TranslationDTO> BuildTranslations(int id, string language, string filter)
+        private IEnumerable<ViewModels.TranslationsViewModel.TranslationDTO> BuildTranslations(int id, string language, FilterType filter)
         {
-            var me = TranslatorService.FindByEmail(HttpContext.User.Identity.Name);
-            var keys = DbSession.QueryOver<TranslateKey>()
-                .Where(x => x.Set.Id == id)
-                .Future();
-
+            var me = TranslatorService.FindByEmail(HttpContext.User.Identity.Name);           
+            var keys = TranslationService.FilteredKeys(id, language, filter);
+                  
             var neutralTranslations = DbSession.QueryOver<Translation>()
-                    .Where(x => x.Language == LanguageService.GetNeutralLanguage())
-                    .And(x => x.NeedsAdminReviewing == false)
-                    .OrderBy(x => x.Votes).Desc
-                    .Future();
+                             .Where(x => x.Language == LanguageService.GetNeutralLanguage(HttpContext.User.Identity.Name))
+                             .And(x => x.NeedsAdminReviewing == false)
+                             .OrderBy(x => x.Votes).Desc
+                             .Future();
 
             var leadingTranslations = DbSession.QueryOver<Translation>()
-                      .Where(x => x.Language == LanguageService.GetLanguageByIsoCode(language))
-                      .And(x => x.IsPublished)
-                      .And(x => x.NeedsAdminReviewing == false)
-                      .OrderBy(x => x.Votes).Desc
-                      .Future();
+                              .Where(x => x.Language == LanguageService.GetLanguageByIsoCode(language))
+                              .And(x => x.IsPublished)
+                              .And(x => x.NeedsAdminReviewing == false)
+                              .OrderBy(x => x.Votes).Desc
+                              .Future();
 
             var userTranslations = DbSession.QueryOver<Translation>()
-                      .Where(x => x.Language == LanguageService.GetLanguageByIsoCode(language))
-                      .And(x => x.Translator == me)
-                      .And(x => x.IsPublished == false)
-                      .And(x => x.NeedsAdminReviewing == true)
-                      .OrderBy(x => x.Votes).Desc
-                      .Future();
-
-            if (filter == "NeedsReview")
-            {
-                neutralTranslations = DbSession.QueryOver<Translation>()
-                   .Where(x => x.Language == LanguageService.GetNeutralLanguage())
-                   .And(x => x.NeedsAdminReviewing == false)
-                    .And(x => x.NeedsReview == true)
-                   .OrderBy(x => x.Votes).Desc
-                   .Future();
-
-                leadingTranslations = DbSession.QueryOver<Translation>()
-                    .Where(x => x.Language == LanguageService.GetLanguageByIsoCode(language))
-                    .And(x => x.IsPublished)
-                    .And(x => x.NeedsAdminReviewing == false)
-                    .And(x => x.NeedsReview == true)
-                    .OrderBy(x => x.Votes).Desc
-                    .Future();
-
-                userTranslations = DbSession.QueryOver<Translation>()
-                   .Where(x => x.Language == LanguageService.GetLanguageByIsoCode(language))
-                   .And(x => x.Translator == me)
-                   .And(x => x.IsPublished == false)
-                   .And(x => x.NeedsAdminReviewing == true)
-                   .And(x => x.NeedsReview == true)
-                   .OrderBy(x => x.Votes).Desc
-                   .Future();
-            }
-
-            else if (filter == "NeedsTranslation")
-            {
-                neutralTranslations = DbSession.QueryOver<Translation>()
-                   .Where(x => x.Language == LanguageService.GetNeutralLanguage())
-                   .And(x => x.NeedsAdminReviewing == false)
-                   .OrderBy(x => x.Votes).Desc
-                   .Future();
-
-                leadingTranslations = DbSession.QueryOver<Translation>()
-                    .Where(x => x.Language == LanguageService.GetLanguageByIsoCode(language))
-                    .And(x => x.IsPublished)
-                    .And(x => x.NeedsAdminReviewing == false)
-                    .OrderBy(x => x.Votes).Desc
-                    .Future();
-
-                userTranslations = DbSession.QueryOver<Translation>()
-                   .Where(x => x.Language == LanguageService.GetLanguageByIsoCode(language))
-                   .And(x => x.Translator == me)
-                   .And(x => x.IsPublished == false)
-                   .And(x => x.NeedsAdminReviewing == true)
-                   .OrderBy(x => x.Votes).Desc
-                   .Future();
-            }
-
-            else if (filter == "Reviewed")
-            {
-                neutralTranslations = DbSession.QueryOver<Translation>()
-                   .Where(x => x.Language == LanguageService.GetNeutralLanguage())
-                   .And(x => x.NeedsAdminReviewing == false)
-                   .OrderBy(x => x.Votes).Desc
-                   .Future();
-
-                leadingTranslations = DbSession.QueryOver<Translation>()
-                   .Where(x => x.Language == LanguageService.GetLanguageByIsoCode(language))
-                   .And(x => x.IsPublished)
-                   .And(x => x.NeedsAdminReviewing == false)
-                   .OrderBy(x => x.Votes).Desc
-                   .Future();
-
-                userTranslations = DbSession.QueryOver<Translation>()
-                    .Where(x => x.Language == LanguageService.GetLanguageByIsoCode(language))
-                    .And(x => x.Translator == me)
-                    .And(x => x.IsPublished == false)
-                    .And(x => x.NeedsAdminReviewing == true)
-                    .OrderBy(x => x.Votes).Desc
-                    .Future();
-            }
+                        .Where(x => x.Language == LanguageService.GetLanguageByIsoCode(language))
+                        .And(x => x.Translator == me)
+                        .And(x => x.IsPublished == false)
+                        .And(x => x.NeedsAdminReviewing == true)
+                        .OrderBy(x => x.Votes).Desc
+                        .Future();
 
             var dc = DetachedCriteria.For<TranslationVote>()
-                .Add(Restrictions.Eq("Translator", me))
-                .CreateAlias("Translation", "t")
-                .Add(Restrictions.Eq("t.Language", LanguageService.GetLanguageByIsoCode(language)))
-                .SetProjection(Projections.Property("t.Key.Id"));
+                         .Add(Restrictions.Eq("Translator", me))
+                         .CreateAlias("Translation", "t")
+                         .Add(Restrictions.Eq("t.Language", LanguageService.GetLanguageByIsoCode(language)))
+                         .SetProjection(Projections.Property("t.Key.Id"));
 
             var votedOnKeys = DbSession.CreateCriteria<TranslateKey>()
-                .Add(Restrictions.Eq("Set.Id", id))
-                .Add(Subqueries.PropertyIn("Id", dc))
-                .SetProjection(Projections.Id())
-                .Future<int>().ToList();
+                        .Add(Restrictions.Eq("Set.Id", id))
+                        .Add(Subqueries.PropertyIn("Id", dc))
+                        .SetProjection(Projections.Id())
+                        .Future<int>().ToList();
 
             var translations = (
-                from key in keys
-                let neutralTranslation = neutralTranslations.Where(x => x.Key == key).FirstOrDefault()
-                let leadingTranslation = leadingTranslations.Where(x => x.Key == key).FirstOrDefault()
-                let userTranslation = userTranslations.Where(x => x.Key == key).FirstOrDefault() ?? leadingTranslation
-                select new ViewModels.TranslationsViewModel.TranslationDTO
-                {
-                    KeyId = key.Id,
-                    Term = neutralTranslation == null ? string.Empty : neutralTranslation.Value,
-                    Value = userTranslation == null ? string.Empty : userTranslation.Value,
-                    LeadingValue = leadingTranslation == null ? neutralTranslation.Value : leadingTranslation.Value,
-                    Votes = leadingTranslation == null ? 0 : userTranslation.Votes,
-                    Voted = votedOnKeys.Contains(key.Id),
-                    SetId = id
-                }
-            ).ToList();
-
+                        from key in keys
+                        let neutralTranslation = neutralTranslations.Where(x => x.Key == key.Key).FirstOrDefault()
+                        let leadingTranslation = leadingTranslations.Where(x => x.Key == key.Key).FirstOrDefault()
+                        let userTranslation = userTranslations.Where(x => x.Key == key.Key).FirstOrDefault() ?? leadingTranslation
+                        select new ViewModels.TranslationsViewModel.TranslationDTO
+                        {
+                            KeyId = key.Id,
+                            Term = neutralTranslation == null ? string.Empty : neutralTranslation.Value,
+                            Value = userTranslation == null ? string.Empty : userTranslation.Value,
+                            LeadingValue = leadingTranslation == null ? neutralTranslation.Value : leadingTranslation.Value,
+                            Votes = leadingTranslation == null ? 0 : userTranslation.Votes,
+                            Voted = votedOnKeys.Contains(key.Id),
+                            SetId = id
+                        }
+                    ).ToList();
+            
             return translations;
-        }
-
+            }
+       
+        
         [HttpPost]
         public ActionResult Update(int id, string language, string value)
         {
@@ -198,9 +130,9 @@ namespace ZiberTranslate.Web.Controllers
 
         private ActionResult TranslationRow(int setId, string language, int keyId)
         {
+            FilterType filter = FilterType.All;
 
-
-            var translations = BuildTranslations(setId, language);
+            var translations = BuildTranslations(setId, language, filter);
 
 
             return PartialView("TranslationRow", translations.Where(x => x.KeyId == keyId).SingleOrDefault());

@@ -21,6 +21,7 @@ namespace ZiberTranslate.Web.ViewModels
             public string SetName { get; set; }
             public int Rank { get; set; }
             public string TranslatorName { get; set; }
+            public int TranslationId { get; set; }
         }
 
         public class SetWithReviews
