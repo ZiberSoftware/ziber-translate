@@ -16,73 +16,37 @@
             location.reload();
         }
     </script>
-<script src="@Url.Content("~/Scripts/translations.js")"></script>
+    <script src="@Url.Content("~/Scripts/translations.js")"></script>
 }
 
-<h2></h2>
-@Html.ActionLink("Login", "Login", new { controller = "Security", returnUrl = this.Context.Request.Url.PathAndQuery })
-|
-@Html.ActionLink("Logout", "Logout", "Security")
-<br />
-<br />
-
-<h3>
-    <a href="/">HOME</a>
-    >>
-    <a href="/TranslateSet?language=@Model.Language">CATEGORIEN</a>
-    >>
-    <a href="#" onclick="reloadPage()">@Model.Name (@Model.Language.ToUpper())</a> 
-</h3>
+@Html.Partial("Breadcrumb", Model)
 
 @Html.ActionLink("Review changes", "Index", "Changeset")
-    
 
-        <ol class="stats">
-            <li class="needs-review">
-                <dl>
-                    <dt>
-                        Needs Review
-                    </dt>
-                    <dd>
-                        <a href="@Url.RouteUrl("Translations", new {setId = @Model.SetId, language = @Model.Language, filter = "NeedsReview" })">@Model.NeedsReview</a>
-                    </dd>
-                </dl>
-            </li>
-            <li class="untranslated">
-                <dl>    
-                    <dt>
-                        Needs Translation
-                    </dt>
-                    <dd>
-                        <a href="@Url.RouteUrl("Translations", new {setId = @Model.SetId, language = @Model.Language, filter = "NeedsTranslation" })">@Model.NeedsTranslation</a>
-                    </dd>
-                </dl>
-            </li>
-            <li class="reviewed">
-                <dl>
-                    <dt>
-                        Reviewed
-                    </dt>
-                    <dd>
-                        <a href="@Url.RouteUrl("Translations", new {setId = @Model.SetId, language = @Model.Language, filter = "Reviewed" })">@Model.Reviewed</a>
-                    </dd> 
-                </dl>
-            </li>
-            <li class="selected all">
-                <dl>
-                    <dt>
-                        All
-                    </dt>
-                    <dd>
-                        <a href="@Url.RouteUrl("Translations", new {setId = @Model.SetId, language = @Model.Language, filter = "All" })">@Model.AllTranslations</a>
-                    </dd>
-                </dl>
-            </li>
-        </ol>    
+<section id="filtering">
+    <ul class="stats">
+        <li class="needs-translation">
+            <a href="@Url.RouteUrl("Translations", new {setId = @Model.SetId, language = @Model.Culture.TwoLetterISOLanguageName, filter = "NeedsTranslation" })">@Model.NeedsTranslation</a>
+            <span class="label">Onvertaald</span>
+        </li>
+        <li class="needs-review">
+            <a href="@Url.RouteUrl("Translations", new {setId = @Model.SetId, language = @Model.Culture.TwoLetterISOLanguageName, filter = "NeedsReview" })">@Model.NeedsReview</a>
+            <span class="label">In afwachting</span>
+        </li>
+        <li class="reviewed">
+            <a href="@Url.RouteUrl("Translations", new {setId = @Model.SetId, language = @Model.Culture.TwoLetterISOLanguageName, filter = "Reviewed" })">@Model.Reviewed</a>
+            <span class="label">Beoordeeld</span>
+        </li>
+        <li class="all">
+            <a href="@Url.RouteUrl("Translations", new {setId = @Model.SetId, language = @Model.Culture.TwoLetterISOLanguageName, filter = "All" })">@Model.AllTranslations</a>
+            <span class="label">Totaal</span>
+        </li>
+    </ul>
+</section>
 
-        <table id="table" class="translations">
-            @foreach(var t in Model.Translations)
-            {
-                Html.RenderPartial("TranslationRow", t);
-            }
-        </table>
+<table id="table" class="translations">
+    @foreach(var t in Model.Translations)
+    {
+        Html.RenderPartial("TranslationRow", t);
+    }
+</table>

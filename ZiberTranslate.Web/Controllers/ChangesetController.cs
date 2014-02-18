@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using System.Net.Mail;
-using System.Configuration;
 using ZiberTranslate.Web.Models;
 using ZiberTranslate.Web.ViewModels;
 using ZiberTranslate.Web.Services;
@@ -20,6 +16,11 @@ namespace ZiberTranslate.Web.Controllers
         {
             var vm = new ChangesetViewModel();
             vm.Changes = BuildTranslations();
+
+            if (!vm.Changes.Any())
+            {
+                return new EmptyResult();
+            }
 
             return View("Changeset", vm);
         }

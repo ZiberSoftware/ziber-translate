@@ -36,7 +36,7 @@ namespace ZiberTranslate.Web.Controllers
             vm.Translations = translations;
             vm.SetId = setId;
             vm.Name = name;
-            vm.Language = language;
+            vm.Culture = System.Globalization.CultureInfo.CreateSpecificCulture(language);
             vm.Reviewed = set.Reviewed;
             vm.NeedsReview = set.NeedsReview;
             vm.NeedsTranslation = set.NeedsTranslation;
@@ -52,11 +52,13 @@ namespace ZiberTranslate.Web.Controllers
         {
             var me = TranslatorService.FindByEmail(HttpContext.User.Identity.Name);
             var keys = TranslationService.FilteredKeys(id, language, filter);
+            var targetLanguage = LanguageService.GetLanguageByIsoCode(language);
 
             //fallback to dutch for anonymous users
             var neutralLanguage = LanguageService.GetLanguageByIsoCode("nl");
             if (HttpContext.User.Identity.IsAuthenticated)
             {
+                //TODO: the neutral language needs to be complete, we can't garantee that at the moment.
                 neutralLanguage = LanguageService.GetNeutralLanguage(HttpContext.User.Identity.Name);
             }
 
@@ -67,24 +69,24 @@ namespace ZiberTranslate.Web.Controllers
                              .Future();
 
             var leadingTranslations = DbSession.QueryOver<Translation>()
-                              .Where(x => x.Language == LanguageService.GetLanguageByIsoCode(language))
+                              .Where(x => x.Language == targetLanguage)
                               .And(x => x.IsPublished)
                               .And(x => x.NeedsAdminReviewing == false)
                               .OrderBy(x => x.Votes).Desc
                               .Future();
 
             var userTranslations = DbSession.QueryOver<Translation>()
-                        .Where(x => x.Language == LanguageService.GetLanguageByIsoCode(language))
+                        .Where(x => x.Language == targetLanguage)
                         .And(x => x.Translator == me)
                         .And(x => x.IsPublished == false)
-                        .And(x => x.NeedsAdminReviewing == true)
+                        .And(x => x.NeedsAdminReviewing)
                         .OrderBy(x => x.Votes).Desc
                         .Future();
 
             var dc = DetachedCriteria.For<TranslationVote>()
                          .Add(Restrictions.Eq("Translator", me))
                          .CreateAlias("Translation", "t")
-                         .Add(Restrictions.Eq("t.Language", LanguageService.GetLanguageByIsoCode(language)))
+                         .Add(Restrictions.Eq("t.Language", targetLanguage))
                          .SetProjection(Projections.Property("t.Key.Id"));
 
             var votedOnKeys = DbSession.CreateCriteria<TranslateKey>()

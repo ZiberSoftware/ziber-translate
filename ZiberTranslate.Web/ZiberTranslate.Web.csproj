@@ -138,6 +138,12 @@
     </Content>
     <Content Include="Content\images\arrows.png" />
     <Content Include="Content\images\edit_actions.png" />
+    <Content Include="Content\Site.css">
+      <DependentUpon>Site.less</DependentUpon>
+    </Content>
+    <Content Include="Content\Site.min.css">
+      <DependentUpon>Site.less</DependentUpon>
+    </Content>
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -166,7 +172,6 @@
     <Content Include="Content\themes\base\jquery.ui.tabs.css" />
     <Content Include="Content\themes\base\jquery.ui.theme.css" />
     <Content Include="Global.asax" />
-    <Content Include="Content\Site.css" />
     <Content Include="Scripts\jsdiff.js" />
     <Content Include="Scripts\search-watermark.js" />
     <Content Include="Scripts\translations.js" />
@@ -216,6 +221,7 @@
     <Content Include="Views\Admin\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Site.less" />
     <None Include="Properties\PublishProfiles\RELEASE.pubxml" />
     <None Include="Properties\PublishProfiles\ZiberNET.pubxml" />
     <Content Include="Views\TranslateSet\TranslateSets.cshtml" />
@@ -224,6 +230,7 @@
     <Content Include="Views\Admin\AdminReview.cshtml" />
     <Content Include="Views\Admin\AdminTranslationRow.cshtml" />
     <Content Include="Views\Home\PickLanguage.cshtml" />
+    <Content Include="Views\Translation\Breadcrumb.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

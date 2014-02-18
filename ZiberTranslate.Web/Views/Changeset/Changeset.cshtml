@@ -2,29 +2,22 @@
 @{
     ViewBag.Title = "Changeset";
 }
-@section scripts {
-<script src="@Url.Content("~/Scripts/translations.js")"></script>
-}
-
 
 <h2>Changeset</h2>
 <div id="translations">
-@if(Model.Changes.Any())
+@foreach (var g in Model.Changes.GroupBy(x => new { x.SetId, x.Language, x.SetName }))
 {
-    foreach (var g in Model.Changes.GroupBy(x => new { x.SetId, x.Language, x.SetName }))
-    {
-        <h3>@g.Key.SetName (@g.Key.Language.ToUpper())</h3>
-        <table class="translations">
-            @foreach (var translation in g)
-            {
-                Html.RenderPartial("TranslationRow", translation);
-            }
-        </table>
-    }
-    using(Html.BeginForm("Submit", "Changeset"))
-    {
-        <input type="submit" value="Publish Changes"/>
-    }
+    <h3>@g.Key.SetName (@g.Key.Language.ToUpper())</h3>
+    <table class="translations">
+        @foreach (var translation in g)
+        {
+            Html.RenderPartial("TranslationRow", translation);
+        }
+    </table>
+}
+@using(Html.BeginForm("Submit", "Changeset"))
+{
+    <input type="submit" value="Publish Changes"/>
 }
     
     @Html.ActionLink("Verder met vertalen", "Index", "Home")

@@ -116,19 +116,10 @@ namespace ZiberTranslate.Web.Services
             smtp.Send(mail);
         }
 
-        public static  IEnumerable<Translation> FilteredKeys(int id, string language, FilterType filter )
+        public static IEnumerable<Translation> FilteredKeys(int id, string language, FilterType filter)
         {
             switch (filter)
             {
-                case FilterType.All:
-                    {
-
-                        return Global.CurrentSession.CreateCriteria<Translation>()
-                                .CreateAlias("Key", "k")                                
-                                .Add(Restrictions.Eq("k.Set.Id", id))                                
-                                .List<Translation>();
-                    }
-
                 case FilterType.NeedsReview:
                     {
                         return Global.CurrentSession.CreateCriteria<Translation>()
@@ -163,13 +154,17 @@ namespace ZiberTranslate.Web.Services
 
                 default:
                     {
+
                         return Global.CurrentSession.CreateCriteria<Translation>()
                                 .CreateAlias("Key", "k")
+                                .CreateAlias("Language", "l")
                                 .Add(Restrictions.Eq("k.Set.Id", id))
+                                .Add(Restrictions.Eq("l.IsoCode", language))
+                                .Add(Restrictions.IsNull("Translator"))
                                 .List<Translation>();
                     }
             }
-            
+
         }
     }
 }

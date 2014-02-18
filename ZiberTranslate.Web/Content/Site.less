@@ -1,0 +1,264 @@
+﻿@headerColor: #486D8A;
+@textColor: #666;
+@borderColor: #ccc;
+
+html, body
+{
+    margin: 0;
+    padding: 0;
+}
+
+body
+{
+    font-family: Verdana;
+    font-size: 62.5%;
+    color: @textColor;
+}
+
+a
+{
+    text-decoration: none;
+    color: inherit;
+}
+
+    a:hover
+    {
+        text-decoration: underline;
+    }
+
+em
+{
+    font-weight: bold;
+    font-style: normal;
+}
+
+#page
+{
+    font-size: 15px;
+}
+
+#header
+{
+    background-color: @headerColor;
+    min-height: 60px;
+    color: #FFF;
+    border-bottom: 1px solid @borderColor;
+}
+
+
+#filtering
+{
+    padding: 20px;
+    border-bottom: 1px solid @borderColor;
+
+    .stats
+    {
+        li
+        {
+            display: inline-block;
+        }
+
+            li + li
+            {
+                margin-left: -4px;
+            }
+
+        a, .label
+        {
+            display: block;
+        }
+
+        a
+        {
+            min-width: 90px;
+            line-height: 40px;
+            font-size: 25px;
+            text-align: center;
+            border: 1px solid @borderColor;
+        }
+
+        .label
+        {
+            text-transform: lowercase;
+            font-size: 13px;
+        }
+
+        .needs-review a
+        {
+            background-color: #7DA1C1;
+            color: #FFF;
+        }
+
+        .reviewed a
+        {
+            background-color: #5FA504;
+            color: #FFF;
+        }
+
+        .all a
+        {
+            background-color: #486D8A;
+            color: #FFF;
+        }
+    }
+}
+
+table.translations
+{
+    width: 100%;
+    color: #333;
+    font-size: 12px;
+
+    th, td
+    {
+        border-bottom: 1px dotted #CCC;
+        padding: 5px;
+        vertical-align: middle;
+    }
+
+        th.key
+        {
+            width: 250px;
+        }
+
+        td.translation
+        {
+            .edit
+            {
+                padding: 5px 7px;
+                display: block;
+                margin: 0pt;
+            }
+
+            .field
+            {
+                padding: 4px 5px 3px;
+                margin: 0pt;
+                height: auto;
+                border-radius: 3px;
+                border: 1px solid #A0A6B3;
+                color: #717B80;
+                background-color: #FFF;
+            }
+
+            textarea
+            {
+                display: block;
+                width: 100%;
+                border: none;
+                background-color: transparent;
+                font-size: 12px;
+                font-family: arial;
+            }
+
+            .edit:hover
+            {
+                background-color: #FFFFDD;
+                border-radius: 3px;
+                border: 1px solid #CCC;
+                padding: 4px 6px;
+            }
+        }
+
+        td.spacer
+        {
+            width: 24px;
+        }
+
+        td.actions
+        {
+            a
+            {
+                display: none;
+                background-image: url('images/edit_actions.png');
+                text-indent: -4000px;
+            }
+
+            .unapprove
+            {
+                width: 16px;
+                height: 16px;
+                background-position: -27px -27px;
+                display: inline-block;
+            }
+
+            .approve
+            {
+                width: 16px;
+                height: 16px;
+                background-position: -0px -27px;
+            }
+
+            .delete
+            {
+                width: 16px;
+                height: 16px;
+                background-position: -0px -0px;
+                display: inline-block;
+            }
+        }
+}
+
+
+    table.translations tr:hover .view-actions a
+    {
+        display: inline-block;
+    }
+
+
+    table.translations td.actions table.translations td.actions .delete:hover
+    {
+        background-position: -27px -0px;
+    }
+
+    table.translations td.userinfo
+    {
+        width: 175px;
+    }
+
+    table.translations td.userinfo2
+    {
+        width: 50px;
+    }
+
+    table.translations .spacer span
+    {
+        display: block;
+        float: right;
+        width: 16px;
+        height: 16px;
+        background-image: url('images/arrows.png');
+    }
+
+        table.translations .spacer span.vote-count
+        {
+            background-image: none;
+            background-color: #004400;
+            color: #FFF;
+            float: left;
+            display: block;
+            font-size: 8px;
+            margin-top: 10px;
+            margin-left: -5px;
+            padding: 0 3px;
+            width: auto;
+            height: auto;
+        }
+
+    table.translations .spacer.reviewed span
+    {
+        background-position: -27px -0px;
+    }
+
+    table.translations ins
+    {
+        background-color: #AAFFAA;
+        text-decoration: none;
+    }
+
+    table.translations del
+    {
+        background-color: #FFAAAA;
+        color: #AA6666;
+        text-decoration: line-through;
+    }

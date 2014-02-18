@@ -1,312 +1,178 @@
-body
-{
-    font-size: .85em;
-    font-family: arial;
-    color: #232323;
-    background-color: #fff;
-    text-rendering:optimizeLegibility;
+html,
+body {
+  margin: 0;
+  padding: 0;
 }
-
-header,
-footer,
-nav,
-section,
-dl 
-{
-    display: block;
-    margin:0px;
+body {
+  font-family: Verdana;
+  font-size: 62.5%;
+  color: #666666;
 }
-
-p
-{
-    display:inline;
-
+a {
+  text-decoration: none;
+  color: inherit;
 }
-ol, li, ul, a
-{
-    text-decoration: none;
-    list-style: none;
-    margin: 0px;
+a:hover {
+  text-decoration: underline;
 }
-#Login {
-    margin: 0;
-    margin-left: 40%;
-    margin-right: 40%;
-    margin-top: 50px;
-    padding-top: 10px;
-    width: 20%;
-    height: 160px;
-    position: absolute;
+em {
+  font-weight: bold;
+  font-style: normal;
 }
- 
-#signup
-{
-  margin: 0; 
-  margin-left: 40%; 
-  margin-right: 40%;
-  margin-top: 50px; 
-  padding-top: 10px; 
-  width: 20%; 
-  height: 200px; 
-  position: absolute; 
-  background: #FBFBF0; 
-  border: solid #000000 2px; 
-  z-index: 9; 
-  font-family: arial; 
-  visibility: hidden; 
+#page {
+  font-size: 15px;
 }
-
-#UserSearch
-{
-    width:200px;
+#header {
+  background-color: #486d8a;
+  min-height: 60px;
+  color: #FFF;
+  border-bottom: 1px solid #cccccc;
 }
-
-.search
-{
-    display: block;
-    right:5px;
-    position:absolute;
+#filtering {
+  padding: 20px;
+  border-bottom: 1px solid #cccccc;
 }
-
-table 
-{
-    border-collapse: collapse;
-    border-spacing: 0;
-    display: inline-block;
-    top:10px;
+#filtering .stats li {
+  display: inline-block;
 }
-
-table.translations
-{ 
-    width: 100%;
-    color: #333;
-    font-size: 12px;
+#filtering .stats li + li {
+  margin-left: -4px;
 }
-
-table.translations th, table.translations td 
-{
-    border-bottom: 1px dotted #CCC;
-    padding: 5px;
-    vertical-align: middle;
+#filtering .stats a,
+#filtering .stats .label {
+  display: block;
 }
-table.translations th.key 
-{
-    width: 250px;
+#filtering .stats a {
+  min-width: 90px;
+  line-height: 40px;
+  font-size: 25px;
+  text-align: center;
+  border: 1px solid #cccccc;
 }
-table.translations td.translation .edit
-{
-    padding: 5px 7px;
-    display: block;
-    margin: 0pt;
+#filtering .stats .label {
+  text-transform: lowercase;
+  font-size: 13px;
 }
-table.translations td.translation .field 
-{
-    padding: 4px 5px 3px;
-    margin: : 0pt;
-    height: auto;
-    border-radius: 3px;
-    border: 1px solid #A0A6B3;
-    color: #717B80;
-    background-color: #FFF;
+#filtering .stats .needs-review a {
+  background-color: #7DA1C1;
+  color: #FFF;
 }
-table.translations td.translation textarea 
-{
-    display: block;
-    width: 100%;
-    border: none;
-    background-color: transparent;
-    font-size: 12px;
-    font-family: arial;
+#filtering .stats .reviewed a {
+  background-color: #5FA504;
+  color: #FFF;
 }
-
-table.translations td.spacer 
-{
-    width: 24px;
+#filtering .stats .all a {
+  background-color: #486D8A;
+  color: #FFF;
 }
-
-table.translations td.translation .edit:hover
-{
-    background-color: #FFFFDD;
-    border-radius: 3px;
-    border: 1px solid #CCC;
-    padding: 4px 6px;
+table.translations {
+  width: 100%;
+  color: #333;
+  font-size: 12px;
 }
-
-table.translations td.actions a
-{
-    display: none;
-    background-image: url('images/edit_actions.png');
-    text-indent: -4000px;
+table.translations th,
+table.translations td {
+  border-bottom: 1px dotted #CCC;
+  padding: 5px;
+  vertical-align: middle;
 }
-table.translations tr:hover .view-actions a { display: inline-block; }
-table.translations td.actions .unapprove 
-{
-    width: 16px;
-    height: 16px;
-    background-position: -27px -27px;
-    display: inline-block;
+table.translations th.key {
+  width: 250px;
 }
-table.translations td.actions .approve 
-{
-    width: 16px;
-    height: 16px;
-    background-position: -0px -27px;
+table.translations td.translation .edit {
+  padding: 5px 7px;
+  display: block;
+  margin: 0pt;
 }
-table.translations td.actions .delete 
-{
-    width: 16px;
-    height: 16px;
-    background-position: -0px -0px;
-    display: inline-block;
+table.translations td.translation .field {
+  padding: 4px 5px 3px;
+  margin: 0pt;
+  height: auto;
+  border-radius: 3px;
+  border: 1px solid #A0A6B3;
+  color: #717B80;
+  background-color: #FFF;
 }
-table.translations td.actions .delete:hover 
-{
-    background-position: -27px -0px;
+table.translations td.translation textarea {
+  display: block;
+  width: 100%;
+  border: none;
+  background-color: transparent;
+  font-size: 12px;
+  font-family: arial;
 }
-table.translations td.userinfo
-{
-    width: 175px;
+table.translations td.translation .edit:hover {
+  background-color: #FFFFDD;
+  border-radius: 3px;
+  border: 1px solid #CCC;
+  padding: 4px 6px;
 }
-
-table,translations td.userinfo2
-{
-    width: 50px;
+table.translations td.spacer {
+  width: 24px;
 }
-
-table.translations .spacer span
-{
-    display: block;
-    float: right;
-    width: 16px;
-    height: 16px;
-    background-image: url('images/arrows.png');
+table.translations td.actions a {
+  display: none;
+  background-image: url('images/edit_actions.png');
+  text-indent: -4000px;
 }
-table.translations .spacer span.vote-count 
-{
-    background-image: none;
-    background-color: #004400;
-    color: #FFF;
-    float: left;
-    display: block;
-    font-size: 8px;
-    margin-top: 10px;
-    margin-left: -5px;
-    padding:0 3px;
-    width: auto;
-    height: auto;
+table.translations td.actions .unapprove {
+  width: 16px;
+  height: 16px;
+  background-position: -27px -27px;
+  display: inline-block;
+}
+table.translations td.actions .approve {
+  width: 16px;
+  height: 16px;
+  background-position: 0px -27px;
+}
+table.translations td.actions .delete {
+  width: 16px;
+  height: 16px;
+  background-position: 0px 0px;
+  display: inline-block;
+}
+table.translations tr:hover .view-actions a {
+  display: inline-block;
+}
+table.translations td.actions table.translations td.actions .delete:hover {
+  background-position: -27px 0px;
+}
+table.translations td.userinfo {
+  width: 175px;
+}
+table.translations td.userinfo2 {
+  width: 50px;
+}
+table.translations .spacer span {
+  display: block;
+  float: right;
+  width: 16px;
+  height: 16px;
+  background-image: url('images/arrows.png');
+}
+table.translations .spacer span.vote-count {
+  background-image: none;
+  background-color: #004400;
+  color: #FFF;
+  float: left;
+  display: block;
+  font-size: 8px;
+  margin-top: 10px;
+  margin-left: -5px;
+  padding: 0 3px;
+  width: auto;
+  height: auto;
 }
 table.translations .spacer.reviewed span {
-    background-position: -27px -0px;
+  background-position: -27px 0px;
 }
-
-table.translations ins 
-{
-    background-color: #AAFFAA;
-    text-decoration: none;
+table.translations ins {
+  background-color: #AAFFAA;
+  text-decoration: none;
 }
-
-table.translations del 
-{
-    background-color: #FFAAAA;
-    color: #AA6666;
-    text-decoration: line-throught;
-}
-
-ol.stats
-{
-    clear: left;
-    margin: 0px;
-}
-
-.stats li
-{
-    float: left;
-    list-style: none;
-    margin-right: 10px;
-    margin-bottom: 10px;
-    margin-top:20px;
-}
-
-.stats dl
-{
-    margin:0px;
-}
-
-.stats dt
-{
-    text-transform: uppercase;
-    font-size: 10px;
-    color: #aaa;
-    padding-left: 40px;
-}
-
-.stats dd a
-{
-    display:block;
-	width:80px;
-	padding:0 15px;
-	text-decoration:none;
-	background-color:#eee;
-	font-size:24px;
-	text-align:center;
-	height:38px;
-	line-height:38px;
-	color:#999;
-	border:solid 2px #ccc
-}
-
-.stats .reviewed dt
-{
-	color:#19b20e;
-}
-
-.stats .needs-review dt
-{
-	color:#d4d00d;
-}
-
-.stats .untranslated dt
-{
-	color:#f57305;
-}
-
-.stats .selected.all dt{
-	color:#888
-}
-
-.stats .selected dd a
-{
-	border:solid 1px #3F7ABE;
-	color:#fff!important
-}
-
-.stats .all.selected dd a
-{
-	border:solid 1px #990;
-	background-color:#666
-}
-
-.stats .untranslated dd a:hover,.stats .untranslated.selected dd a
-{
-	border:solid 1px #ccc;
-	background-color:#f57305;
-}
-
-.stats .reviewed dd a:hover,.stats .reviewed.selected dd a
-{
-	border:solid 1px #ccc;
-	background-color:#19b20e;
-}
-
-.stats .needs-review dd a:hover, .stats .needs-review.selected dd a 
-{
-    border: solid 1px #ccc;
-    background-color:#d4d00d;
-}
-
-.stats dd a:hover
-{
-	border:solid 1px #ccc;
-	background-color:#0087CC;
-	color:#fff!important
+table.translations del {
+  background-color: #FFAAAA;
+  color: #AA6666;
+  text-decoration: line-through;
 }
