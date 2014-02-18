@@ -50,11 +50,18 @@ namespace ZiberTranslate.Web.Controllers
 
         private IEnumerable<ViewModels.TranslationsViewModel.TranslationDTO> BuildTranslations(int id, string language, FilterType filter)
         {
-            var me = TranslatorService.FindByEmail(HttpContext.User.Identity.Name);           
+            var me = TranslatorService.FindByEmail(HttpContext.User.Identity.Name);
             var keys = TranslationService.FilteredKeys(id, language, filter);
-                  
+
+            //fallback to dutch for anonymous users
+            var neutralLanguage = LanguageService.GetLanguageByIsoCode("nl");
+            if (HttpContext.User.Identity.IsAuthenticated)
+            {
+                neutralLanguage = LanguageService.GetNeutralLanguage(HttpContext.User.Identity.Name);
+            }
+
             var neutralTranslations = DbSession.QueryOver<Translation>()
-                             .Where(x => x.Language == LanguageService.GetNeutralLanguage(HttpContext.User.Identity.Name))
+                             .Where(x => x.Language == neutralLanguage)
                              .And(x => x.NeedsAdminReviewing == false)
                              .OrderBy(x => x.Votes).Desc
                              .Future();
@@ -102,11 +109,11 @@ namespace ZiberTranslate.Web.Controllers
                             SetId = id
                         }
                     ).ToList();
-            
+
             return translations;
-            }
-       
-        
+        }
+
+
         [HttpPost]
         public ActionResult Update(int id, string language, string value)
         {
