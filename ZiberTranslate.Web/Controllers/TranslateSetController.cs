@@ -17,6 +17,16 @@ namespace ZiberTranslate.Web.Controllers
             var sets = Global.CurrentSession.QueryOver<TranslateSet>()
                         .List();
 
+            if (Request.IsAjaxRequest())
+            {
+                return Json(from s in sets
+                            select new {
+                                id = s.Id,
+                                name = s.Name,
+                                language = language
+                            }, JsonRequestBehavior.AllowGet);
+            }
+
             var vm = new TranslateSetsViewModel();
             vm.Sets = sets;
             vm.Language = language;

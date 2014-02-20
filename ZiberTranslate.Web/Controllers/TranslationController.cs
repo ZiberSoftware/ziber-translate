@@ -23,6 +23,12 @@ namespace ZiberTranslate.Web.Controllers
         public ActionResult Index(int setId, string language, FilterType filter, int? categoryId = null)
         {
             var translations = BuildTranslations(setId, language, filter);
+
+            if (Request.IsAjaxRequest())
+            {
+                return Json(translations, JsonRequestBehavior.AllowGet);
+            }
+
             var set = DbSession.Load<TranslateSet>(setId);
             var name = Global.CurrentSession.QueryOver<TranslateSet>()
                 .Where(x => x.Id == setId)

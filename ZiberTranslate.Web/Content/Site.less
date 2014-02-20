@@ -103,25 +103,28 @@ em
     }
 }
 
-table.translations
+.translations
 {
     width: 100%;
     color: #333;
     font-size: 12px;
-
-    th, td
+    list-style : none;
+    .translation-root
     {
         border-bottom: 1px dotted #CCC;
         padding: 5px;
         vertical-align: middle;
+        >div {
+            display: inline-block;
+        }
     }
 
-        th.key
+        .term
         {
             width: 250px;
         }
 
-        td.translation
+        .translation
         {
             .edit
             {
@@ -160,12 +163,12 @@ table.translations
             }
         }
 
-        td.spacer
+        .spacer
         {
             width: 24px;
         }
 
-        td.actions
+        .actions
         {
             a
             {
@@ -200,28 +203,28 @@ table.translations
 }
 
 
-    table.translations tr:hover .view-actions a
+    .translations:hover .view-actions a
     {
         display: inline-block;
     }
 
 
-    table.translations td.actions table.translations td.actions .delete:hover
+    .translations .actions, .translations .actions .delete:hover
     {
         background-position: -27px -0px;
     }
 
-    table.translations td.userinfo
+    .translations .userinfo
     {
         width: 175px;
     }
 
-    table.translations td.userinfo2
+    .translations .userinfo2
     {
         width: 50px;
     }
 
-    table.translations .spacer span
+    .translations .spacer span
     {
         display: block;
         float: right;
@@ -230,7 +233,7 @@ table.translations
         background-image: url('images/arrows.png');
     }
 
-        table.translations .spacer span.vote-count
+        .translations .spacer span.vote-count
         {
             background-image: none;
             background-color: #004400;
@@ -245,18 +248,18 @@ table.translations
             height: auto;
         }
 
-    table.translations .spacer.reviewed span
+    .translations .spacer.reviewed span
     {
         background-position: -27px -0px;
     }
 
-    table.translations ins
+    .translations ins
     {
         background-color: #AAFFAA;
         text-decoration: none;
     }
 
-    table.translations del
+    .translations del
     {
         background-color: #FFAAAA;
         color: #AA6666;
