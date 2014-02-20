@@ -104,17 +104,17 @@ namespace ZiberTranslate.Web.Services
             return translation;
         }
 
-        public static void SendEmail()
-        {
-            string emailAddress = HttpContext.Current.User.Identity.Name;
+        //public static void SendEmail()
+        //{
+        //    string emailAddress = HttpContext.Current.User.Identity.Name;
 
-            MailMessage mail = new MailMessage();
-            mail.To.Add(emailAddress);
-            mail.Subject = "Thanks for your contribution!";
-            mail.Body = "Thank you for translating or reviewing on ziber.translate.nl. You will be notified when your changes are accepted and made public. \n" + "Kind regards, the Ziber team.";
-            SmtpClient smtp = new SmtpClient();
-            smtp.Send(mail);
-        }
+        //    MailMessage mail = new MailMessage();
+        //    mail.To.Add(emailAddress);
+        //    mail.Subject = "Thanks for your contribution!";
+        //    mail.Body = "Thank you for translating or reviewing on ziber.translate.nl. You will be notified when your changes are accepted and made public. \n" + "Kind regards, the Ziber team.";
+        //    SmtpClient smtp = new SmtpClient();
+        //    smtp.Send(mail);
+        //}
 
         public static IEnumerable<TranslateKey> FilteredKeys(int id, string language, FilterType filter)
         {
@@ -125,14 +125,14 @@ namespace ZiberTranslate.Web.Services
                                 .CreateAlias("Key", "k")
                                 .CreateAlias("Language", "l")
                                 .Add(Restrictions.Eq("k.Set.Id", id))
-                                .Add(Restrictions.Eq("l.IsoCode", language))
-                                .Add(Restrictions.IsNotNull("Translator"))
+                                .Add(Restrictions.Eq("l.IsoCode", language))                               
                                 .SetProjection(Projections.Property("k.Id"));
             switch (filter)
             {
                 case FilterType.NeedsReview:
                     {
-                        translations.Add(Restrictions.Eq("NeedsReview", true));
+                        translations.Add(Restrictions.Eq("NeedsReview", true))
+                            .Add(Restrictions.Eq("NeedsAdminReviewing", false));
                         return keys.Add(Subqueries.PropertyIn("Id", translations)).List<TranslateKey>();
                     }
 
@@ -143,7 +143,8 @@ namespace ZiberTranslate.Web.Services
 
                 case FilterType.Reviewed:
                     {
-                        translations.Add(Restrictions.Eq("NeedsReview", false));
+                        translations.Add(Restrictions.Eq("NeedsReview", false))
+                            .Add(Restrictions.Eq("NeedsAdminReviewing", false));
                         return keys.Add(Subqueries.PropertyIn("Id", translations)).List<TranslateKey>();
                     }
             }

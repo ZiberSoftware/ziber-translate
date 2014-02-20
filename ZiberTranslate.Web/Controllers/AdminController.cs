@@ -51,16 +51,37 @@ namespace ZiberTranslate.Web.Controllers
                 foreach (var id in TranslationId)
                 {
                     var translationsToBeApproved = TranslationService.FindById(id);
-                    var leading = TranslationService.FindByKey(id, language);
+                    var leading = TranslationService.FindByKey(translationsToBeApproved.Key.Id, language);
+                    if (leading != null)
+                    {
+                        if (translationsToBeApproved.NeedsAdminReviewing && translationsToBeApproved.Value != leading.Value)
+                        {
+                            leading.Value = translationsToBeApproved.Value;
 
+                            DbSession.Update(leading);
+                            DbSession.Delete(translationsToBeApproved);
+                        }
+                    }
 
+                    else
+                    {
+                        // check if translation still needs adminreviewing(in case 2 admins are reviewing)
+                        if (translationsToBeApproved.NeedsAdminReviewing)
+                        {
+                            leading = translationsToBeApproved;
+                            leading.Translator = null;
+                            leading.NeedsAdminReviewing = false;
 
-                    t.Commit();
+                            DbSession.Save(leading);                            
+                        }
+                    }
+                    
                 }
+                
+                t.Commit();
+                
             }
-
-
-            return RedirectToAction("Set");
+            return RedirectToAction("Index");
         }
 
         public IEnumerable<ViewModels.ReviewViewModel.SetContent> BuildSetContent(int id, string language)

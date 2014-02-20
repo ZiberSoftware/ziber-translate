@@ -63,12 +63,14 @@ namespace ZiberTranslate.Web.Controllers
 
             var neutralUserTranslations = DbSession.QueryOver<Translation>()
                              .Where(x => x.Language == neutralUserLanguage)
+                            
                              .And(x => x.NeedsAdminReviewing == false)
                              .OrderBy(x => x.Votes).Desc
                              .Future();
 
             var neutralTranslations = DbSession.QueryOver<Translation>()
                              .Where(x => x.Language == LanguageService.GetLanguageByIsoCode("nl"))
+                            
                              .And(x => x.NeedsAdminReviewing == false)
                              .OrderBy(x => x.Votes).Desc
                              .Future();
@@ -111,7 +113,7 @@ namespace ZiberTranslate.Web.Controllers
                             KeyId = key.Id,
                             Term = neutralUserTranslation == null ? neutralTranslation.Value : neutralUserTranslation.Value,
                             Value = userTranslation == null ? string.Empty : userTranslation.Value,
-                            LeadingValue = leadingTranslation == null ? neutralUserTranslation.Value : leadingTranslation.Value,
+                            LeadingValue = leadingTranslation == null ? neutralTranslation.Value : leadingTranslation.Value,
                             Votes = leadingTranslation == null ? 0 : userTranslation.Votes,
                             Voted = votedOnKeys.Contains(key.Id),
                             SetId = id

@@ -48,9 +48,16 @@ namespace ZiberTranslate.Web.Controllers
 
             changes = changes.Concat(votes);
 
-            var neutralTranslations = DbSession.QueryOver<Translation>()
+            var neutralUserTranslations = DbSession.QueryOver<Translation>()
                 .Where(Restrictions.On<Translation>(x => x.Key).IsIn(changes.Select(x => x.Key).ToArray()))
                 .And(x => x.Language == LanguageService.GetNeutralLanguage(HttpContext.User.Identity.Name))
+                .And(x => x.NeedsAdminReviewing == false)
+                .OrderBy(x => x.Votes).Desc
+                .Future();
+
+            var neutralTranslations = DbSession.QueryOver<Translation>()
+                .Where(Restrictions.On<Translation>(x => x.Key).IsIn(changes.Select(x => x.Key).ToArray()))
+                .And(x => x.Language == LanguageService.GetLanguageByIsoCode("nl"))
                 .And(x => x.NeedsAdminReviewing == false)
                 .OrderBy(x => x.Votes).Desc
                 .Future();
@@ -64,16 +71,17 @@ namespace ZiberTranslate.Web.Controllers
 
             var translations = (
                 from change in changes
+                let neutralUserTranslation = neutralUserTranslations.Where(x => x.Key == change.Key).FirstOrDefault()
                 let neutralTranslation = neutralTranslations.Where(x => x.Key == change.Key).FirstOrDefault()
                 let leadingTranslation = leadingTranslations.Where(x => x.Key == change.Key && x.Language == change.Language).FirstOrDefault()
-                let voted = votes.Any(x => x.Key == neutralTranslation.Key)
+                let voted = votes.Any(x => x.Key == (neutralUserTranslation == null ? neutralUserTranslation.Key : neutralTranslation.Key))
                 select new TranslationChange
                 {
                     KeyId = change.Key.Id,
                     SetId = change.Key.Set.Id,
                     SetName = change.Key.Set.Name,
                     Language = change.Language.IsoCode,
-                    Term = neutralTranslation.Value,
+                    Term = neutralUserTranslation == null ? neutralTranslation.Value : neutralUserTranslation.Value,
                     LeadingValue = leadingTranslation == null ? (voted ? change.Value : string.Empty) : leadingTranslation.Value,
                     Value = change.Value,
                     Voted = voted
@@ -103,7 +111,7 @@ namespace ZiberTranslate.Web.Controllers
                     .And(x => x.Translator == me)
                     .Future();
 
-                TranslationService.SendEmail();
+               // TranslationService.SendEmail();
 
                 foreach (var translation in changes.ToList())
                 {
