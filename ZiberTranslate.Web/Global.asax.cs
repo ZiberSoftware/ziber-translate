@@ -110,8 +110,8 @@ namespace ZiberTranslate.Web
 
             routes.MapRoute(
                 name: "Translations",
-                url: "sets/{setId}/translations-{language}/filter-{filter}",
-                defaults: new { controller = "Translation", action = "Index", language = "", setId = 0, filter = "All" }
+                url: "sets/{setId}/translations-{language}/filter-{filter}/pageNr-{pageNr}",
+                defaults: new { controller = "Translation", action = "Index", language = "", setId = 0, filter = "All" , pageNr = 0}
             );
 
             //fallback

@@ -27,7 +27,8 @@ namespace ZiberTranslate.Web.Controllers
 
         private IEnumerable<TranslationChange> BuildTranslations()
         {
-            var me = TranslatorService.FindByEmail(HttpContext.User.Identity.Name);
+            var emailAddress = HttpContext.User.Identity.Name;
+            var me = TranslatorService.FindByEmail(emailAddress);
             
             var changes = DbSession.CreateCriteria<Translation>()
                 .Add(Restrictions.Eq("IsPublished", false))
@@ -48,26 +49,9 @@ namespace ZiberTranslate.Web.Controllers
 
             changes = changes.Concat(votes);
 
-            var neutralUserTranslations = DbSession.QueryOver<Translation>()
-                .Where(Restrictions.On<Translation>(x => x.Key).IsIn(changes.Select(x => x.Key).ToArray()))
-                .And(x => x.Language == LanguageService.GetNeutralLanguage(HttpContext.User.Identity.Name))
-                .And(x => x.NeedsAdminReviewing == false)
-                .OrderBy(x => x.Votes).Desc
-                .Future();
-
-            var neutralTranslations = DbSession.QueryOver<Translation>()
-                .Where(Restrictions.On<Translation>(x => x.Key).IsIn(changes.Select(x => x.Key).ToArray()))
-                .And(x => x.Language == LanguageService.GetLanguageByIsoCode("nl"))
-                .And(x => x.NeedsAdminReviewing == false)
-                .OrderBy(x => x.Votes).Desc
-                .Future();
-
-            var leadingTranslations = DbSession.QueryOver<Translation>()
-                .Where(Restrictions.On<Translation>(x => x.Key).IsIn(changes.Select(x => x.Key).ToArray()))
-                .And(x => x.IsPublished)
-                .And(x => x.NeedsAdminReviewing == false)
-                .OrderBy(x => x.Votes).Desc
-                .Future();
+            var neutralUserTranslations = TranslationService.GetTranslations(LanguageService.GetNeutralLanguage(emailAddress), changes.Select(x => x.Key), TranslationType.Neutral);
+            var neutralTranslations = TranslationService.GetTranslations(LanguageService.GetLanguageByIsoCode("nl"), changes.Select(x => x.Key), TranslationType.Neutral);
+            var leadingTranslations = TranslationService.GetTranslations(LanguageService.GetLanguageByIsoCode(changes.Select(x=>x.Language.IsoCode).ToString()), changes.Select(x => x.Key), TranslationType.Leading);
 
             var translations = (
                 from change in changes
@@ -116,10 +100,7 @@ namespace ZiberTranslate.Web.Controllers
                 foreach (var translation in changes.ToList())
                 {
                     translation.IsPublished = true;
-                    if (rank == 0)
-                    {
-                        translation.NeedsAdminReviewing = false;
-                    }
+                    
 
                     DbSession.Update(translation);
                 }
@@ -127,10 +108,7 @@ namespace ZiberTranslate.Web.Controllers
                 foreach (var vote in votes.ToList())
                 {
                     vote.IsPublished = true;
-                    if (rank == 0)
-                    {
-                        vote.NeedsAdminReviewing = false;
-                    }
+                    
                     DbSession.Update(vote);
                 }
 

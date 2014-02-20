@@ -18,11 +18,18 @@ namespace ZiberTranslate.Web.Controllers
         Reviewed
     }
 
+    public enum TranslationType
+    {
+        Neutral,
+        Leading,
+        User
+    }
+
     public class TranslationController : BaseController
     {
-        public ActionResult Index(int setId, string language, FilterType filter, int? categoryId = null)
+        public ActionResult Index(int setId, string language, FilterType filter, int pageNr, int? categoryId = null)
         {
-            var translations = BuildTranslations(setId, language, filter);
+            var translations = BuildTranslations(setId, language, filter, pageNr);
             var set = DbSession.Load<TranslateSet>(setId);
             var name = Global.CurrentSession.QueryOver<TranslateSet>()
                 .Where(x => x.Id == setId)
@@ -36,6 +43,7 @@ namespace ZiberTranslate.Web.Controllers
             vm.Translations = translations;
             vm.SetId = setId;
             vm.Name = name;
+            vm.PageNumber = pageNr;
             vm.Culture = System.Globalization.CultureInfo.CreateSpecificCulture(language);
             vm.Reviewed = set.Reviewed;
             vm.NeedsReview = set.NeedsReview;
@@ -48,12 +56,12 @@ namespace ZiberTranslate.Web.Controllers
             return View("Index", vm);
         }
 
-        private IEnumerable<ViewModels.TranslationsViewModel.TranslationDTO> BuildTranslations(int id, string language, FilterType filter)
+        private IEnumerable<ViewModels.TranslationsViewModel.TranslationDTO> BuildTranslations(int id, string language, FilterType filter, int pageNr)
         {
             var me = TranslatorService.FindByEmail(HttpContext.User.Identity.Name);
-            var keys = TranslationService.FilteredKeys(id, language, filter);
+            var keys = TranslationService.FilteredKeys(id, language, filter, pageNr);
             var targetLanguage = LanguageService.GetLanguageByIsoCode(language);
-
+            
             //fallback to dutch for anonymous users
             var neutralUserLanguage = LanguageService.GetLanguageByIsoCode("nl");
             if (HttpContext.User.Identity.IsAuthenticated)
@@ -61,34 +69,10 @@ namespace ZiberTranslate.Web.Controllers
                 neutralUserLanguage = LanguageService.GetNeutralLanguage(HttpContext.User.Identity.Name);
             }
 
-            var neutralUserTranslations = DbSession.QueryOver<Translation>()
-                             .Where(x => x.Language == neutralUserLanguage)
-                            
-                             .And(x => x.NeedsAdminReviewing == false)
-                             .OrderBy(x => x.Votes).Desc
-                             .Future();
-
-            var neutralTranslations = DbSession.QueryOver<Translation>()
-                             .Where(x => x.Language == LanguageService.GetLanguageByIsoCode("nl"))
-                            
-                             .And(x => x.NeedsAdminReviewing == false)
-                             .OrderBy(x => x.Votes).Desc
-                             .Future();
-
-            var leadingTranslations = DbSession.QueryOver<Translation>()
-                              .Where(x => x.Language == targetLanguage)
-                              .And(x => x.IsPublished)
-                              .And(x => x.NeedsAdminReviewing == false)
-                              .OrderBy(x => x.Votes).Desc
-                              .Future();
-
-            var userTranslations = DbSession.QueryOver<Translation>()
-                        .Where(x => x.Language == targetLanguage)
-                        .And(x => x.Translator == me)
-                        .And(x => x.IsPublished == false)
-                        .And(x => x.NeedsAdminReviewing)
-                        .OrderBy(x => x.Votes).Desc
-                        .Future();
+            var neutralUserTranslations = TranslationService.GetTranslations(neutralUserLanguage, keys, TranslationType.Neutral);
+            var neutralTranslations = TranslationService.GetTranslations(LanguageService.GetLanguageByIsoCode("nl"), keys, TranslationType.Neutral);
+            var leadingTranslations = TranslationService.GetTranslations(targetLanguage, keys, TranslationType.Leading);
+            var userTranslations = TranslationService.GetTranslations(targetLanguage, keys, TranslationType.User);
 
             var dc = DetachedCriteria.For<TranslationVote>()
                          .Add(Restrictions.Eq("Translator", me))

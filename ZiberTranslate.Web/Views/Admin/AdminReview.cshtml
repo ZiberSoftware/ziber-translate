@@ -13,6 +13,7 @@
 @using (Html.BeginForm("Submit", "Admin", FormMethod.Post))
 {
     <input type="hidden" name="language" value="@this.Request.QueryString["language"]"/>
+    <input type="hidden" name="setId" value="@this.Request.QueryString["setId"]"/>
     <table id="table" class="translations">
         @foreach (var t in Model.Content)
         {
