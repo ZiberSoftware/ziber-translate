@@ -10,9 +10,14 @@
 
 <h2>Review Page</h2>
 
-<table id="table" class="translations">
-    @foreach (var t in Model.Content)
-    {
-        Html.RenderPartial("AdminTranslationRow", t);
-    }
-</table>
+@using (Html.BeginForm("Submit", "Admin", FormMethod.Post))
+{
+    <input type="hidden" name="language" value="@this.Request.QueryString["language"]"/>
+    <table id="table" class="translations">
+        @foreach (var t in Model.Content)
+        {
+            Html.RenderPartial("AdminTranslationRow", t);
+        }
+    </table>
+    <input type="submit"/>    
+}

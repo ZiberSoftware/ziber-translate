@@ -55,15 +55,20 @@ namespace ZiberTranslate.Web.Controllers
             var targetLanguage = LanguageService.GetLanguageByIsoCode(language);
 
             //fallback to dutch for anonymous users
-            var neutralLanguage = LanguageService.GetLanguageByIsoCode("nl");
+            var neutralUserLanguage = LanguageService.GetLanguageByIsoCode("nl");
             if (HttpContext.User.Identity.IsAuthenticated)
             {
-                //TODO: the neutral language needs to be complete, we can't garantee that at the moment.
-                neutralLanguage = LanguageService.GetNeutralLanguage(HttpContext.User.Identity.Name);
+                neutralUserLanguage = LanguageService.GetNeutralLanguage(HttpContext.User.Identity.Name);
             }
 
+            var neutralUserTranslations = DbSession.QueryOver<Translation>()
+                             .Where(x => x.Language == neutralUserLanguage)
+                             .And(x => x.NeedsAdminReviewing == false)
+                             .OrderBy(x => x.Votes).Desc
+                             .Future();
+
             var neutralTranslations = DbSession.QueryOver<Translation>()
-                             .Where(x => x.Language == neutralLanguage)
+                             .Where(x => x.Language == LanguageService.GetLanguageByIsoCode("nl"))
                              .And(x => x.NeedsAdminReviewing == false)
                              .OrderBy(x => x.Votes).Desc
                              .Future();
@@ -97,15 +102,16 @@ namespace ZiberTranslate.Web.Controllers
 
             var translations = (
                         from key in keys
-                        let neutralTranslation = neutralTranslations.Where(x => x.Key == key.Key).FirstOrDefault()
-                        let leadingTranslation = leadingTranslations.Where(x => x.Key == key.Key).FirstOrDefault()
-                        let userTranslation = userTranslations.Where(x => x.Key == key.Key).FirstOrDefault() ?? leadingTranslation
+                        let neutralUserTranslation = neutralUserTranslations.Where(x => x.Key == key).FirstOrDefault()
+                        let neutralTranslation = neutralTranslations.Where(x => x.Key == key).FirstOrDefault()
+                        let leadingTranslation = leadingTranslations.Where(x => x.Key == key).FirstOrDefault()
+                        let userTranslation = userTranslations.Where(x => x.Key == key).FirstOrDefault() ?? leadingTranslation
                         select new ViewModels.TranslationsViewModel.TranslationDTO
                         {
                             KeyId = key.Id,
-                            Term = neutralTranslation == null ? string.Empty : neutralTranslation.Value,
+                            Term = neutralUserTranslation == null ? neutralTranslation.Value : neutralUserTranslation.Value,
                             Value = userTranslation == null ? string.Empty : userTranslation.Value,
-                            LeadingValue = leadingTranslation == null ? neutralTranslation.Value : leadingTranslation.Value,
+                            LeadingValue = leadingTranslation == null ? neutralUserTranslation.Value : leadingTranslation.Value,
                             Votes = leadingTranslation == null ? 0 : userTranslation.Votes,
                             Voted = votedOnKeys.Contains(key.Id),
                             SetId = id

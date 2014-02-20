@@ -116,55 +116,38 @@ namespace ZiberTranslate.Web.Services
             smtp.Send(mail);
         }
 
-        public static IEnumerable<Translation> FilteredKeys(int id, string language, FilterType filter)
+        public static IEnumerable<TranslateKey> FilteredKeys(int id, string language, FilterType filter)
         {
-            switch (filter)
-            {
-                case FilterType.NeedsReview:
-                    {
-                        return Global.CurrentSession.CreateCriteria<Translation>()
-                            .CreateAlias("Key", "k")
-                            .CreateAlias("Language", "l")
-                            .Add(Restrictions.Eq("k.Set.Id", id))
-                            .Add(Restrictions.Eq("NeedsReview", true))
-                            .Add(Restrictions.Eq("l.IsoCode", language))
-                            .List<Translation>();
-                    }
+            var keys = Global.CurrentSession.CreateCriteria<TranslateKey>()
+                .Add(Restrictions.Eq("Set.Id", id));
 
-                case FilterType.NeedsTranslation:
-                    {
-                        return Global.CurrentSession.CreateCriteria<Translation>()
-                            .CreateAlias("Key", "k")
-                            .CreateAlias("Language", "l")
-                            .Add(Restrictions.Eq("k.Set.Id", id))
-                            .Add(Restrictions.Eq("l.IsoCode", language))
-                            .List<Translation>();
-                    }
-
-                case FilterType.Reviewed:
-                    {
-                        return Global.CurrentSession.CreateCriteria<Translation>()
-                            .CreateAlias("Key", "k")
-                            .CreateAlias("Language", "l")
-                            .Add(Restrictions.Eq("k.Set.Id", id))
-                            .Add(Restrictions.Eq("NeedsReview", false))
-                            .Add(Restrictions.Eq("l.IsoCode", language))
-                            .List<Translation>();
-                    }
-
-                default:
-                    {
-
-                        return Global.CurrentSession.CreateCriteria<Translation>()
+            var translations = DetachedCriteria.For<Translation>()
                                 .CreateAlias("Key", "k")
                                 .CreateAlias("Language", "l")
                                 .Add(Restrictions.Eq("k.Set.Id", id))
                                 .Add(Restrictions.Eq("l.IsoCode", language))
-                                .Add(Restrictions.IsNull("Translator"))
-                                .List<Translation>();
+                                .Add(Restrictions.IsNotNull("Translator"))
+                                .SetProjection(Projections.Property("k.Id"));
+            switch (filter)
+            {
+                case FilterType.NeedsReview:
+                    {
+                        translations.Add(Restrictions.Eq("NeedsReview", true));
+                        return keys.Add(Subqueries.PropertyIn("Id", translations)).List<TranslateKey>();
+                    }
+
+                case FilterType.NeedsTranslation:
+                    {
+                        return keys.Add(Subqueries.PropertyNotIn("Id", translations)).List<TranslateKey>();
+                    }
+
+                case FilterType.Reviewed:
+                    {
+                        translations.Add(Restrictions.Eq("NeedsReview", false));
+                        return keys.Add(Subqueries.PropertyIn("Id", translations)).List<TranslateKey>();
                     }
             }
-
+            return keys.List<TranslateKey>();
         }
     }
 }

@@ -10,7 +10,7 @@
     </script>
     <script type="text/javascript">
         window.redirect = "@(Url.Action("Login", new { controller = "Security", returnUrl = this.Context.Request.Url.PathAndQuery }))";
-        window.prevPage = "@(Request.UrlReferrer.PathAndQuery)";
+        
 
         function reloadPage() {
             location.reload();

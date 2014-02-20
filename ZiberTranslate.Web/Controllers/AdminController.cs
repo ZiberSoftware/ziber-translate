@@ -44,12 +44,20 @@ namespace ZiberTranslate.Web.Controllers
 
         }
 
-        public ActionResult Submit (int[] TranslationId)
+        public ActionResult Submit (int[] TranslationId, string language)
         {
-            var translationsApproved = DbSession.CreateCriteria<Translation>()
-                .Add(Restrictions.Eq("Id",TranslationId))
-                .List<Translation>();
+            using (var t = DbSession.BeginTransaction())
+            {
+                foreach (var id in TranslationId)
+                {
+                    var translationsToBeApproved = TranslationService.FindById(id);
+                    var leading = TranslationService.FindByKey(id, language);
 
+
+
+                    t.Commit();
+                }
+            }
 
 
             return RedirectToAction("Set");
