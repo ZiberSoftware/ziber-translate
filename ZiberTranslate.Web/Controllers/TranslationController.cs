@@ -54,6 +54,18 @@ namespace ZiberTranslate.Web.Controllers
             return View("Index", vm);
         }
 
+        public ActionResult Filters(int setId, string language)
+        {
+            var set = DbSession.Load<TranslateSet>(setId);
+            return Json(new
+            {
+                reviewed = set.Reviewed,
+                needsReview = set.NeedsReview,
+                needsTranslation = set.NeedsTranslation,
+                total = set.AllTranslations
+            }, JsonRequestBehavior.AllowGet);
+        }
+
         private IEnumerable<ViewModels.TranslationsViewModel.TranslationDTO> BuildTranslations(int id, string language, FilterType filter)
         {
             var me = TranslatorService.FindByEmail(HttpContext.User.Identity.Name);
@@ -69,14 +81,14 @@ namespace ZiberTranslate.Web.Controllers
 
             var neutralUserTranslations = DbSession.QueryOver<Translation>()
                              .Where(x => x.Language == neutralUserLanguage)
-                            
+
                              .And(x => x.NeedsAdminReviewing == false)
                              .OrderBy(x => x.Votes).Desc
                              .Future();
 
             var neutralTranslations = DbSession.QueryOver<Translation>()
                              .Where(x => x.Language == LanguageService.GetLanguageByIsoCode("nl"))
-                            
+
                              .And(x => x.NeedsAdminReviewing == false)
                              .OrderBy(x => x.Votes).Desc
                              .Future();

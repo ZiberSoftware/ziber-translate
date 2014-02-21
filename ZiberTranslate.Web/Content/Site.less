@@ -46,7 +46,7 @@ em
 }
 
 
-#filtering
+#filters
 {
     padding: 20px;
     border-bottom: 1px solid @borderColor;
@@ -113,15 +113,16 @@ em
     {
         border-bottom: 1px dotted #CCC;
         padding: 5px;
-        vertical-align: middle;
+        
         >div {
             display: inline-block;
+            vertical-align: middle;
         }
     }
 
-        .term
+        .term, .translation
         {
-            width: 250px;
+            width: 40%;
         }
 
         .translation
@@ -203,7 +204,7 @@ em
 }
 
 
-    .translations:hover .view-actions a
+    .translations >:hover .view-actions a
     {
         display: inline-block;
     }

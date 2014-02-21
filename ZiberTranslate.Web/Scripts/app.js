@@ -5,7 +5,7 @@
 
     app.config(['$routeProvider', '$httpProvider', function ($routeProvider, $httpProvider) {
         $routeProvider
-            .when('/sets/:id/translations-:language', {
+            .when('/sets/:id/translations/:language', {
                 templateUrl: '/Scripts/partials/Translation.html'
             })
             .when('/sets', {

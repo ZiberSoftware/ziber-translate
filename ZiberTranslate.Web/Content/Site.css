@@ -28,40 +28,40 @@ em {
   color: #FFF;
   border-bottom: 1px solid #cccccc;
 }
-#filtering {
+#filters {
   padding: 20px;
   border-bottom: 1px solid #cccccc;
 }
-#filtering .stats li {
+#filters .stats li {
   display: inline-block;
 }
-#filtering .stats li + li {
+#filters .stats li + li {
   margin-left: -4px;
 }
-#filtering .stats a,
-#filtering .stats .label {
+#filters .stats a,
+#filters .stats .label {
   display: block;
 }
-#filtering .stats a {
+#filters .stats a {
   min-width: 90px;
   line-height: 40px;
   font-size: 25px;
   text-align: center;
   border: 1px solid #cccccc;
 }
-#filtering .stats .label {
+#filters .stats .label {
   text-transform: lowercase;
   font-size: 13px;
 }
-#filtering .stats .needs-review a {
+#filters .stats .needs-review a {
   background-color: #7DA1C1;
   color: #FFF;
 }
-#filtering .stats .reviewed a {
+#filters .stats .reviewed a {
   background-color: #5FA504;
   color: #FFF;
 }
-#filtering .stats .all a {
+#filters .stats .all a {
   background-color: #486D8A;
   color: #FFF;
 }
@@ -74,13 +74,14 @@ em {
 .translations .translation-root {
   border-bottom: 1px dotted #CCC;
   padding: 5px;
-  vertical-align: middle;
 }
 .translations .translation-root > div {
   display: inline-block;
+  vertical-align: middle;
 }
-.translations .term {
-  width: 250px;
+.translations .term,
+.translations .translation {
+  width: 40%;
 }
 .translations .translation .edit {
   padding: 5px 7px;
@@ -135,7 +136,7 @@ em {
   background-position: 0px 0px;
   display: inline-block;
 }
-.translations:hover .view-actions a {
+.translations > :hover .view-actions a {
   display: inline-block;
 }
 .translations .actions,

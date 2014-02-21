@@ -10,8 +10,11 @@
                         return response.data;
                     });
                 },
-                translations: function (setId, language) {
-                    return $http.get('/sets/' + setId + '/translations-' + language + '/filter-all').then(function (response) {
+                translations: function (setId, language, filter) {
+                    if (typeof(filter) === 'undefined')
+                        filter = 'all';
+                    
+                    return $http.get('/sets/' + setId + '/translations-' + language + '/filter-' + filter).then(function (response) {
                         response.data.forEach(function (item) {
                             item.approved = item.Votes > 0;
                             item.voted = item.Votes > 0;

@@ -1,4 +1,31 @@
 ﻿<div ng-controller="TranslationCtrl">
+    <section id="change-set" ng-controller="ChangeSetCtrl" ng-show="changes">
+        <h3>U heeft {{changes}} wijzigingen in afwachting</h3>
+        <a href="" class="button button-gray">Annuleren</a>
+        <a href="" class="button button-green">Publiceren</a>
+    </section>
+
+    <section id="filters">
+        <ul class="stats">
+            <li class="needs-translation">
+                <a ng-bind="filters.needsTranslation" ng-click="filter('needsTranslation')"></a>
+                <span class="label">Onvertaald</span>
+            </li>
+            <li class="needs-review">
+                <a ng-bind="filters.needsReview" ng-click="filter('needsReview')"></a>
+                <span class="label">In afwachting</span>
+            </li>
+            <li class="reviewed">
+                <a ng-bind="filters.reviewed" ng-click="filter('reviewed')"></a>
+                <span class="label">Beoordeeld</span>
+            </li>
+            <li class="all">
+                <a ng-bind="filters.total" ng-click="filter('all')"></a>
+                <span class="label">Totaal</span>
+            </li>
+        </ul>
+    </section>
+
     <ul id="table" class="translations">
         <li ng-repeat="translation in translations">
             <zbr-translation translation="translation"></zbr-translation>

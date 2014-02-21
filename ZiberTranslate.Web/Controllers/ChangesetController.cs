@@ -14,6 +14,32 @@ namespace ZiberTranslate.Web.Controllers
         [HttpGet]
         public ActionResult Index()
         {
+            if (Request.IsAjaxRequest())
+            {
+
+                var me = TranslatorService.FindByEmail(HttpContext.User.Identity.Name);
+                var rank = TranslatorService.FetchRank(HttpContext.User.Identity.Name);
+
+                var changes = DbSession.CreateCriteria<Translation>()
+                    .Add(Restrictions.Eq("IsPublished", false))
+                    .Add(Restrictions.Eq("Translator", me))
+                    .CreateAlias("Key", "k")
+                    .CreateAlias("k.Set", "s")
+                    .Future<Translation>();
+
+                var votes = DbSession.QueryOver<TranslationVote>()
+                    .Where(x => x.IsPublished == false)
+                    .And(x => x.Translator == me)
+                    .Future();
+
+                return Json(new
+                    {
+                        votes = votes.Count(),
+                        changes = changes.Count()
+                    }, 
+                    JsonRequestBehavior.AllowGet);
+            }
+
             var vm = new ChangesetViewModel();
             vm.Changes = BuildTranslations();
 
