@@ -17,6 +17,7 @@ namespace ZiberTranslate.Web.ViewModels
         public IEnumerable<TranslationDTO> Translations { get; set; }
         public int SetId { get; set; }
         public string Name { get; set; }
+        public int PageNumber { get; set; }
         public CultureInfo Culture { get; set; }
         public int Rank { get; set; }
         public int NeedsTranslation { get; set; }

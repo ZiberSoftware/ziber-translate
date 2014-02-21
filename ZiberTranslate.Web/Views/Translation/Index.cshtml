@@ -26,19 +26,19 @@
 <section id="filtering">
     <ul class="stats">
         <li class="needs-translation">
-            <a href="@Url.RouteUrl("Translations", new {setId = @Model.SetId, language = @Model.Culture.TwoLetterISOLanguageName, filter = "NeedsTranslation" })">@Model.NeedsTranslation</a>
+            <a href="@Url.RouteUrl("Translations", new {setId = @Model.SetId, language = @Model.Culture.TwoLetterISOLanguageName, filter = "NeedsTranslation", pageNr = @Model.PageNumber })">@Model.NeedsTranslation</a>
             <span class="label">Onvertaald</span>
         </li>
         <li class="needs-review">
-            <a href="@Url.RouteUrl("Translations", new {setId = @Model.SetId, language = @Model.Culture.TwoLetterISOLanguageName, filter = "NeedsReview" })">@Model.NeedsReview</a>
+            <a href="@Url.RouteUrl("Translations", new { setId = @Model.SetId, language = @Model.Culture.TwoLetterISOLanguageName, filter = "NeedsReview", pageNr = @Model.PageNumber })">@Model.NeedsReview</a>
             <span class="label">In afwachting</span>
         </li>
         <li class="reviewed">
-            <a href="@Url.RouteUrl("Translations", new {setId = @Model.SetId, language = @Model.Culture.TwoLetterISOLanguageName, filter = "Reviewed" })">@Model.Reviewed</a>
+            <a href="@Url.RouteUrl("Translations", new { setId = @Model.SetId, language = @Model.Culture.TwoLetterISOLanguageName, filter = "Reviewed", pageNr = @Model.PageNumber })">@Model.Reviewed</a>
             <span class="label">Beoordeeld</span>
         </li>
         <li class="all">
-            <a href="@Url.RouteUrl("Translations", new {setId = @Model.SetId, language = @Model.Culture.TwoLetterISOLanguageName, filter = "All" })">@Model.AllTranslations</a>
+            <a href="@Url.RouteUrl("Translations", new { setId = @Model.SetId, language = @Model.Culture.TwoLetterISOLanguageName, filter = "All", pageNr = @Model.PageNumber })">@Model.AllTranslations</a>
             <span class="label">Totaal</span>
         </li>
     </ul>

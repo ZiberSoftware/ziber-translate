@@ -115,9 +115,11 @@ namespace ZiberTranslate.Web.Services
         //    SmtpClient smtp = new SmtpClient();
         //    smtp.Send(mail);
         //}
-
-        public static IEnumerable<TranslateKey> FilteredKeys(int id, string language, FilterType filter)
+        
+        
+        public static IEnumerable<TranslateKey> FilteredKeys(int id, string language, FilterType filter, int pageNr)
         {
+
             var keys = Global.CurrentSession.CreateCriteria<TranslateKey>()
                 .Add(Restrictions.Eq("Set.Id", id));
 
@@ -148,7 +150,46 @@ namespace ZiberTranslate.Web.Services
                         return keys.Add(Subqueries.PropertyIn("Id", translations)).List<TranslateKey>();
                     }
             }
+
+            keys.SetFirstResult((pageNr-1) * 20);
+            keys.SetMaxResults(20);
             return keys.List<TranslateKey>();
         }
+
+        public static IEnumerable<Translation> GetTranslations(Language language, IEnumerable<TranslateKey> keys, TranslationType type)
+        {
+            switch (type)
+            {
+                case TranslationType.Leading:
+                    {
+                        return Global.CurrentSession.QueryOver<Translation>()
+                              .Where(Restrictions.On<Translation>(x => x.Key).IsInG(keys))
+                              .And(x => x.Language == language)
+                              .And(x => x.IsPublished)
+                              .And(x => x.NeedsAdminReviewing == false)
+                              .OrderBy(x => x.Votes).Desc
+                              .Future(); 
+                    }
+                case TranslationType.User:
+                    {
+                        return Global.CurrentSession.QueryOver<Translation>()
+                              .Where(Restrictions.On<Translation>(x => x.Key).IsInG(keys))
+                              .And(x => x.Language == language)
+                              .And(x=> x.Translator == TranslatorService.FindByEmail(HttpContext.Current.User.Identity.Name))
+                              .And(x => x.IsPublished == false)
+                              .And(x => x.NeedsAdminReviewing)
+                              .OrderBy(x => x.Votes).Desc
+                              .Future(); 
+                    }
+            }
+
+           return Global.CurrentSession.QueryOver<Translation>()
+                     .Where(Restrictions.On<Translation>(x => x.Key).IsInG(keys))
+                     .And(x => x.Language == language)
+                     .And(x => x.NeedsAdminReviewing == false)
+                     .OrderBy(x => x.Votes).Desc
+                     .Future();
+        }
+
     }
 }

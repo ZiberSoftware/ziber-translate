@@ -82,6 +82,52 @@ namespace ZiberTranslate.Web
             
         }
 
+<<<<<<< HEAD
+=======
+        public static void RegisterRoutes(RouteCollection routes)
+        {
+            routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+            routes.IgnoreRoute("Content/{*pathInfo}");
+            routes.IgnoreRoute("Scripts/{*pathInfo}");
+
+            routes.MapRoute(
+                name: "Approve translation",
+                url: "sets/{setId}/translations-{language}/{id}/approve",
+                defaults: new { controller = "Translation", action = "Approve", language = "", setId = 0, id = 0 }
+            );
+
+            routes.MapRoute(
+                name: "Disapprove translation",
+                url: "sets/{setId}/translations-{language}/{id}/disapprove",
+                defaults: new { controller = "Translation", action = "Disapprove", language = "", setId = 0, id = 0 }
+            );
+
+            routes.MapRoute(
+                name: "Update translation",
+                url: "sets/{setId}/translations-{language}/{id}/update",
+                defaults: new { controller = "Translation", action = "Update", language = "", setId = 0, id = 0 }
+            );
+
+            routes.MapRoute(
+                name: "Destroy translation",
+                url: "sets/{setId}/translations-{language}/{id}/destroy",
+                defaults: new { controller = "Translation", action = "Destroy", language = "", setId = 0, id = 0 }
+            );
+
+            routes.MapRoute(
+                name: "Translations",
+                url: "sets/{setId}/translations-{language}/filter-{filter}/pageNr-{pageNr}",
+                defaults: new { controller = "Translation", action = "Index", language = "", setId = 0, filter = "All" , pageNr = 0}
+            );
+
+            //fallback
+            routes.MapRoute(
+                "Default", // Route name
+                "{controller}/{action}/{id}", // URL with parameters
+                new { controller = "Home", action = "Index", id = UrlParameter.Optional } // Parameter defaults
+            );
+        }
+>>>>>>> 8664f1ab7aa558787aa191cb72d60b08f44a9eef
 
     }
 }
