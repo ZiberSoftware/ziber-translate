@@ -11,6 +11,7 @@ namespace ZiberTranslate.Web.App_Start
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/app.js")
+                .Include("~/Scripts/modules.js")
                 .IncludeDirectory("~/Scripts/controllers", "*.js")
                 .IncludeDirectory("~/Scripts/services", "*.js")
                 .IncludeDirectory("~/Scripts/directives", "*.js")

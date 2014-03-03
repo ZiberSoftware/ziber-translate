@@ -15,19 +15,17 @@ namespace ZiberTranslate.Web.Controllers
     {
         public ActionResult Index()
         {
-            var rank = TranslatorService.FetchRank(HttpContext.User.Identity.Name);
-            var vm = new TranslationsViewModel();
-            vm.Rank = rank;
-
-            using (var t = DbSession.BeginTransaction())
+            if (HttpContext.User.Identity.IsAuthenticated)
             {
-                var translators = DbSession.Query<Models.Translator>().ToList();
-
-                t.Commit();
+                ViewBag.IsAuthenticated = true;
+                ViewBag.Username = HttpContext.User.Identity.Name;
             }
-           
+            else
+            {
+                ViewBag.IsAuthenticated = false;
+            }
 
-            return View("Index", vm);
+            return View("Index");
         }
        
         public ActionResult DefaultLanguage(string language="")

@@ -1,6 +1,6 @@
 ﻿@using System.Web.Optimization
 <!DOCTYPE html>
-<html>
+<html ng-app="TranslateApp">
 <head>
     <title>@ViewBag.Title</title>
     <meta charset="utf-8" />
@@ -8,7 +8,7 @@
 </head>
 
     <body>
-        <header id="header">
+        <header id="header" ng-hide="!!hideHeader">
             @RenderSection("header", false)
         </header>
         <section id="page">

@@ -18,11 +18,18 @@ namespace ZiberTranslate.Web.Controllers
         Reviewed
     }
 
+    public enum TranslationType
+    {
+        Neutral,
+        Leading,
+        User
+    }
+
     public class TranslationController : BaseController
     {
-        public ActionResult Index(int setId, string language, FilterType filter, int? categoryId = null)
+        public ActionResult Index(int setId, string language, FilterType filter, int pageNr = 1, int? categoryId = null)
         {
-            var translations = BuildTranslations(setId, language, filter);
+            var translations = BuildTranslations(setId, language, filter, pageNr);
 
             if (Request.IsAjaxRequest())
             {
@@ -42,6 +49,7 @@ namespace ZiberTranslate.Web.Controllers
             vm.Translations = translations;
             vm.SetId = setId;
             vm.Name = name;
+            vm.PageNumber = pageNr;
             vm.Culture = System.Globalization.CultureInfo.CreateSpecificCulture(language);
             vm.Reviewed = set.Reviewed;
             vm.NeedsReview = set.NeedsReview;
@@ -66,10 +74,11 @@ namespace ZiberTranslate.Web.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
-        private IEnumerable<ViewModels.TranslationsViewModel.TranslationDTO> BuildTranslations(int id, string language, FilterType filter)
+
+        private IEnumerable<ViewModels.TranslationsViewModel.TranslationDTO> BuildTranslations(int id, string language, FilterType filter, int pageNr)
         {
             var me = TranslatorService.FindByEmail(HttpContext.User.Identity.Name);
-            var keys = TranslationService.FilteredKeys(id, language, filter);
+            var keys = TranslationService.FilteredKeys(id, language, filter, pageNr);
             var targetLanguage = LanguageService.GetLanguageByIsoCode(language);
 
             //fallback to dutch for anonymous users
@@ -79,34 +88,10 @@ namespace ZiberTranslate.Web.Controllers
                 neutralUserLanguage = LanguageService.GetNeutralLanguage(HttpContext.User.Identity.Name);
             }
 
-            var neutralUserTranslations = DbSession.QueryOver<Translation>()
-                             .Where(x => x.Language == neutralUserLanguage)
-
-                             .And(x => x.NeedsAdminReviewing == false)
-                             .OrderBy(x => x.Votes).Desc
-                             .Future();
-
-            var neutralTranslations = DbSession.QueryOver<Translation>()
-                             .Where(x => x.Language == LanguageService.GetLanguageByIsoCode("nl"))
-
-                             .And(x => x.NeedsAdminReviewing == false)
-                             .OrderBy(x => x.Votes).Desc
-                             .Future();
-
-            var leadingTranslations = DbSession.QueryOver<Translation>()
-                              .Where(x => x.Language == targetLanguage)
-                              .And(x => x.IsPublished)
-                              .And(x => x.NeedsAdminReviewing == false)
-                              .OrderBy(x => x.Votes).Desc
-                              .Future();
-
-            var userTranslations = DbSession.QueryOver<Translation>()
-                        .Where(x => x.Language == targetLanguage)
-                        .And(x => x.Translator == me)
-                        .And(x => x.IsPublished == false)
-                        .And(x => x.NeedsAdminReviewing)
-                        .OrderBy(x => x.Votes).Desc
-                        .Future();
+            var neutralUserTranslations = TranslationService.GetTranslations(neutralUserLanguage, keys, TranslationType.Neutral);
+            var neutralTranslations = TranslationService.GetTranslations(LanguageService.GetLanguageByIsoCode("nl"), keys, TranslationType.Neutral);
+            var leadingTranslations = TranslationService.GetTranslations(targetLanguage, keys, TranslationType.Leading);
+            var userTranslations = TranslationService.GetTranslations(targetLanguage, keys, TranslationType.User);
 
             var dc = DetachedCriteria.For<TranslationVote>()
                          .Add(Restrictions.Eq("Translator", me))
@@ -155,23 +140,9 @@ namespace ZiberTranslate.Web.Controllers
 
                 t.Commit();
             }
-            return TranslationRow(translation);
+            return new EmptyResult();
         }
 
-        private ActionResult TranslationRow(Translation translation)
-        {
-            return TranslationRow(translation.Key.Set.Id, translation.Language.IsoCode, translation.Key.Id);
-        }
-
-        private ActionResult TranslationRow(int setId, string language, int keyId)
-        {
-            FilterType filter = FilterType.All;
-
-            var translations = BuildTranslations(setId, language, filter);
-
-
-            return PartialView("TranslationRow", translations.Where(x => x.KeyId == keyId).SingleOrDefault());
-        }
 
         [HttpPost]
         public ActionResult Destroy(int id, string language)
@@ -195,11 +166,9 @@ namespace ZiberTranslate.Web.Controllers
 
                     t.Commit();
                 }
-
-                return TranslationRow(setId, language, keyId);
             }
 
-            return TranslationRow(translation);
+            return new EmptyResult();
         }
 
         [HttpPost]
@@ -209,12 +178,7 @@ namespace ZiberTranslate.Web.Controllers
 
             TranslationVoteService.Vote(translation);
 
-            if (Request.IsAjaxRequest())
-            {
-                return TranslationRow(translation);
-            }
-
-            return RedirectToAction("Index", new { id = 0 });
+            return new EmptyResult();
         }
 
         [HttpPost]
@@ -228,14 +192,9 @@ namespace ZiberTranslate.Web.Controllers
                 TranslationVoteService.RemoveVote(translation);
 
                 t.Commit();
-            }
-
-            if (Request.IsAjaxRequest())
-            {
-                return TranslationRow(translation);
-            }
-
-            return RedirectToAction("Index", new { id = 0 });
+            } 
+            
+            return new EmptyResult();
         }
 
         public ActionResult SearchByName(int id, string language = "", string searchString = "")

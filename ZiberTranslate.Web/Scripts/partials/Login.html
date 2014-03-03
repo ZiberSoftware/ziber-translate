@@ -1,0 +1,19 @@
+﻿<section class="login-screen">
+    <div class="form-wrapper">
+        <div class="logo">
+            <span>The world is not enough</span>
+            <span>Ziber Translate</span>
+        </div>
+        <ng-form name="loginForm" ng-controller="LoginCtrl">
+            <div class="wrapper">
+                <label>Gebruikersnaam</label>
+                <input type="email" ng-model="user.username" ng-required="true"/>
+            </div>
+            <div class="wrapper">
+                <label>Wachtwoord</label>
+                <input type="password" ng-model="user.password" ng-required="true"/>
+                <input type="submit" ng-click="login(user)"/>
+            </div>
+        </ng-form>
+    </div>
+</section>

@@ -34,7 +34,7 @@ em
 
 #page
 {
-    font-size: 15px;
+    font-size: 1.5em;
 }
 
 #header
@@ -108,103 +108,105 @@ em
     width: 100%;
     color: #333;
     font-size: 12px;
-    list-style : none;
+    list-style: none;
+
     .translation-root
     {
         border-bottom: 1px dotted #CCC;
         padding: 5px;
-        
-        >div {
+
+        >div
+        {
             display: inline-block;
             vertical-align: middle;
         }
     }
 
-        .term, .translation
+    .term, .translation
+    {
+        width: 40%;
+    }
+
+    .translation
+    {
+        .edit
         {
-            width: 40%;
+            padding: 5px 7px;
+            display: block;
+            margin: 0pt;
         }
 
-        .translation
+        .field
         {
-            .edit
-            {
-                padding: 5px 7px;
-                display: block;
-                margin: 0pt;
-            }
-
-            .field
-            {
-                padding: 4px 5px 3px;
-                margin: 0pt;
-                height: auto;
-                border-radius: 3px;
-                border: 1px solid #A0A6B3;
-                color: #717B80;
-                background-color: #FFF;
-            }
-
-            textarea
-            {
-                display: block;
-                width: 100%;
-                border: none;
-                background-color: transparent;
-                font-size: 12px;
-                font-family: arial;
-            }
-
-            .edit:hover
-            {
-                background-color: #FFFFDD;
-                border-radius: 3px;
-                border: 1px solid #CCC;
-                padding: 4px 6px;
-            }
+            padding: 4px 5px 3px;
+            margin: 0pt;
+            height: auto;
+            border-radius: 3px;
+            border: 1px solid #A0A6B3;
+            color: #717B80;
+            background-color: #FFF;
         }
 
-        .spacer
+        textarea
         {
-            width: 24px;
+            display: block;
+            width: 100%;
+            border: none;
+            background-color: transparent;
+            font-size: 12px;
+            font-family: arial;
         }
 
-        .actions
+        .edit:hover
         {
-            a
-            {
-                display: none;
-                background-image: url('images/edit_actions.png');
-                text-indent: -4000px;
-            }
-
-            .unapprove
-            {
-                width: 16px;
-                height: 16px;
-                background-position: -27px -27px;
-                display: inline-block;
-            }
-
-            .approve
-            {
-                width: 16px;
-                height: 16px;
-                background-position: -0px -27px;
-            }
-
-            .delete
-            {
-                width: 16px;
-                height: 16px;
-                background-position: -0px -0px;
-                display: inline-block;
-            }
+            background-color: #FFFFDD;
+            border-radius: 3px;
+            border: 1px solid #CCC;
+            padding: 4px 6px;
         }
+    }
+
+    .spacer
+    {
+        width: 24px;
+    }
+
+    .actions
+    {
+        a
+        {
+            display: none;
+            background-image: url('images/edit_actions.png');
+            text-indent: -4000px;
+        }
+
+        .unapprove
+        {
+            width: 16px;
+            height: 16px;
+            background-position: -27px -27px;
+            display: inline-block;
+        }
+
+        .approve
+        {
+            width: 16px;
+            height: 16px;
+            background-position: -0px -27px;
+        }
+
+        .delete
+        {
+            width: 16px;
+            height: 16px;
+            background-position: -0px -0px;
+            display: inline-block;
+        }
+    }
 }
 
 
-    .translations >:hover .view-actions a
+    .translations > :hover .view-actions a
     {
         display: inline-block;
     }
@@ -266,3 +268,83 @@ em
         color: #AA6666;
         text-decoration: line-through;
     }
+
+
+
+.login-screen
+{
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #EAEAEA;
+    color: #919191;    
+
+    .logo {
+        background-image: url('/Content/images/vlaggen.png');
+        background-size: 384px 216px;
+        background-repeat: no-repeat;
+        background-position: 30px 40px;
+        width: 385px;
+        height: 385px;
+        background-color: #FFF;
+        border-radius: 50%;
+        text-align: center;
+        margin-left: 95px;
+        margin-bottom: 20px;
+
+        span {
+            display: inline-block;
+            margin-top: 250px;
+            font-size: 1.4em;
+        }
+        span + span {
+            display: block;
+            margin-top: 5px;
+            font-size: 1.8em;
+        }
+    }
+
+    input[type=email], input[type=password]
+    {
+        font-size: 1.2em;
+        border: 1px solid #CCC;
+        background-color: #DDDDDD;
+        color: #666;
+        padding: 5px;
+        margin-top: 5px;
+        display: block;
+        width: 270px;
+    }
+
+    input[type=submit] {
+        background-color: transparent;
+        border-style: none;
+        width: 39px;
+        height: 40px;
+        background-image: url('/Content/images/pijltje.png');
+        text-indent: -1000px;
+        position: absolute;
+        right: -40px;
+        top: 20px;
+        padding: 0;
+    }
+
+
+    .form-wrapper {
+        position: relative;
+        width: 600px;
+        height: 700px;
+        top: 50%;
+        margin: 0 auto;
+        margin-top: -300px;
+
+        .wrapper {
+            float: left;
+            width: 50%;
+            height: 150px;
+            position: relative;
+        }
+    }
+}

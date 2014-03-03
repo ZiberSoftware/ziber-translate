@@ -20,7 +20,7 @@ em {
   font-style: normal;
 }
 #page {
-  font-size: 15px;
+  font-size: 1.5em;
 }
 #header {
   background-color: #486d8a;
@@ -180,4 +180,73 @@ em {
   background-color: #FFAAAA;
   color: #AA6666;
   text-decoration: line-through;
+}
+.login-screen {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  background-color: #EAEAEA;
+  color: #919191;
+}
+.login-screen .logo {
+  background-image: url('/Content/images/vlaggen.png');
+  background-size: 384px 216px;
+  background-repeat: no-repeat;
+  background-position: 30px 40px;
+  width: 385px;
+  height: 385px;
+  background-color: #FFF;
+  border-radius: 50%;
+  text-align: center;
+  margin-left: 95px;
+  margin-bottom: 20px;
+}
+.login-screen .logo span {
+  display: inline-block;
+  margin-top: 250px;
+  font-size: 1.4em;
+}
+.login-screen .logo span + span {
+  display: block;
+  margin-top: 5px;
+  font-size: 1.8em;
+}
+.login-screen input[type=email],
+.login-screen input[type=password] {
+  font-size: 1.2em;
+  border: 1px solid #CCC;
+  background-color: #DDDDDD;
+  color: #666;
+  padding: 5px;
+  margin-top: 5px;
+  display: block;
+  width: 270px;
+}
+.login-screen input[type=submit] {
+  background-color: transparent;
+  border-style: none;
+  width: 39px;
+  height: 40px;
+  background-image: url('/Content/images/pijltje.png');
+  text-indent: -1000px;
+  position: absolute;
+  right: -40px;
+  top: 20px;
+  padding: 0;
+}
+.login-screen .form-wrapper {
+  position: relative;
+  width: 600px;
+  height: 700px;
+  top: 50%;
+  margin: 0 auto;
+  margin-top: -300px;
+}
+.login-screen .form-wrapper .wrapper {
+  float: left;
+  width: 50%;
+  height: 150px;
+  position: relative;
 }

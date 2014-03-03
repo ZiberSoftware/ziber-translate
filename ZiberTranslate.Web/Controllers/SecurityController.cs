@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using ZiberTranslate.Web.Models;
@@ -25,29 +26,25 @@ namespace ZiberTranslate.Web.Controllers
                         .Where(x => x.EmailAddress == emailAddress)
                         .Select(x => x.Salt)
                         .SingleOrDefault<string>();
-                        
-            //var salt = "c4x2J66hVK2ptF6MrrEG3h6yTGCUTtZ6U6erf+rTFvfLjiNqBrr0vzTyCre7ZLZTP430YBoC1+97MSsyAX6wUzc=";
+            if(salt == null)
+                return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
+            
             var saltBytes = Encoding.UTF8.GetBytes(salt);
             var pbkdf2 = new Rfc2898DeriveBytes(password, saltBytes, NUMBER_OF_ITERATIONS);
             var key = pbkdf2.GetBytes(128);
             var hashKey = Convert.ToBase64String(key);
-            var hash = DbSession.QueryOver<Translator>()
+            var user = DbSession.QueryOver<Translator>()
                 .Where(x => x.EmailAddress == emailAddress).And(x => x.Hash == hashKey)
                 .SingleOrDefault();
 
-            if (hash == null)
+            if (user == null)
             {
-                return RedirectToAction("Login");
+                return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
             }
 
             FormsAuthentication.SetAuthCookie(emailAddress, false);
-           
-            if (!string.IsNullOrWhiteSpace(returnUrl))
-            {              
-                return new RedirectResult(returnUrl);
-            }
-
-            return RedirectToAction("Index", "Home");
+            
+            return new HttpStatusCodeResult(HttpStatusCode.OK);
         }
 
         public ActionResult Signup()

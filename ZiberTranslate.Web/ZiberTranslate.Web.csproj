@@ -199,8 +199,11 @@
     <Content Include="Scripts\libs\angular-sanitize.js" />
     <Content Include="Scripts\libs\angular.js" />
     <Content Include="Scripts\libs\bindonce.js" />
+    <Content Include="Scripts\partials\Login.html" />
     <Content Include="Scripts\partials\Sets.html" />
     <Content Include="Scripts\partials\Translation.html" />
+    <Content Include="Scripts\services\authentication.js" />
+    <Content Include="Scripts\modules.js" />
     <Content Include="Scripts\services\translation.js" />
     <Content Include="Scripts\translations.js" />
     <Content Include="Web.config">

@@ -1,8 +1,7 @@
 ﻿(function () {
     'use strict';
-
-
-    angular.module('Translate.Services', [])
+    
+    angular.module('Translate.Services')
         .factory('TranslationService', ['$http', function ($http) {
             return {
                 sets: function () {
@@ -10,11 +9,16 @@
                         return response.data;
                     });
                 },
-                translations: function (setId, language, filter) {
+                translations: function (setId, language, filter, page) {
                     if (typeof(filter) === 'undefined')
                         filter = 'all';
                     
-                    return $http.get('/sets/' + setId + '/translations-' + language + '/filter-' + filter).then(function (response) {
+                    if (typeof(page) === 'undefined') {
+                        page = 1;
+                    }
+                        
+                    
+                    return $http.get('/sets/' + setId + '/translations-' + language + '/filter-' + filter + '?pageNr=' + page).then(function (response) {
                         response.data.forEach(function (item) {
                             item.approved = item.Votes > 0;
                             item.voted = item.Votes > 0;

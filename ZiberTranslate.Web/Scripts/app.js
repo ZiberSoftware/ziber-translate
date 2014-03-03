@@ -5,16 +5,18 @@
 
     app.config(['$routeProvider', '$httpProvider', function ($routeProvider, $httpProvider) {
         $routeProvider
-            .when('/sets/:id/translations/:language', {
+            .when('/sets/:id/translations/:language/:page', {
                 templateUrl: '/Scripts/partials/Translation.html'
             })
             .when('/sets', {
                 templateUrl: '/Scripts/partials/Sets.html'
             })
+            .when('/login', {
+                templateUrl: '/SCripts/partials/Login.html'
+            })
             .otherwise({
                 redirectTo: '/sets'
             });
-
 
         $httpProvider.interceptors.push('mvcHttpInterceptor');
     }]);
