@@ -157,6 +157,8 @@
     </Content>
     <Content Include="Content\images\arrows.png" />
     <Content Include="Content\images\edit_actions.png" />
+    <Content Include="Content\images\pijltje.png" />
+    <Content Include="Content\images\vlaggen.png" />
     <Content Include="Content\Site.css">
       <DependentUpon>Site.less</DependentUpon>
     </Content>
@@ -234,9 +236,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Translation\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Security\Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\TranslationRow.cshtml" />
