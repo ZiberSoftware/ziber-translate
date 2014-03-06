@@ -14,36 +14,24 @@ namespace ZiberTranslate.Web.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            if (Request.IsAjaxRequest())
-            {
-                
-                var rank = TranslatorService.FetchRank(HttpContext.User.Identity.Name);
-                var me = TranslatorService.FindByEmail(HttpContext.User.Identity.Name);
 
-                var changes = TranslationService.GetChangesForTranslator(me);
+            var rank = TranslatorService.FetchRank(HttpContext.User.Identity.Name);
+            var me = TranslatorService.FindByEmail(HttpContext.User.Identity.Name);
 
-                var votes = DbSession.QueryOver<TranslationVote>()
-                    .Where(x => x.IsPublished == false)
-                    .And(x => x.Translator == me)
-                    .Future();
+            var changes = TranslationService.GetChangesForTranslator(me);
 
-                return Json(new
-                    {
-                        votes = votes.Count(),
-                        changes = changes.Count()
-                    }, 
-                    JsonRequestBehavior.AllowGet);
-            }
+            var votes = DbSession.QueryOver<TranslationVote>()
+                .Where(x => x.IsPublished == false)
+                .And(x => x.Translator == me)
+                .Future();
 
-            var vm = new ChangesetViewModel();
-            vm.Changes = BuildTranslations();
+            return Json(new
+                {
+                    votes = votes.Count(),
+                    changes = changes.Count()
+                },
+                JsonRequestBehavior.AllowGet);
 
-            if (!vm.Changes.Any())
-            {
-                return new EmptyResult();
-            }
-
-            return View("Changeset", vm);
         }
 
         private IEnumerable<TranslationChange> BuildTranslations()
@@ -67,7 +55,7 @@ namespace ZiberTranslate.Web.Controllers
 
             var neutralUserTranslations = TranslationService.GetTranslations(LanguageService.GetNeutralLanguage(emailAddress), changes.Select(x => x.Key), TranslationType.Neutral);
             var neutralTranslations = TranslationService.GetTranslations(LanguageService.GetLanguageByIsoCode("nl"), changes.Select(x => x.Key), TranslationType.Neutral);
-            var leadingTranslations = TranslationService.GetTranslations(LanguageService.GetLanguageByIsoCode(changes.Select(x=>x.Language.IsoCode).ToString()), changes.Select(x => x.Key), TranslationType.Leading);
+            var leadingTranslations = TranslationService.GetTranslations(LanguageService.GetLanguageByIsoCode(changes.Select(x => x.Language.IsoCode).ToString()), changes.Select(x => x.Key), TranslationType.Leading);
 
             var translations = (
                 from change in changes
@@ -106,12 +94,12 @@ namespace ZiberTranslate.Web.Controllers
                     .And(x => x.Translator == me)
                     .Future();
 
-               // TranslationService.SendEmail();
+                // TranslationService.SendEmail();
 
                 foreach (var translation in changes.ToList())
                 {
                     translation.IsPublished = true;
-                    
+
 
                     DbSession.Update(translation);
                 }
@@ -119,7 +107,7 @@ namespace ZiberTranslate.Web.Controllers
                 foreach (var vote in votes.ToList())
                 {
                     vote.IsPublished = true;
-                    
+
                     DbSession.Update(vote);
                 }
 

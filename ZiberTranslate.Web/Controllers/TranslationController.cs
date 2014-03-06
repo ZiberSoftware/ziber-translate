@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Globalization;
 using ZiberTranslate.Web.Models;
 using ZiberTranslate.Web.Services;
 using NHibernate.Transform;
@@ -34,41 +35,16 @@ namespace ZiberTranslate.Web.Controllers
         {
             var translations = BuildTranslations(setId, language, filter, pageNr);
 
-            if (Request.IsAjaxRequest())
+            try
             {
-                try
-                {
-                    return Json(translations, JsonRequestBehavior.AllowGet);
-                }
-                catch (Exception ex)
-                {
-                    logger.Error(ex.Message);
-                }
+                return Json(translations, JsonRequestBehavior.AllowGet);
             }
-
-
-            var set = DbSession.Load<TranslateSet>(setId);
-            var name = Global.CurrentSession.QueryOver<TranslateSet>()
-                .Where(x => x.Id == setId)
-                        .Select(x => x.Name)
-                        .SingleOrDefault<string>();
-
-
-            var vm = new ViewModels.TranslationsViewModel();
-            vm.Translations = translations;
-            vm.SetId = setId;
-            vm.Name = name;
-            vm.PageNumber = pageNr;
-            vm.Culture = System.Globalization.CultureInfo.CreateSpecificCulture(language);
-            vm.Reviewed = set.Reviewed;
-            vm.NeedsReview = set.NeedsReview;
-            vm.NeedsTranslation = set.NeedsTranslation;
-            vm.AllTranslations = set.AllTranslations;
-
-            if (categoryId.HasValue)
-                TempData["categoryId"] = categoryId.Value;
-
-            return View("Index", vm);
+            catch (Exception ex)
+            {
+                logger.Error(ex.Message);
+                return new EmptyResult();
+            }
+            
         }
 
         public ActionResult Filters(int setId, string language)
@@ -77,7 +53,7 @@ namespace ZiberTranslate.Web.Controllers
             var lang = LanguageService.GetLanguageByIsoCode(language);
 
             TranslateSetService.UpdateCounters(set, lang);
-            
+
             return Json(new
             {
                 reviewed = set.Reviewed,
@@ -247,12 +223,18 @@ namespace ZiberTranslate.Web.Controllers
                 JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult AddLanguage()
+        {
+            CultureInfo[] cultures = System.Globalization.CultureInfo.GetCultures(CultureTypes.NeutralCultures);
+            return new EmptyResult();
+        }
+
         public ActionResult SearchByName(int id, string language = "", string searchString = "")
         {
             var searchByKey = TranslationService.FindByKey(id, language);
             var searchByName = DbSession.QueryOver<Translation>()
                                .Where(x => x.Value.Contains(searchString))
-                               .SingleOrDefault<string>();
+                               .SingleOrDefault();
 
             if (!String.IsNullOrEmpty(searchString))
             {
