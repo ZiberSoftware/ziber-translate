@@ -18,27 +18,10 @@ namespace ZiberTranslate.Web.Controllers
             var rank = TranslatorService.FetchRank(HttpContext.User.Identity.Name);
             var me = TranslatorService.FindByEmail(HttpContext.User.Identity.Name);
 
-<<<<<<< HEAD
-            var changes = TranslationService.GetChangesForTranslator(me);
-=======
-                return Json(new
-                {
-                    changes = BuildTranslations()
-                }, JsonRequestBehavior.AllowGet);
-            }
->>>>>>> 87e64e9a877a5cefe630a87392ad494ed59d4830
-
-            var votes = DbSession.QueryOver<TranslationVote>()
-                .Where(x => x.IsPublished == false)
-                .And(x => x.Translator == me)
-                .Future();
-
             return Json(new
-                {
-                    votes = votes.Count(),
-                    changes = changes.Count()
-                },
-                JsonRequestBehavior.AllowGet);
+            {
+                changes = BuildTranslations()
+            }, JsonRequestBehavior.AllowGet);
 
         }
 

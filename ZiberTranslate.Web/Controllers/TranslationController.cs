@@ -44,7 +44,7 @@ namespace ZiberTranslate.Web.Controllers
                 logger.Error(ex.Message);
                 return new EmptyResult();
             }
-            
+
         }
 
         public ActionResult Filters(int setId, string language)
@@ -192,10 +192,15 @@ namespace ZiberTranslate.Web.Controllers
         {
             var me = TranslatorService.FindByEmail(HttpContext.User.Identity.Name);
             var changes = TranslationService.GetChangesForTranslator(me);
+            var votes = DbSession.QueryOver<TranslationVote>()
+                .Where(x => x.IsPublished == false)
+                .And(x => x.Translator == me)
+                .Future();
 
             using (var t = DbSession.BeginTransaction())
             {
                 DbSession.Delete(changes);
+                DbSession.Delete(votes);
 
                 t.Commit();
             }
@@ -221,9 +226,32 @@ namespace ZiberTranslate.Web.Controllers
                 JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult AddLanguage()
+        // this way the name and isocode can be found, front-end needs a way to make the list of languages chooseable options
+        // which can then be used as variable for the AddLanguage function.
+        public ActionResult LanguageList()
         {
             CultureInfo[] cultures = System.Globalization.CultureInfo.GetCultures(CultureTypes.NeutralCultures);
+
+
+            foreach (var culture in cultures)
+            {
+                Content(culture.DisplayName);
+                Content(culture.TwoLetterISOLanguageName);
+            }
+            return new EmptyResult();
+        }
+
+        public ActionResult AddLanguage(string ISOCode)
+        {
+            using (var t = DbSession.BeginTransaction())
+            {
+                var language = new Language();
+                language.IsoCode = ISOCode;
+                language.IsEnabled = true;
+
+                DbSession.Save(language);
+                t.Commit();
+            }
             return new EmptyResult();
         }
 

@@ -39,17 +39,26 @@ namespace ZiberTranslate.Web.Controllers
             }
             else
             {
-                using (var t = DbSession.BeginTransaction())
+                var amountTranslations = DbSession.QueryOver<Translation>()
+                        .Where(x => x.Language == LanguageService.GetLanguageByIsoCode(language))
+                        .RowCount();
+
+                if (amountTranslations >= 5)
                 {
-                    var me = TranslatorService.FindByEmail(HttpContext.User.Identity.Name);
+                    using (var t = DbSession.BeginTransaction())
+                    {
+                        var me = TranslatorService.FindByEmail(HttpContext.User.Identity.Name);
 
-                    me.NeutralLanguage = language;
+                        me.NeutralLanguage = language;
 
-                    Global.CurrentSession.Update(me);
-                    t.Commit();
+                        Global.CurrentSession.Update(me);
+                        t.Commit();
+                    }
+
+                    return RedirectToAction("Index");
                 }
-
-                return RedirectToAction("Index");
+                else
+                    return View("PickLanguage");
             }
             
         }
