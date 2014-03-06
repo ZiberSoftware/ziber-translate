@@ -13,7 +13,10 @@ namespace ZiberTranslate.Web.Controllers
    
     public class HomeController : BaseController
     {
-
+<<<<<<< HEAD
+=======
+        private log4net.ILog logger = log4net.LogManager.GetLogger(typeof(HomeController));
+>>>>>>> 2ae232e1f93366dae6ad4ff1055620f7a0d9d294
 
         public ActionResult Index()
         {

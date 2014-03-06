@@ -13,6 +13,8 @@ namespace ZiberTranslate.Web.Controllers
 {
     public class SecurityController : BaseController
     {
+        private log4net.ILog logger = log4net.LogManager.GetLogger(typeof(SecurityController));
+
         public ActionResult Login()
         {
             return View("Login");

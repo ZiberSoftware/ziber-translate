@@ -49,13 +49,13 @@
                 }, 0);
             });
         }])
-        .controller('ChangeSetCtrl', ['$scope', '$http', function ($scope, $http) {
+        .controller('ChangeSetSummaryCtrl', ['$scope', '$http', function ($scope, $http) {
 
             $scope.$watch('[changes, votes]', function () {
                 $scope.totalChanges = $scope.changes + $scope.votes;
             }, true);
             
-            $http.get('/ChangeSet').then(function(response) {
+            $http.get('/Translation/CountChanges').then(function (response) {
                 $scope.changes = response.data.changes;
                 $scope.votes = response.data.votes;
             });

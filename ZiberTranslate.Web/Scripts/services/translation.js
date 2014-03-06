@@ -16,7 +16,6 @@
                     if (typeof(page) === 'undefined') {
                         page = 1;
                     }
-                        
                     
                     return $http.get('/sets/' + setId + '/translations-' + language + '/filter-' + filter + '?pageNr=' + page).then(function (response) {
                         response.data.forEach(function (item) {
@@ -36,8 +35,13 @@
         }])
         .factory('ChangesetService', ['$http', function ($http) {
             return {
-                approve: function () {
-
+                submit: function () {
+                    return $http.post('/ChangeSet/Submit');
+                },
+                get: function() {
+                    return $http.get('/ChangeSet/').then(function(result) {
+                        return result.data;
+                    });
                 }
             };
         }])

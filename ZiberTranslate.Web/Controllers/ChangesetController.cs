@@ -20,12 +20,7 @@ namespace ZiberTranslate.Web.Controllers
                 var rank = TranslatorService.FetchRank(HttpContext.User.Identity.Name);
                 var me = TranslatorService.FindByEmail(HttpContext.User.Identity.Name);
 
-                var changes = DbSession.CreateCriteria<Translation>()
-                    .Add(Restrictions.Eq("IsPublished", false))
-                    .Add(Restrictions.Eq("Translator", me))
-                    .CreateAlias("Key", "k")
-                    .CreateAlias("k.Set", "s")
-                    .Future<Translation>();
+                var changes = TranslationService.GetChangesForTranslator(me);
 
                 var votes = DbSession.QueryOver<TranslationVote>()
                     .Where(x => x.IsPublished == false)
@@ -33,11 +28,9 @@ namespace ZiberTranslate.Web.Controllers
                     .Future();
 
                 return Json(new
-                    {
-                        votes = votes.Count(),
-                        changes = changes.Count()
-                    }, 
-                    JsonRequestBehavior.AllowGet);
+                {
+                    changes = BuildTranslations()
+                }, JsonRequestBehavior.AllowGet);
             }
 
             var vm = new ChangesetViewModel();
@@ -55,13 +48,8 @@ namespace ZiberTranslate.Web.Controllers
         {
             var emailAddress = HttpContext.User.Identity.Name;
             var me = TranslatorService.FindByEmail(emailAddress);
-            
-            var changes = DbSession.CreateCriteria<Translation>()
-                .Add(Restrictions.Eq("IsPublished", false))
-                .Add(Restrictions.Eq("Translator", me))
-                .CreateAlias("Key", "k")
-                .CreateAlias("k.Set", "s")
-                .Future<Translation>();
+
+            var changes = TranslationService.GetChangesForTranslator(me);
 
             var votedOn = DetachedCriteria.For<TranslationVote>()
                 .Add(Restrictions.Eq("IsPublished", false))
@@ -109,12 +97,7 @@ namespace ZiberTranslate.Web.Controllers
                 var me = TranslatorService.FindByEmail(HttpContext.User.Identity.Name);
                 var rank = TranslatorService.FetchRank(HttpContext.User.Identity.Name);
 
-                var changes = DbSession.CreateCriteria<Translation>()
-                    .Add(Restrictions.Eq("IsPublished", false))
-                    .Add(Restrictions.Eq("Translator", me))
-                    .CreateAlias("Key", "k")
-                    .CreateAlias("k.Set", "s")
-                    .Future<Translation>();
+                var changes = TranslationService.GetChangesForTranslator(me);
 
                 var votes = DbSession.QueryOver<TranslationVote>()
                     .Where(x => x.IsPublished == false)

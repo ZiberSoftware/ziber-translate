@@ -12,7 +12,10 @@
                 templateUrl: '/Scripts/partials/Sets.html'
             })
             .when('/login', {
-                templateUrl: '/SCripts/partials/Login.html'
+                templateUrl: '/Scripts/partials/Login.html'
+            })
+            .when('/changeset', {
+                templateUrl: '/Scripts/partials/Changeset.html'
             })
             .otherwise({
                 redirectTo: '/sets'

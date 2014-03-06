@@ -181,6 +181,7 @@
     <Content Include="Content\themes\base\jquery.ui.theme.css" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\app.js" />
+    <Content Include="Scripts\controllers\changeset.js" />
     <Content Include="Scripts\controllers\controllers.js" />
     <Content Include="Scripts\controllers\header.js" />
     <Content Include="Scripts\directives\translation.js" />
@@ -189,6 +190,7 @@
     <Content Include="Scripts\libs\angular-sanitize.js" />
     <Content Include="Scripts\libs\angular.js" />
     <Content Include="Scripts\libs\bindonce.js" />
+    <Content Include="Scripts\partials\Changeset.html" />
     <Content Include="Scripts\partials\Login.html" />
     <Content Include="Scripts\partials\Sets.html" />
     <Content Include="Scripts\partials\Translation.html" />
