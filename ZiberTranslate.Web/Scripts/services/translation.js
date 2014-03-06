@@ -21,7 +21,7 @@
                     return $http.get('/sets/' + setId + '/translations-' + language + '/filter-' + filter + '?pageNr=' + page).then(function (response) {
                         response.data.forEach(function (item) {
                             item.approved = item.Votes > 0;
-                            item.voted = item.Votes > 0;
+                            item.voted = item.Voted;
                         });
                         return response.data;
                     });

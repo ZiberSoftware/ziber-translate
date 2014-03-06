@@ -13,6 +13,7 @@ namespace ZiberTranslate.Web.Controllers
    
     public class HomeController : BaseController
     {
+
         public ActionResult Index()
         {
             if (HttpContext.User.Identity.IsAuthenticated)
@@ -24,7 +25,8 @@ namespace ZiberTranslate.Web.Controllers
             {
                 ViewBag.IsAuthenticated = false;
             }
-
+            
+            
             return View("Index");
         }
        
