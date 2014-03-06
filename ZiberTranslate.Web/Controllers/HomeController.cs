@@ -13,6 +13,8 @@ namespace ZiberTranslate.Web.Controllers
    
     public class HomeController : BaseController
     {
+        private log4net.ILog logger = log4net.LogManager.GetLogger(typeof(HomeController));
+
         public ActionResult Index()
         {
             if (HttpContext.User.Identity.IsAuthenticated)

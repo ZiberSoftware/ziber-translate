@@ -13,6 +13,8 @@ namespace ZiberTranslate.Web.Controllers
 {
     public class AdminController : BaseController
     {
+        private log4net.ILog logger = log4net.LogManager.GetLogger(typeof(AdminController));
+
         public ActionResult Index()
         {
             var sets = DbSession.CreateCriteria<TranslateSet>()

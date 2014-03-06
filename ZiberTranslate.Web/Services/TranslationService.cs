@@ -125,9 +125,6 @@ namespace ZiberTranslate.Web.Services
                 .SetFirstResult((pageNr - 1) * 20)
                 .SetMaxResults(20);
 
-            //keys.SetFirstResult((pageNr - 1) * 20);
-            //keys.SetMaxResults(20);
-
             var translations = DetachedCriteria.For<Translation>()
                                 .CreateAlias("Key", "k")
                                 .CreateAlias("Language", "l")
@@ -194,5 +191,15 @@ namespace ZiberTranslate.Web.Services
                      .Future();
         }
 
+        public static IEnumerable<Translation> GetChangesForTranslator(Translator me)
+        {            
+
+            return Global.CurrentSession.CreateCriteria<Translation>()
+                .Add(Restrictions.Eq("IsPublished", false))
+                .Add(Restrictions.Eq("Translator", me))
+                .CreateAlias("Key", "k")
+                .CreateAlias("k.Set", "s")
+                .Future<Translation>();
+        }
     }
 }

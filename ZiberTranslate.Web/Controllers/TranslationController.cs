@@ -33,14 +33,19 @@ namespace ZiberTranslate.Web.Controllers
         public ActionResult Index(int setId, string language, FilterType filter, int pageNr = 1, int? categoryId = null)
         {
             var translations = BuildTranslations(setId, language, filter, pageNr);
-            logger.Debug("Test");         
-            
+
             if (Request.IsAjaxRequest())
             {
-                logger.Error("Error");            
-                return Json(translations, JsonRequestBehavior.AllowGet);
+                try
+                {
+                    return Json(translations, JsonRequestBehavior.AllowGet);
+                }
+                catch (Exception ex)
+                {
+                    logger.Error(ex.Message);
+                }
             }
-            
+
 
             var set = DbSession.Load<TranslateSet>(setId);
             var name = Global.CurrentSession.QueryOver<TranslateSet>()
@@ -70,8 +75,9 @@ namespace ZiberTranslate.Web.Controllers
         {
             var set = DbSession.Load<TranslateSet>(setId);
             var lang = LanguageService.GetLanguageByIsoCode(language);
-            TranslateSetService.UpdateCounters(set, lang);
 
+            TranslateSetService.UpdateCounters(set, lang);
+            
             return Json(new
             {
                 reviewed = set.Reviewed,
@@ -79,6 +85,8 @@ namespace ZiberTranslate.Web.Controllers
                 needsTranslation = set.NeedsTranslation,
                 total = set.AllTranslations
             }, JsonRequestBehavior.AllowGet);
+
+
         }
 
 
@@ -130,9 +138,9 @@ namespace ZiberTranslate.Web.Controllers
                         }
                     ).ToList();
 
-            
+
             return translations;
-            
+
         }
 
 
@@ -146,7 +154,7 @@ namespace ZiberTranslate.Web.Controllers
                 translation = TranslationService.UpdateTranslation(id, language, value);
 
                 TranslateSetService.UpdateCounters(translation.Key.Set, translation.Language);
-                                
+
                 t.Commit();
             }
             return CountChanges();
@@ -201,9 +209,42 @@ namespace ZiberTranslate.Web.Controllers
                 TranslationVoteService.RemoveVote(translation);
 
                 t.Commit();
-            } 
-            
+            }
+
             return new EmptyResult();
+        }
+
+        public ActionResult CancelChanges()
+        {
+            var me = TranslatorService.FindByEmail(HttpContext.User.Identity.Name);
+            var changes = TranslationService.GetChangesForTranslator(me);
+
+            using (var t = DbSession.BeginTransaction())
+            {
+                DbSession.Delete(changes);
+
+                t.Commit();
+            }
+            return new EmptyResult();
+        }
+
+        public ActionResult CountChanges()
+        {
+            var me = TranslatorService.FindByEmail(HttpContext.User.Identity.Name);
+
+            var changes = TranslationService.GetChangesForTranslator(me);
+
+            var votes = DbSession.QueryOver<TranslationVote>()
+                .Where(x => x.IsPublished == false)
+                .And(x => x.Translator == me)
+                .Future();
+
+            return Json(new
+            {
+                votes = votes.Count(),
+                changes = changes.Count()
+            },
+                JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult SearchByName(int id, string language = "", string searchString = "")
@@ -219,30 +260,6 @@ namespace ZiberTranslate.Web.Controllers
             }
             else
                 return View();
-        }
-
-        public ActionResult CountChanges()
-        {
-            var me = TranslatorService.FindByEmail(HttpContext.User.Identity.Name);
-
-            var changes = DbSession.CreateCriteria<Translation>()
-                .Add(Restrictions.Eq("IsPublished", false))
-                .Add(Restrictions.Eq("Translator", me))
-                .CreateAlias("Key", "k")
-                .CreateAlias("k.Set", "s")
-                .Future<Translation>();
-
-            var votes = DbSession.QueryOver<TranslationVote>()
-                .Where(x => x.IsPublished == false)
-                .And(x => x.Translator == me)
-                .Future();
-
-            return Json(new
-            {
-                votes = votes.Count(),
-                changes = changes.Count()
-            },
-                JsonRequestBehavior.AllowGet);
         }
     }
 }
