@@ -2,7 +2,7 @@
     'use strict';
 
 
-    angular.module('Translate.Controllers', ['Translate.Services'])
+    angular.module('Translate.Controllers')
         .controller('SetsCtrl', ['$scope', 'TranslationService', function($scope, service) {
             service.sets().then(function(sets) {
                 $scope.sets = sets;
@@ -19,7 +19,11 @@
             //fires when a translation for a user changes
             $scope.$on('translationChanged', function(e, translation, newValue) {
                 translation.Value = newValue;
-                service.update(translation);
+                service.update(translation).then(function (result) {
+                    var changeSet = result.data;
+
+                    $scope.$broadcast('changesetUpdated', changeSet);
+                });
             });
 
 
@@ -45,10 +49,20 @@
                 }, 0);
             });
         }])
-        .controller('ChangeSetCtrl', ['$scope', '$http', function($scope, $http) {
+        .controller('ChangeSetCtrl', ['$scope', '$http', function ($scope, $http) {
+
+            $scope.$watch('[changes, votes]', function () {
+                $scope.totalChanges = $scope.changes + $scope.votes;
+            }, true);
+            
             $http.get('/ChangeSet').then(function(response) {
                 $scope.changes = response.data.changes;
-                $scope.Votes = response.data.votes;
+                $scope.votes = response.data.votes;
+            });
+
+            $scope.$on('changesetUpdated', function (event, changeSet) {
+                $scope.changes = changeSet.changes;
+                $scope.votes = changeSet.votes;
             });
         }])
         .controller('LoginCtrl', ['$scope', '$http', '$location', '$rootScope', 'AuthenticationService', function ($scope, $http, $location, $rootScope, authService) {

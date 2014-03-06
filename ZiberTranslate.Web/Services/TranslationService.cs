@@ -121,7 +121,12 @@ namespace ZiberTranslate.Web.Services
         {
 
             var keys = Global.CurrentSession.CreateCriteria<TranslateKey>()
-                .Add(Restrictions.Eq("Set.Id", id));
+                .Add(Restrictions.Eq("Set.Id", id))
+                .SetFirstResult((pageNr - 1) * 20)
+                .SetMaxResults(20);
+
+            //keys.SetFirstResult((pageNr - 1) * 20);
+            //keys.SetMaxResults(20);
 
             var translations = DetachedCriteria.For<Translation>()
                                 .CreateAlias("Key", "k")
@@ -150,9 +155,7 @@ namespace ZiberTranslate.Web.Services
                         return keys.Add(Subqueries.PropertyIn("Id", translations)).List<TranslateKey>();
                     }
             }
-
-            keys.SetFirstResult((pageNr-1) * 20);
-            keys.SetMaxResults(20);
+           
             return keys.List<TranslateKey>();
         }
 

@@ -1,6 +1,6 @@
 ﻿<div ng-controller="TranslationCtrl">
-    <section id="change-set" ng-controller="ChangeSetCtrl" ng-show="changes">
-        <h3>U heeft {{changes}} wijzigingen in afwachting</h3>
+    <section id="change-set" class="summary" ng-controller="ChangeSetCtrl" ng-show="changes">
+        <h3>U heeft <span class="changes" ng-bind="totalChanges"></span> wijzigingen in afwachting</h3>
         <a href="" class="button button-gray">Annuleren</a>
         <a href="" class="button button-green">Publiceren</a>
     </section>

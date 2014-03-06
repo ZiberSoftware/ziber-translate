@@ -27,23 +27,27 @@ namespace ZiberTranslate.Web.Controllers
 
     public class TranslationController : BaseController
     {
+
+        private log4net.ILog logger = log4net.LogManager.GetLogger(typeof(TranslationController));
+
         public ActionResult Index(int setId, string language, FilterType filter, int pageNr = 1, int? categoryId = null)
         {
             var translations = BuildTranslations(setId, language, filter, pageNr);
-
+            logger.Debug("Test");         
+            
             if (Request.IsAjaxRequest())
             {
+                logger.Error("Error");            
                 return Json(translations, JsonRequestBehavior.AllowGet);
             }
+            
 
             var set = DbSession.Load<TranslateSet>(setId);
             var name = Global.CurrentSession.QueryOver<TranslateSet>()
                 .Where(x => x.Id == setId)
                         .Select(x => x.Name)
                         .SingleOrDefault<string>();
-            var lang = LanguageService.GetLanguageByIsoCode(language);
 
-            TranslateSetService.UpdateCounters(set, lang);
 
             var vm = new ViewModels.TranslationsViewModel();
             vm.Translations = translations;
@@ -65,6 +69,9 @@ namespace ZiberTranslate.Web.Controllers
         public ActionResult Filters(int setId, string language)
         {
             var set = DbSession.Load<TranslateSet>(setId);
+            var lang = LanguageService.GetLanguageByIsoCode(language);
+            TranslateSetService.UpdateCounters(set, lang);
+
             return Json(new
             {
                 reviewed = set.Reviewed,
@@ -123,7 +130,9 @@ namespace ZiberTranslate.Web.Controllers
                         }
                     ).ToList();
 
+            
             return translations;
+            
         }
 
 
@@ -137,11 +146,10 @@ namespace ZiberTranslate.Web.Controllers
                 translation = TranslationService.UpdateTranslation(id, language, value);
 
                 TranslateSetService.UpdateCounters(translation.Key.Set, translation.Language);
-
+                                
                 t.Commit();
             }
-
-            return new EmptyResult();
+            return CountChanges();
         }
 
 
@@ -211,6 +219,30 @@ namespace ZiberTranslate.Web.Controllers
             }
             else
                 return View();
+        }
+
+        public ActionResult CountChanges()
+        {
+            var me = TranslatorService.FindByEmail(HttpContext.User.Identity.Name);
+
+            var changes = DbSession.CreateCriteria<Translation>()
+                .Add(Restrictions.Eq("IsPublished", false))
+                .Add(Restrictions.Eq("Translator", me))
+                .CreateAlias("Key", "k")
+                .CreateAlias("k.Set", "s")
+                .Future<Translation>();
+
+            var votes = DbSession.QueryOver<TranslationVote>()
+                .Where(x => x.IsPublished == false)
+                .And(x => x.Translator == me)
+                .Future();
+
+            return Json(new
+            {
+                votes = votes.Count(),
+                changes = changes.Count()
+            },
+                JsonRequestBehavior.AllowGet);
         }
     }
 }

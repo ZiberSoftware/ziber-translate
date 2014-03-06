@@ -40,11 +40,78 @@ em
 #header
 {
     background-color: @headerColor;
-    min-height: 60px;
+    height: 60px;
+    line-height: 60px;
     color: #FFF;
     border-bottom: 1px solid @borderColor;
+    padding: 0 20px;
+    font-size: 1.3em;
+
+    .username {
+        font-size: 1.2em;
+    }
+
+    .button {
+        margin-left: 10px;
+    }
 }
 
+#change-set {
+    &.summary {
+        display: inline-block;
+
+        h3 {
+            font-weight: normal;
+            font-size: 1em;
+        }
+
+        .changes {
+            font-weight: bold;
+        }
+    }
+}
+
+.button {
+    display: inline-block;
+    padding: 5px 15px;
+    color: #FFF;
+    text-transform: lowercase;
+    line-height: normal;
+    cursor: pointer;
+
+    &:hover {
+        text-decoration: none;
+    }
+
+    &.button-gray {
+        .button(#999);
+    }
+
+    &.button-green {
+        .button(#5FA504);
+    }
+
+    &.button-lightblue {
+        .button(#7DA1C1);
+    }
+
+
+    .button(@color) {
+        background-color: @color;
+        padding: 5px 40px;
+
+        &:hover {
+            background-color: lighten(@color, 3);
+        }
+    }
+}
+
+
+.float-box {
+    &.float-box-right {
+        float: right;
+    }
+}
 
 #filters
 {
@@ -56,10 +123,12 @@ em
         li
         {
             display: inline-block;
+            margin-right: 10px;
         }
 
             li + li
             {
+                margin-right: 0px;
                 margin-left: -4px;
             }
 
