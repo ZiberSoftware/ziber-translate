@@ -1,0 +1,9 @@
+﻿<div ng-controller="ChangeSetCtrl">
+    <ul id="table" class="translations">
+        <li ng-repeat="translation in translations" ng-click="checkUser()">
+            <zbr-translation translation="translation"></zbr-translation>
+        </li>
+    </ul>
+
+    <a ng-click="submit()" class="button button-green">Publiseren</a>
+</div>

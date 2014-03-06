@@ -7,9 +7,12 @@
     <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
 </head>
 
-    <body>
-        <header id="header" ng-hide="!!hideHeader">
-            @RenderSection("header", false)
+    <body ng-controller="InitCtrl">
+        <header id="header" ng-hide="!!hideHeader" ng-controller="HeaderCtrl" bindonce>
+            <div class="float-box float-box-right">
+                <span  class="username" bo-text="user.username"></span>
+                <a class="button button-lightblue">Instellingen</a>
+            </div>
         </header>
         <section id="page">
             @RenderBody()

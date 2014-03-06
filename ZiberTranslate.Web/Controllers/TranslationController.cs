@@ -61,8 +61,6 @@ namespace ZiberTranslate.Web.Controllers
                 needsTranslation = set.NeedsTranslation,
                 total = set.AllTranslations
             }, JsonRequestBehavior.AllowGet);
-
-
         }
 
 
