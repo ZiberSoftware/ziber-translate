@@ -8,6 +8,7 @@ using ZiberTranslate.Web.Models;
 using NHibernate.Criterion;
 using ZiberTranslate.Web.Controllers;
 using System.Web.Mvc;
+using NHibernate;
 
 namespace ZiberTranslate.Web.Services
 {

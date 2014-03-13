@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using ZiberTranslate.Web.Models;
+using ZiberTranslate.Web.Controllers;
 using NHibernate.Criterion;
 using NHibernate.Transform;
 
@@ -21,39 +22,79 @@ namespace ZiberTranslate.Web.Services
             Global.CurrentSession.Save(set);
         }
 
-        public static void UpdateCounters(TranslateSet set, Language language)
+        public static int GetCounter(int id, string language, FilterType filter)
         {
-            var keyCount = set.TranslateKeys.Count;
+            var keys = Global.CurrentSession.CreateCriteria<TranslateKey>()
+                .Add(Restrictions.Eq("Set.Id", id));
+                
 
-            var keys = DetachedCriteria.For<TranslateKey>("s")
-                .Add(Restrictions.Eq("Set", set))
-                .Add(Restrictions.EqProperty("s.Id", "t.Key.Id"))
-                .SetProjection(Projections.Id());
+            var translations = DetachedCriteria.For<Translation>()
+                                .CreateAlias("Key", "k")
+                                .CreateAlias("Language", "l")
+                                .Add(Restrictions.Eq("k.Set.Id", id))
+                                .Add(Restrictions.Eq("l.IsoCode", language))
+                                .SetProjection(Projections.Property("k.Id"));
+            switch (filter)
+            {
+                case FilterType.NeedsReview:
+                    {
+                        translations.Add(Restrictions.Eq("NeedsReview", true))
+                            .Add(Restrictions.Eq("NeedsAdminReviewing", false));
+                        return keys.Add(Subqueries.PropertyIn("Id", translations))
+                            .SetProjection(Projections.RowCount())
+                            .UniqueResult<int>();
+                    }
 
-            var needsReview = Global.CurrentSession.CreateCriteria<Translation>("t")
-                .Add(Restrictions.Eq("IsPublished", true))
-                .Add(Restrictions.Eq("NeedsAdminReviewing", false))
-                .Add(Restrictions.Eq("NeedsReview", true))
-                .Add(Subqueries.Exists(keys))
-                .Add(Restrictions.Eq("Language", language))
-                .SetProjection(Projections.RowCount())
-                .UniqueResult<int>();
-            
-            var reviewed = Global.CurrentSession.CreateCriteria<Translation>("t")
-                .Add(Restrictions.Eq("IsPublished", true))
-                .Add(Restrictions.Eq("NeedsAdminReviewing", false))
-                .Add(Restrictions.Eq("NeedsReview", false))
-                .Add(Subqueries.Exists(keys))
-                .Add(Restrictions.Eq("Language", language))
-                .SetProjection(Projections.RowCount())
-                .UniqueResult<int>();
+                case FilterType.NeedsTranslation:
+                    {
+                        return keys.Add(Subqueries.PropertyNotIn("Id", translations))
+                                .SetProjection(Projections.RowCount())
+                            .UniqueResult<int>(); 
+                    }
 
-            set.NeedsReview = needsReview;
-            set.NeedsTranslation = keyCount - (needsReview + reviewed);
-            set.Reviewed = reviewed;
-            set.AllTranslations = keyCount;
+                case FilterType.Reviewed:
+                    {
+                        translations.Add(Restrictions.Eq("NeedsReview", false))
+                            .Add(Restrictions.Eq("NeedsAdminReviewing", false));
+                        return keys.Add(Subqueries.PropertyIn("Id", translations))
+                            .SetProjection(Projections.RowCount())
+                            .UniqueResult<int>();
+                    }
+            }
 
-            Global.CurrentSession.Update(set);
+            return keys.SetProjection(Projections.RowCount())
+                            .UniqueResult<int>();
+            //var keyCount = set.TranslateKeys.Count;
+
+            //var keys = DetachedCriteria.For<TranslateKey>("s")
+            //    .Add(Restrictions.Eq("Set", set))
+            //    .Add(Restrictions.EqProperty("s.Id", "t.Key.Id"))
+            //    .SetProjection(Projections.Id());
+           
+            //var needsReview = Global.CurrentSession.CreateCriteria<Translation>("t")
+            //    .Add(Restrictions.Eq("IsPublished", true))
+            //    .Add(Restrictions.Eq("NeedsAdminReviewing", false))
+            //    .Add(Restrictions.Eq("NeedsReview", true))
+            //    .Add(Subqueries.Exists(keys))
+            //    .Add(Restrictions.Eq("Language", language))
+            //    .SetProjection(Projections.RowCount())
+            //    .UniqueResult<int>();
+
+            //var reviewed = Global.CurrentSession.CreateCriteria<Translation>("t")
+            //    .Add(Restrictions.Eq("IsPublished", true))
+            //    .Add(Restrictions.Eq("NeedsAdminReviewing", false))
+            //    .Add(Restrictions.Eq("NeedsReview", false))
+            //    .Add(Subqueries.Exists(keys))
+            //    .Add(Restrictions.Eq("Language", language))
+            //    .SetProjection(Projections.RowCount())
+            //    .UniqueResult<int>();
+
+            //set.NeedsReview = needsReview;
+            //set.NeedsTranslation = keyCount - (needsReview + reviewed);
+            //set.Reviewed = reviewed;
+            //set.AllTranslations = keyCount;
+
+            //Global.CurrentSession.Update(set);
         }
     }
 }

@@ -32,7 +32,13 @@ namespace ZiberTranslate.Web.Controllers
         private log4net.ILog logger = log4net.LogManager.GetLogger(typeof(TranslationController));
 
         public ActionResult Index(int setId, string language, FilterType filter, int pageNr = 1, int? categoryId = null)
-        {
+        {           
+            double totalPages = TranslateSetService.GetCounter(setId, language, filter) / 20;
+            totalPages = (int)Math.Ceiling(totalPages);
+            
+            if (pageNr > totalPages)
+                pageNr = (int)totalPages;
+
             var translations = BuildTranslations(setId, language, filter, pageNr);
 
             try
@@ -48,18 +54,13 @@ namespace ZiberTranslate.Web.Controllers
         }
 
         public ActionResult Filters(int setId, string language)
-        {
-            var set = DbSession.Load<TranslateSet>(setId);
-            var lang = LanguageService.GetLanguageByIsoCode(language);
-
-            TranslateSetService.UpdateCounters(set, lang);
-
+        {                      
             return Json(new
             {
-                reviewed = set.Reviewed,
-                needsReview = set.NeedsReview,
-                needsTranslation = set.NeedsTranslation,
-                total = set.AllTranslations
+                reviewed = TranslateSetService.GetCounter(setId, language, FilterType.Reviewed),
+                needsReview = TranslateSetService.GetCounter(setId, language, FilterType.NeedsReview),
+                needsTranslation = TranslateSetService.GetCounter(setId, language, FilterType.NeedsTranslation),
+                total = TranslateSetService.GetCounter(setId, language, FilterType.All)
             }, JsonRequestBehavior.AllowGet);
         }
 
@@ -117,7 +118,6 @@ namespace ZiberTranslate.Web.Controllers
 
         }
 
-
         [HttpPost]
         public ActionResult Update(int id, string language, string value)
         {
@@ -125,9 +125,7 @@ namespace ZiberTranslate.Web.Controllers
 
             using (var t = DbSession.BeginTransaction())
             {
-                translation = TranslationService.UpdateTranslation(id, language, value);
-
-                TranslateSetService.UpdateCounters(translation.Key.Set, translation.Language);
+                translation = TranslationService.UpdateTranslation(id, language, value);               
 
                 t.Commit();
             }

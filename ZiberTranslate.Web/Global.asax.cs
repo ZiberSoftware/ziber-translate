@@ -10,6 +10,8 @@ using NHibernate.Tool.hbm2ddl;
 using Castle.Windsor;
 using Castle.Windsor.Installer;
 using ZiberTranslate.Web.App_Start;
+using Castle.MicroKernel.Registration;
+using ZiberTranslate.Web.Controllers;
 
 namespace ZiberTranslate.Web
 {
@@ -73,6 +75,10 @@ namespace ZiberTranslate.Web
 
             var container = new WindsorContainer();
             container.Install(FromAssembly.This());
+          
+            container.Register(
+                Component.For<ISecurityService>().ImplementedBy<TranslateSecurityService>()
+            );
 
             AreaRegistration.RegisterAllAreas();
 

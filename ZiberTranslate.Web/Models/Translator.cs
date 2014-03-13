@@ -10,8 +10,6 @@ namespace ZiberTranslate.Web.Models
     {
         public virtual string Name { get; set; }
         public virtual string EmailAddress { get; set; }
-        public virtual string Salt { get; set; }
-        public virtual string Hash { get; set; }
         public virtual string NeutralLanguage { get; set; }
         public virtual int Rank { get; set; }
         public virtual bool IsBlocked { get; set; }
@@ -28,8 +26,6 @@ namespace ZiberTranslate.Web.Models
 
             Map(x => x.Name);
             Map(x => x.EmailAddress);
-            Map(x => x.Salt);
-            Map(x => x.Hash);
             Map(x => x.NeutralLanguage);
             Map(x => x.Rank);
             Map(x => x.IsBlocked);
