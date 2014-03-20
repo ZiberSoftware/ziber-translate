@@ -289,8 +289,6 @@
     <None Include="Properties\PublishProfiles\RELEASE.pubxml" />
     <None Include="Properties\PublishProfiles\ZiberNET.pubxml" />
     <Content Include="Views\TranslateSet\TranslateSets.cshtml" />
-    <Content Include="Views\Security\Succes.cshtml" />
-    <Content Include="Views\Security\Signup.cshtml" />
     <Content Include="Views\Admin\AdminReview.cshtml" />
     <Content Include="Views\Admin\AdminTranslationRow.cshtml" />
     <Content Include="Views\Home\PickLanguage.cshtml" />
