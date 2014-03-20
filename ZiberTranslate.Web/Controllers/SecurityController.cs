@@ -90,7 +90,15 @@ namespace ZiberTranslate.Web.Controllers
         {
             var userHasAccount = securityService.Login(emailAddress, password);           
             
+
             if (userHasAccount == null)
+                return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
+
+            var hasTranslateAccount = DbSession.QueryOver<Translator>()
+                                      .Where(x => x.EmailAddress == userHasAccount.Email)
+                                      .SingleOrDefault();
+
+            if (hasTranslateAccount.IsBlocked)
                 return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
 
             FormsAuthentication.SetAuthCookie(emailAddress, false);
