@@ -234,19 +234,19 @@ namespace ZiberTranslate.Web.Controllers
             return new EmptyResult();
         }
 
-        public ActionResult SearchByName(int id, string language = "", string searchString = "")
-        {
-            var searchByKey = TranslationService.FindByKey(id, language);
-            var searchByName = DbSession.QueryOver<Translation>()
-                               .Where(x => x.Value.Contains(searchString))
-                               .SingleOrDefault();
+        //public ActionResult SearchByName(int id, string language = "", string searchString = "")
+        //{
+        //    var searchByKey = TranslationService.FindByKey(id, language);
+        //    var searchByName = DbSession.QueryOver<Translation>()
+        //                       .Where(x => x.Value.Contains(searchString))
+        //                       .SingleOrDefault();
 
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                return View(searchByName);
-            }
-            else
-                return View();
-        }
+        //    if (!String.IsNullOrEmpty(searchString))
+        //    {
+        //        return View(searchByName);
+        //    }
+        //    else
+        //        return View();
+        //}
     }
 }

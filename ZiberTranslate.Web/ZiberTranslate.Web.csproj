@@ -252,9 +252,6 @@
     <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Translation\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Admin\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -280,8 +277,6 @@
     <None Include="Properties\PublishProfiles\ZiberNET.pubxml" />
     <Content Include="Views\Admin\AdminReview.cshtml" />
     <Content Include="Views\Admin\AdminTranslationRow.cshtml" />
-    <Content Include="Views\Home\PickLanguage.cshtml" />
-    <Content Include="Views\Translation\Breadcrumb.cshtml" />
     <Content Include="Scripts\libs\jquery-1.11.0.js" />
   </ItemGroup>
   <ItemGroup>

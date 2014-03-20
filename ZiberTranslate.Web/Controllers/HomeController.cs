@@ -31,36 +31,36 @@ namespace ZiberTranslate.Web.Controllers
             return View("Index");
         }
        
-        public ActionResult DefaultLanguage(string language="")
-        {
-            if (language == "")
-            {
-                return View("PickLanguage");
-            }
-            else
-            {
-                var amountTranslations = DbSession.QueryOver<Translation>()
-                        .Where(x => x.Language == LanguageService.GetLanguageByIsoCode(language))
-                        .RowCount();
+        //public ActionResult DefaultLanguage(string language="")
+        //{
+        //    if (language == "")
+        //    {
+        //        return View("PickLanguage");
+        //    }
+        //    else
+        //    {
+        //        var amountTranslations = DbSession.QueryOver<Translation>()
+        //                .Where(x => x.Language == LanguageService.GetLanguageByIsoCode(language))
+        //                .RowCount();
 
-                if (amountTranslations >= 5)
-                {
-                    using (var t = DbSession.BeginTransaction())
-                    {
-                        var me = TranslatorService.FindByEmail(HttpContext.User.Identity.Name);
+        //        if (amountTranslations >= 5)
+        //        {
+        //            using (var t = DbSession.BeginTransaction())
+        //            {
+        //                var me = TranslatorService.FindByEmail(HttpContext.User.Identity.Name);
 
-                        me.NeutralLanguage = language;
+        //                me.NeutralLanguage = language;
 
-                        Global.CurrentSession.Update(me);
-                        t.Commit();
-                    }
+        //                Global.CurrentSession.Update(me);
+        //                t.Commit();
+        //            }
 
-                    return RedirectToAction("Index");
-                }
-                else
-                    return View("PickLanguage");
-            }
+        //            return RedirectToAction("Index");
+        //        }
+        //        else
+        //            return View("PickLanguage");
+        //    }
             
-        }
+        //}
     }
 }
