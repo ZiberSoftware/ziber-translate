@@ -14,10 +14,6 @@ namespace ZiberTranslate.Web.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-
-            var rank = TranslatorService.FetchRank(HttpContext.User.Identity.Name);
-            var me = TranslatorService.FindByEmail(HttpContext.User.Identity.Name);
-
             return Json(new
             {
                 changes = BuildTranslations()
@@ -107,11 +103,26 @@ namespace ZiberTranslate.Web.Controllers
 
             return RedirectToAction("Index");
         }
+
+        public ActionResult CancelChanges()
+        {
+            var me = TranslatorService.FindByEmail(HttpContext.User.Identity.Name);
+            var changes = TranslationService.GetChangesForTranslator(me);
+            var votes = DbSession.QueryOver<TranslationVote>()
+                .Where(x => x.IsPublished == false)
+                .And(x => x.Translator == me)
+                .Future();
+
+            using (var t = DbSession.BeginTransaction())
+            {
+                DbSession.Delete(changes);
+                DbSession.Delete(votes);
+
+                t.Commit();
+            }
+            return new EmptyResult();
+        }
+
     }
 
-    public class Changeset
-    {
-        public IEnumerable<Translation> Changes { get; set; }
-        public IEnumerable<TranslationVote> Votes { get; set; }
-    }
 }

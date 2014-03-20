@@ -186,25 +186,6 @@ namespace ZiberTranslate.Web.Controllers
             return new EmptyResult();
         }
 
-        public ActionResult CancelChanges()
-        {
-            var me = TranslatorService.FindByEmail(HttpContext.User.Identity.Name);
-            var changes = TranslationService.GetChangesForTranslator(me);
-            var votes = DbSession.QueryOver<TranslationVote>()
-                .Where(x => x.IsPublished == false)
-                .And(x => x.Translator == me)
-                .Future();
-
-            using (var t = DbSession.BeginTransaction())
-            {
-                DbSession.Delete(changes);
-                DbSession.Delete(votes);
-
-                t.Commit();
-            }
-            return new EmptyResult();
-        }
-
         public ActionResult CountChanges()
         {
             var me = TranslatorService.FindByEmail(HttpContext.User.Identity.Name);
