@@ -210,14 +210,15 @@ namespace ZiberTranslate.Web.Controllers
 
         public ActionResult LanguageList()
         {
-            CultureInfo[] cultures = System.Globalization.CultureInfo.GetCultures(CultureTypes.NeutralCultures);
+            CultureInfo[] cultures = System.Globalization.CultureInfo.GetCultures(CultureTypes.SpecificCultures);
 
             var languageList = (
                         from culture in cultures
+                        orderby culture.Name
                         select new Language.LanguageList
                         {
                             Name = culture.DisplayName,
-                            IsoCode = culture.TwoLetterISOLanguageName
+                            IsoCode = culture.Name
                         }
                         ).ToList();
 
