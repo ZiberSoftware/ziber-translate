@@ -12,6 +12,7 @@ using Castle.Windsor.Installer;
 using ZiberTranslate.Web.App_Start;
 using Castle.MicroKernel.Registration;
 using ZiberTranslate.Web.Controllers;
+using ZiberTranslate.Web.Services;
 
 namespace ZiberTranslate.Web
 {
