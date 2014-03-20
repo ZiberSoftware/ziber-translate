@@ -90,7 +90,6 @@ namespace ZiberTranslate.Web.Controllers
         {
             var userHasAccount = securityService.Login(emailAddress, password);           
             
-
             if (userHasAccount == null)
                 return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
 
@@ -98,10 +97,10 @@ namespace ZiberTranslate.Web.Controllers
                                       .Where(x => x.EmailAddress == userHasAccount.Email)
                                       .SingleOrDefault();
 
-            if (hasTranslateAccount.IsBlocked)
+            if (hasTranslateAccount == null || hasTranslateAccount.IsBlocked)
                 return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
 
-            FormsAuthentication.SetAuthCookie(emailAddress, false);
+            FormsAuthentication.SetAuthCookie(userHasAccount.Email, false);
             
             return new HttpStatusCodeResult(HttpStatusCode.OK);
         }
