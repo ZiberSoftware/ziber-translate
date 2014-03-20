@@ -22,7 +22,7 @@ namespace ZiberTranslate.Web.Services
             Global.CurrentSession.Save(set);
         }
 
-        public static int GetCounter(int id, string language, FilterType filter)
+        public static double GetCounter(int id, string language, FilterType filter)
         {
             var keys = Global.CurrentSession.CreateCriteria<TranslateKey>()
                 .Add(Restrictions.Eq("Set.Id", id));
