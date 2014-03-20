@@ -173,10 +173,7 @@
     <Compile Include="Services\TranslationVoteService.cs" />
     <Compile Include="Services\TranslatorService.cs" />
     <Compile Include="Services\User.cs" />
-    <Compile Include="ViewModels\ChangesetViewModel.cs" />
     <Compile Include="ViewModels\ReviewViewModel.cs" />
-    <Compile Include="ViewModels\TranslateSetsViewModel.cs" />
-    <Compile Include="ViewModels\TranslationsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\Translate.mdf" />

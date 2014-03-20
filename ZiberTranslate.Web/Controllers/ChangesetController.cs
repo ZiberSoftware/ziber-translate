@@ -21,7 +21,7 @@ namespace ZiberTranslate.Web.Controllers
 
         }
 
-        private IEnumerable<TranslationChange> BuildTranslations()
+        private IEnumerable<TranslationChangeset.TranslationChange> BuildTranslations()
         {
             var emailAddress = HttpContext.User.Identity.Name;
             var me = TranslatorService.FindByEmail(emailAddress);
@@ -50,7 +50,7 @@ namespace ZiberTranslate.Web.Controllers
                 let neutralTranslation = neutralTranslations.Where(x => x.Key == change.Key).FirstOrDefault()
                 let leadingTranslation = leadingTranslations.Where(x => x.Key == change.Key && x.Language == change.Language).FirstOrDefault()
                 let voted = votes.Any(x => x.Key == (neutralUserTranslation == null ? neutralUserTranslation.Key : neutralTranslation.Key))
-                select new TranslationChange
+                select new TranslationChangeset.TranslationChange
                 {
                     KeyId = change.Key.Id,
                     SetId = change.Key.Set.Id,

@@ -8,12 +8,17 @@ namespace ZiberTranslate.Web.Models
 {
     public class Translation : Entity, ICloneable
     {
+        public Translation()
+        {
+            Translations = new List<TranslationDTO>();
+        }
+
         public virtual TranslateKey Key {get;set;}
         public virtual Translator Translator { get; set; }
         public virtual Language Language { get; set; }
         public virtual string Value { get; set; }
         public virtual int Votes { get; protected set; }
-
+        public virtual IEnumerable<TranslationDTO> Translations { get; set; }
         public virtual bool IsPublished { get; set; }
         public virtual bool NeedsAdminReviewing { get; set; }
         public virtual bool NeedsReview { get; set; }
@@ -30,6 +35,23 @@ namespace ZiberTranslate.Web.Models
             };
 
             return translation;
+        }
+        public class TranslationDTO
+        {
+            public virtual bool Differs
+            {
+                get
+                {
+                    return Value != LeadingValue;
+                }
+            }
+            public virtual int KeyId { get; set; }
+            public virtual int SetId { get; set; }
+            public virtual string Term { get; set; }
+            public virtual string Value { get; set; }
+            public virtual string LeadingValue { get; set; }
+            public virtual int Votes { get; set; }
+            public virtual bool Voted { get; set; }
         }
     }
 

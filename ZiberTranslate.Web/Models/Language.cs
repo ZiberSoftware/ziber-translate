@@ -13,6 +13,13 @@ namespace ZiberTranslate.Web.Models
         //ISO-639-1
         public virtual string IsoCode { get; set; }
         public virtual string Name { get; set; }
+        public virtual IEnumerable<LanguageList> List { get; set; }
+
+        public class LanguageList
+        {
+            public virtual string Name { get; set; }
+            public virtual string IsoCode { get; set; }
+        }
     }
 
     public class LanguageMap : ClassMap<Language>
