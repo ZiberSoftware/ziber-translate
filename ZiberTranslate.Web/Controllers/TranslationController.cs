@@ -220,6 +220,7 @@ namespace ZiberTranslate.Web.Controllers
             var languageList = (
 
                         from culture in cultures
+                        where culture != CultureInfo.InvariantCulture
                         orderby culture.Name
                         select new Language.LanguageList
                         {

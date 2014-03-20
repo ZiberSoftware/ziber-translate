@@ -24,7 +24,7 @@ namespace ZiberTranslate.Web.Controllers
         }        
 
         [HttpPost]
-        public ActionResult Login(string emailAddress, string password, string returnUrl = "")
+        public ActionResult Login(string emailAddress, string password)
         {
             var userHasAccount = securityService.Login(emailAddress, password);           
             
