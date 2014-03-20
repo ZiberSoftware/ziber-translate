@@ -32,10 +32,10 @@ namespace ZiberTranslate.Web.Controllers
         private log4net.ILog logger = log4net.LogManager.GetLogger(typeof(TranslationController));
 
         public ActionResult Index(int setId, string language, FilterType filter, int pageNr = 1, int? categoryId = null)
-        {           
+        {
             double totalPages = TranslateSetService.GetCounter(setId, language, filter) / 20;
             totalPages = (int)Math.Ceiling(totalPages);
-            
+
             if (pageNr > totalPages)
                 pageNr = (int)totalPages;
 
@@ -54,7 +54,7 @@ namespace ZiberTranslate.Web.Controllers
         }
 
         public ActionResult Filters(int setId, string language)
-        {                      
+        {
             return Json(new
             {
                 reviewed = TranslateSetService.GetCounter(setId, language, FilterType.Reviewed),
@@ -65,7 +65,7 @@ namespace ZiberTranslate.Web.Controllers
         }
 
 
-        private IEnumerable<ViewModels.TranslationsViewModel.TranslationDTO> BuildTranslations(int id, string language, FilterType filter, int pageNr)
+        private IEnumerable<Translation.TranslationDTO> BuildTranslations(int id, string language, FilterType filter, int pageNr)
         {
             var me = TranslatorService.FindByEmail(HttpContext.User.Identity.Name);
             var keys = TranslationService.FilteredKeys(id, language, filter, pageNr);
@@ -101,7 +101,7 @@ namespace ZiberTranslate.Web.Controllers
                         let neutralTranslation = neutralTranslations.Where(x => x.Key == key).FirstOrDefault()
                         let leadingTranslation = leadingTranslations.Where(x => x.Key == key).FirstOrDefault()
                         let userTranslation = userTranslations.Where(x => x.Key == key).FirstOrDefault() ?? leadingTranslation
-                        select new ViewModels.TranslationsViewModel.TranslationDTO
+                        select new Translation.TranslationDTO
                         {
                             KeyId = key.Id,
                             Term = neutralUserTranslation == null ? neutralTranslation.Value : neutralUserTranslation.Value,
@@ -125,7 +125,7 @@ namespace ZiberTranslate.Web.Controllers
 
             using (var t = DbSession.BeginTransaction())
             {
-                translation = TranslationService.UpdateTranslation(id, language, value);               
+                translation = TranslationService.UpdateTranslation(id, language, value);
 
                 t.Commit();
             }
@@ -207,17 +207,21 @@ namespace ZiberTranslate.Web.Controllers
 
         // this way the name and isocode can be found, front-end needs a way to make the list of languages chooseable options
         // which can then be used as variable for the AddLanguage function.
+
         public ActionResult LanguageList()
         {
             CultureInfo[] cultures = System.Globalization.CultureInfo.GetCultures(CultureTypes.NeutralCultures);
 
+            var languageList = (
+                        from culture in cultures
+                        select new Language.LanguageList
+                        {
+                            Name = culture.DisplayName,
+                            IsoCode = culture.TwoLetterISOLanguageName
+                        }
+                        ).ToList();
 
-            foreach (var culture in cultures)
-            {
-                Content(culture.DisplayName);
-                Content(culture.TwoLetterISOLanguageName);
-            }
-            return new EmptyResult();
+            return Json(languageList, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult AddLanguage(string ISOCode)
