@@ -27,9 +27,20 @@
             });
 
 
+            var range = function (i) {
+                return i ? range(i - 1).concat(i) : [];
+            }
+
+            $scope.gotoPage = function (page) {
+                $location.path('/sets/' + $routeParams['id'] + '/translations/' + $routeParams['language'] + '/' + page);
+            };
+
             $scope.filter = function(filter) {
-                service.translations($routeParams['id'], $routeParams['language'], filter, $routeParams["page"]).then(function(translations) {
-                    $scope.translations = translations;
+                service.translations($routeParams['id'], $routeParams['language'], filter, $routeParams["page"]).then(function (data) {
+                    $scope.translations = data.translations;
+                    $scope.totalPages = data.totalPages;
+                    $scope.currentPage = data.currentPage;
+                    $scope.pages = range(data.totalPages);
                 });
             };
 

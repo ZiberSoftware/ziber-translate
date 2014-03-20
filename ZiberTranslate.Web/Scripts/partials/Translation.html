@@ -32,4 +32,8 @@
             <zbr-translation translation="translation"></zbr-translation>
         </li>
     </ul>
+
+    <div class="pagination">
+        <a class="page" ng-repeat="page in pages" ng-bind="page" ng-class="{selected : page == currentPage}" ng-click="gotoPage(page)" ></a>
+    </div>
 </div>

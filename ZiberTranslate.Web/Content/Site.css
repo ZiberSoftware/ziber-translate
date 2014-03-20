@@ -1,4 +1,4 @@
-html,
+﻿html,
 body {
   margin: 0;
   padding: 0;
@@ -306,3 +306,20 @@ em {
   height: 150px;
   position: relative;
 }
+.pagination .page {
+  display: inline-block;
+  padding: 5px;
+  min-width: 1em;
+  text-align: center;
+  background-color: #ccc;
+  cursor: pointer;
+}
+.pagination .page.page {
+  margin-left: 5px;
+}
+.pagination .selected {
+  font-weight: bold;
+  background-color: #666;
+  color: #FFF;
+}
+/*# sourceMappingURL=Site.css.map */

@@ -270,6 +270,9 @@
       <DependentUpon>Users.edmx</DependentUpon>
       <LastGenOutput>Users.cs</LastGenOutput>
     </Content>
+    <Content Include="Content\Site.css.map">
+      <DependentUpon>Site.css</DependentUpon>
+    </Content>
     <None Include="Properties\PublishProfiles\RELEASE.pubxml" />
     <None Include="Properties\PublishProfiles\ZiberNET.pubxml" />
     <Content Include="Views\Admin\AdminReview.cshtml" />

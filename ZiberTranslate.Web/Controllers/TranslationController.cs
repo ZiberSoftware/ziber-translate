@@ -43,7 +43,12 @@ namespace ZiberTranslate.Web.Controllers
 
             try
             {
-                return Json(translations, JsonRequestBehavior.AllowGet);
+                return Json(new
+                {
+                    currentPage = pageNr,
+                    totalPages = totalPages,
+                    translations
+                }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
@@ -213,6 +218,7 @@ namespace ZiberTranslate.Web.Controllers
             CultureInfo[] cultures = System.Globalization.CultureInfo.GetCultures(CultureTypes.SpecificCultures);
 
             var languageList = (
+
                         from culture in cultures
                         orderby culture.Name
                         select new Language.LanguageList
