@@ -38,8 +38,8 @@
                         '<div class=\'actions\'>' +
                             '<span class=\'view-actions\' ng-hide=\'editMode\'>' +
                                 '<a ng-click=\'undo()\' ng-if="translation.changed" class="ajax delete" title="Undo changes">Undo changes</a>' +
-                                '<a ng-click=\'approve(false)\' ng-if="translation.voted" class="ajax unapprove" title="Remove approval">UnApprove</a>' +
-                                '<a ng-click=\'approve(true)\' ng-if="!translation.voted" class="ajax approve" title="Approve">Approve</a> ' +
+                                '<a ng-click=\'disapprove()\' ng-if="translation.voted" class="ajax unapprove" title="Remove approval">UnApprove</a>' +
+                                '<a ng-click=\'approve()\' ng-if="!translation.voted" class="ajax approve" title="Approve">Approve</a> ' +
                             '</span>' +
                             '<span class="edit-actions" ng-show=\'editMode\'>' +
                                 '<input ng-click=\'exitEditMode()\' class="save" type="button" value="&gt;" /> ' +
@@ -89,6 +89,13 @@
 
                         translationService.approve($scope.translation);
                     };
+
+                    $scope.disapprove = function () {
+                        $scope.translation.approved = false;
+                        $scope.translation.Votes -= 1;
+
+                        translationService.disapprove($scope.translation);
+                    }
 
                     $scope.editorKeyDown = function ($event) {
                         if ($event.which == 9) { //tab key

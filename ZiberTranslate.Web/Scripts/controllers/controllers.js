@@ -12,7 +12,7 @@
         }])
         .controller('TranslationCtrl', ['$scope', '$routeParams', '$http', '$location', 'TranslationService', 'AuthenticationService', function ($scope, $routeParams, $http, $location, service, authService) {
 
-            $http.get('/Translation/Filters?setId=' + $routeParams['id'] + '&language=' + $routeParams['language']).then(function(result) {
+            $http.get('/Translation/Filters?setId=' + $routeParams['id'] + '&language=' + $routeParams['language']).then(function (result) {
                 $scope.filters = result.data;
             });
 
@@ -26,6 +26,18 @@
                 });
             });
 
+            $scope.currentFilter = 'all';
+
+            $scope.$watch('currentFilter', function () {
+                
+                $scope.filter($scope.currentFilter);
+                console.log($scope.currentFilter)
+            }, true);            
+
+            $scope.$on('changesetUpdated', function (changeset) {
+                $scope.filter($scope.currentFilter);
+            });
+            
 
             var range = function (i) {
                 return i ? range(i - 1).concat(i) : [];
@@ -40,7 +52,7 @@
                     $scope.translations = data.translations;
                     $scope.totalPages = data.totalPages;
                     $scope.currentPage = data.currentPage;
-                    $scope.pages = range(data.totalPages);
+                    $scope.pages = range(data.totalPages);                    
                 });
             };
 
@@ -50,7 +62,7 @@
                 }
             };
             
-            $scope.filter('all');
+            $scope.filter($scope.currentFilter);            
 
             $scope.$on('leftEditMode', function(e, $element, prevOrNext) {
                 //don't run this during $apply cycle
@@ -74,6 +86,8 @@
             $scope.$on('changesetUpdated', function (event, changeSet) {
                 $scope.changes = changeSet.changes;
                 $scope.votes = changeSet.votes;
+
+                console.log('changeset update', changeSet);
             });
         }])
         .controller('LoginCtrl', ['$scope', '$http', '$location', '$rootScope', 'AuthenticationService', function ($scope, $http, $location, $rootScope, authService) {

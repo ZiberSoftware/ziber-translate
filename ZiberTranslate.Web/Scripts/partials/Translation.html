@@ -1,26 +1,26 @@
 ﻿<div ng-controller="TranslationCtrl">
     <section id="change-set" class="summary" ng-controller="ChangeSetSummaryCtrl" ng-show="changes">
         <h3>U heeft <span class="changes" ng-bind="totalChanges"></span> wijzigingen in afwachting</h3>
-        <a href="" class="button button-gray">Annuleren</a>
+        <a ng-controller="ChangeSetCtrl" ng-click="cancel()" class="button button-gray">Annuleren</a>
         <a href="#/changeset" class="button button-green">Publiceren</a>
     </section>
 
     <section id="filters">
         <ul class="stats">
             <li class="needs-translation">
-                <a ng-bind="filters.needsTranslation" ng-click="filter('needsTranslation')"></a>
+                <a ng-bind="filters.needsTranslation" ng-click="currentFilter='needsTranslation'"></a>
                 <span class="label">Onvertaald</span>
             </li>
             <li class="needs-review">
-                <a ng-bind="filters.needsReview" ng-click="filter('needsReview')"></a>
+                <a ng-bind="filters.needsReview" ng-click="currentFilter='needsReview'"></a>
                 <span class="label">In afwachting</span>
             </li>
             <li class="reviewed">
-                <a ng-bind="filters.reviewed" ng-click="filter('reviewed')"></a>
+                <a ng-bind="filters.reviewed" ng-click="currentFilter='reviewed'"></a>
                 <span class="label">Beoordeeld</span>
             </li>
             <li class="all">
-                <a ng-bind="filters.total" ng-click="filter('all')"></a>
+                <a ng-bind="filters.total" ng-click="currentFilter='all'"></a>
                 <span class="label">Totaal</span>
             </li>
         </ul>

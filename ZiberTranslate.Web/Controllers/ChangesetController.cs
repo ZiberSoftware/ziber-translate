@@ -101,9 +101,10 @@ namespace ZiberTranslate.Web.Controllers
                 t.Commit();
             }
 
-            return RedirectToAction("Index");
+            return new HttpStatusCodeResult(200);
         }
 
+        [HttpPost]
         public ActionResult CancelChanges()
         {
             var me = TranslatorService.FindByEmail(HttpContext.User.Identity.Name);
@@ -115,11 +116,19 @@ namespace ZiberTranslate.Web.Controllers
 
             using (var t = DbSession.BeginTransaction())
             {
-                DbSession.Delete(changes);
-                DbSession.Delete(votes);
+                foreach (var translation in changes.ToList())
+                {
+                    DbSession.Delete(translation);
+                }
+
+                foreach (var vote in votes.ToList())
+                {
+                    DbSession.Delete(votes);
+                }
 
                 t.Commit();
             }
+
             return new EmptyResult();
         }
 

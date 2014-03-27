@@ -9,9 +9,7 @@
                         return response.data;
                     });
                 },
-                translations: function (setId, language, filter, page) {
-                    if (typeof(filter) === 'undefined')
-                        filter = 'all';
+                translations: function (setId, language, filter, page) {                
                     
                     if (typeof(page) === 'undefined') {
                         page = 1;
@@ -30,6 +28,9 @@
                 },
                 approve: function (translation) {
                     return $http.post('sets/' + translation.SetId + '/translations-nl/' + translation.KeyId + '/approve', { value: translation.Value });
+                },
+                disapprove: function (translation) {
+                    return $http.post('sets/' + translation.SetId + '/translations-nl/' + translation.KeyId + '/disapprove', { value: translation.Value });
                 }
             };
         }])
@@ -42,6 +43,9 @@
                     return $http.get('/ChangeSet/').then(function(result) {
                         return result.data;
                     });
+                },
+                cancel: function () {
+                return $http.post('/ChangeSet/CancelChanges');
                 }
             };
         }])
