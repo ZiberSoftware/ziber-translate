@@ -37,7 +37,7 @@ namespace ZiberTranslate.Web.Controllers
             return View(vm);
         }
 
-        public ActionResult Set(int setId, string language)
+        public ActionResult SetContent(int setId, string language)
         {
             var content = BuildSetContent(setId, language);
             var vm = new ReviewViewModel() { Content = content };

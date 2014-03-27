@@ -17,6 +17,9 @@
             .when('/changeset', {
                 templateUrl: '/Scripts/partials/Changeset.html'
             })
+            .when('/admin', {
+                templateUrl: '/Scripts/partials/Admin.html'
+            })
             .otherwise({
                 redirectTo: '/sets'
             });

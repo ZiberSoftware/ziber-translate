@@ -31,7 +31,6 @@
             $scope.$watch('currentFilter', function () {
                 
                 $scope.filter($scope.currentFilter);
-                console.log($scope.currentFilter)
             }, true);            
 
             $scope.$on('changesetUpdated', function (changeset) {
@@ -85,10 +84,11 @@
 
             $scope.$on('changesetUpdated', function (event, changeSet) {
                 $scope.changes = changeSet.changes;
-                $scope.votes = changeSet.votes;
-
-                console.log('changeset update', changeSet);
+                $scope.votes = changeSet.votes;                
             });
+        }])
+        .controller('AdminCtrl', ['$scope', '$http', '$location', '$rootScope', 'AdminService', function ($scope, $http, $location, $rootScope, AdminService) {
+
         }])
         .controller('LoginCtrl', ['$scope', '$http', '$location', '$rootScope', 'AuthenticationService', function ($scope, $http, $location, $rootScope, authService) {
             $rootScope.hideHeader = true;

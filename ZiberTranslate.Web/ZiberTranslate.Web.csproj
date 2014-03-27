@@ -218,6 +218,7 @@
     <Content Include="Scripts\libs\angular-sanitize.js" />
     <Content Include="Scripts\libs\angular.js" />
     <Content Include="Scripts\libs\bindonce.js" />
+    <Content Include="Scripts\partials\Admin.html" />
     <Content Include="Scripts\partials\Changeset.html" />
     <Content Include="Scripts\partials\Login.html" />
     <Content Include="Scripts\partials\Sets.html" />
