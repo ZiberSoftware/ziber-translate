@@ -88,10 +88,10 @@
             });
         }])
         .controller('AdminCtrl', ['$scope', '$http', '$location', '$rootScope', 'AdminService', function ($scope, $http, $location, $rootScope, AdminService) {
-
+            $scope.isAdmin = false;
         }])
         .controller('LoginCtrl', ['$scope', '$http', '$location', '$rootScope', 'AuthenticationService', function ($scope, $http, $location, $rootScope, authService) {
-            $rootScope.hideHeader = true;
+            //$rootScope.hideHeader = true;
             
             $scope.login = function(user) {
                 $http.post('/Security/Login', { emailAddress: user.username, password: user.password })
@@ -103,6 +103,8 @@
                         if (redirectUrl) {
                             $location.url(redirectUrl);
                         }
+                        else
+                            $location.path('/');
                     }).error(function() {
                         //TODO: implement error handling
                     });

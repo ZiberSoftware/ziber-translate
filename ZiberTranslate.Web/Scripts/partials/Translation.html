@@ -1,5 +1,5 @@
 ﻿<div ng-controller="TranslationCtrl">
-    <section id="change-set" class="summary" ng-controller="ChangeSetSummaryCtrl" ng-show="changes">
+    <section id="change-set" class="summary" ng-controller="ChangeSetSummaryCtrl" ng-show="totalChanges">
         <h3>U heeft <span class="changes" ng-bind="totalChanges"></span> wijzigingen in afwachting</h3>
         <a ng-controller="ChangeSetCtrl" ng-click="cancel()" class="button button-gray">Annuleren</a>
         <a href="#/changeset" class="button button-green">Publiceren</a>

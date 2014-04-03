@@ -43,10 +43,12 @@ namespace ZiberTranslate.Web.Controllers
             return new HttpStatusCodeResult(HttpStatusCode.OK);
         }
 
+        [HttpPost]
         public ActionResult Logout()
         { 
-          FormsAuthentication.SignOut();
-          return RedirectToAction("Index", "Home");
+            FormsAuthentication.SignOut();
+          
+            return new HttpStatusCodeResult(200);
         }
     }
 }

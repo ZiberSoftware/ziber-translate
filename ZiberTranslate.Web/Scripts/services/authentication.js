@@ -9,6 +9,9 @@
                 },
                 isLoggedIn: function() {
                     return SessionService.currentUser !== null;
+                },
+                logout: function () {
+                    SessionService.currentUser = null;
                 }
             };
         }])

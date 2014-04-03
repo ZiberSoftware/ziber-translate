@@ -18,6 +18,7 @@ namespace ZiberTranslate.Web.Models
         public virtual Language Language { get; set; }
         public virtual string Value { get; set; }
         public virtual int Votes { get; protected set; }
+        public virtual int UserVotes { get; protected set; }
         public virtual IEnumerable<TranslationDTO> Translations { get; set; }
         public virtual bool IsPublished { get; set; }
         public virtual bool NeedsAdminReviewing { get; set; }
@@ -31,6 +32,7 @@ namespace ZiberTranslate.Web.Models
                 Language = Language,
                 Value =Value,
                 Votes = 0,
+                UserVotes = 0,
                 IsPublished = false
             };
 
@@ -51,6 +53,7 @@ namespace ZiberTranslate.Web.Models
             public virtual string Value { get; set; }
             public virtual string LeadingValue { get; set; }
             public virtual int Votes { get; set; }
+            public virtual int UserVotes { get; set; }
             public virtual bool Voted { get; set; }
         }
     }
@@ -67,7 +70,11 @@ namespace ZiberTranslate.Web.Models
             Map(x => x.NeedsReview);
             Map(x => x.Votes)
                 .Generated.Always()
-                .Formula("(SELECT ISNULL(COUNT(*), 0) FROM TranslationVote v WHERE v.Translation_Id = Id AND v.IsPublished = 1)");
+                .Formula("(SELECT ISNULL(COUNT(*), 0) FROM TranslationVote v WHERE v.Translation_Id = Id AND v.IsPublished = 1 AND v.NeedsAdminReviewing = 0)");
+
+            Map(x => x.UserVotes)
+                .Generated.Always()
+                .Formula("(SELECT ISNULL(COUNT(*),0) FROM TranslationVote v WHERE v.Translation_Id = Id AND v.IsPublished = 0 AND v.NeedsAdminReviewing = 1)");
 
             References(x => x.Language)
                 .Cascade.None();

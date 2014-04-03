@@ -26,6 +26,7 @@
                         '<div class=\'spacer\'>' +
                             '<span>' +
                                 '<span class="vote-count" ng-bind="translation.Votes" ng-if="translation.Votes > 0"></span>' +
+                                '<span class="vote-count" ng-bind="translation.UserVotes" ng-if="translation.UserVotes > 0"></span>' +
                             '</span>' +
                         '</div>' +
                         '<div class=\'translation\'>' +
@@ -45,6 +46,10 @@
                                 '<input ng-click=\'exitEditMode()\' class="save" type="button" value="&gt;" /> ' +
                             '</span>' +
                         '</div>' +
+                        '<div class=\'admin\'>' +
+                            '<span class=\'adminApproval\' ng-show=\'isAdmin\'>' +
+                                '<input type="checkbox" value="translation.Id" name="translationId" />' +
+                            '</span>'+
                     '</div>',
                 scope: {
                     translation: '='
@@ -87,15 +92,21 @@
                         $scope.translation.approved = true;
                         $scope.translation.Votes += 1;
 
-                        translationService.approve($scope.translation);
+                        translationService.approve($scope.translation).then(function (result) {
+                            var changeSet = result.data;
+                            $rootScope.$broadcast('changesetUpdated', changeSet);
+                        });
                     };
 
                     $scope.disapprove = function () {
                         $scope.translation.approved = false;
                         $scope.translation.Votes -= 1;
 
-                        translationService.disapprove($scope.translation);
-                    }
+                        translationService.disapprove($scope.translation).then(function (result) {
+                            var changeSet = result.data;
+                            $rootScope.$broadcast('changesetUpdated', changeSet);
+                        });
+                    };
 
                     $scope.editorKeyDown = function ($event) {
                         if ($event.which == 9) { //tab key

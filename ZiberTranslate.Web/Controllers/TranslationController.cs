@@ -113,6 +113,7 @@ namespace ZiberTranslate.Web.Controllers
                             Value = userTranslation == null ? string.Empty : userTranslation.Value,
                             LeadingValue = leadingTranslation == null ? neutralTranslation.Value : leadingTranslation.Value,
                             Votes = leadingTranslation == null ? 0 : userTranslation.Votes,
+                            UserVotes = userTranslation.UserVotes,
                             Voted = votedOnKeys.Contains(key.Id),
                             SetId = id
                         }
@@ -162,7 +163,7 @@ namespace ZiberTranslate.Web.Controllers
                 }
             }
 
-            return new EmptyResult();
+            return CountChanges();
         }
 
         [HttpPost]
@@ -172,23 +173,17 @@ namespace ZiberTranslate.Web.Controllers
 
             TranslationVoteService.Vote(translation);
 
-            return new EmptyResult();
+            return CountChanges();
         }
 
         [HttpPost]
         public ActionResult Disapprove(int id, string language)
         {
-            Translation translation;
-            using (var t = Global.CurrentSession.BeginTransaction())
-            {
-                translation = TranslationService.FindByKey(id, language);
+            Translation translation = TranslationService.FindByKey(id, language);
 
-                TranslationVoteService.RemoveVote(translation);
+            TranslationVoteService.RemoveVote(translation);
 
-                t.Commit();
-            }
-
-            return new EmptyResult();
+            return CountChanges();
         }
 
         public ActionResult CountChanges()

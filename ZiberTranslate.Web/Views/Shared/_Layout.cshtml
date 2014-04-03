@@ -11,7 +11,10 @@
         <header id="header" ng-hide="!!hideHeader" ng-controller="HeaderCtrl" bindonce>
             <div class="float-box float-box-right">
                 <span  class="username" bo-text="user.username"></span>
+                <a class="button button-lightblue" ng-click="login()" ng-hide="isAuthenticated">Login</a>
+                <a class="button button-lightblue" ng-click="logout()" ng-show="isAuthenticated">Logout</a>
                 <a class="button button-lightblue">Instellingen</a>
+
             </div>
         </header>
         <section id="page">

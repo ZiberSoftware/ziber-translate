@@ -11,7 +11,7 @@ namespace ZiberTranslate.Web.Services
         public static void Vote(Translation translation)
         {
             var voter = TranslatorService.FindByEmail(HttpContext.Current.User.Identity.Name);
-            var vote = FindVote(translation, voter);
+            var vote = FindVoteForTranslator(translation, voter);
             using (var t = Global.CurrentSession.BeginTransaction())
             {
                 if (vote == null)
@@ -28,8 +28,6 @@ namespace ZiberTranslate.Web.Services
 
                     Global.CurrentSession.Save(vote);
                 }
-                translation.NeedsReview = false;
-                Global.CurrentSession.Update(translation);
 
                 t.Commit();
             }
@@ -38,16 +36,35 @@ namespace ZiberTranslate.Web.Services
         public static void RemoveVote(Translation translation)
         {
             var voter = TranslatorService.FindByEmail(HttpContext.Current.User.Identity.Name);
-            var vote = FindVote(translation, voter);
+            var vote = FindVoteForTranslator(translation, voter);
+            var atleastOneVote = Global.CurrentSession.QueryOver<TranslationVote>()
+                            .Where(x => x.Translation == translation)
+                            .RowCount();
+                            
 
-            if (vote != null)
+            using (var t = Global.CurrentSession.BeginTransaction())
             {
-                if(vote.IsPublished == false) 
-                    Global.CurrentSession.Delete(vote);
+                if (vote != null)
+                {
+                    if (vote.IsPublished == false)
+                    {
+                        Global.CurrentSession.Delete(vote);
+                        atleastOneVote--;
+                    }
+                        
+                }
+
+                if (atleastOneVote == 0)
+                {
+                    translation.NeedsReview = true;
+                    Global.CurrentSession.Update(translation);
+                }
+
+                t.Commit();
             }
         }
 
-        public static TranslationVote FindVote(Translation translation, Translator translator)
+        public static TranslationVote FindVoteForTranslator(Translation translation, Translator translator)
         {
             return Global.CurrentSession.QueryOver<TranslationVote>()
                 .Where(x => x.Translation == translation)

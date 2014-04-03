@@ -52,7 +52,6 @@ em {
   display: inline-block;
   padding: 5px 15px;
   color: #FFF;
-  text-transform: lowercase;
   line-height: normal;
   cursor: pointer;
 }
@@ -107,8 +106,8 @@ em {
   border: 1px solid #cccccc;
 }
 #filters .stats .label {
-  text-transform: lowercase;
   font-size: 13px;
+  text-align: center;
 }
 #filters .stats .needs-review a {
   background-color: #7DA1C1;
