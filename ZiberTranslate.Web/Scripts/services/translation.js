@@ -52,12 +52,12 @@
         .factory('AdminService', ['$http', function ($http) {
             return {
                 reviewSets: function () {
-                    return $http.get('/Admin').then(function (response) {
-                        return response.data;
+                    return $http.get('/Admin').then(function (result) {
+                        return result.data;
                     });
                 },
                 reviewTranslations: function (setId, language) {
-                    return $http.get('/Admin/setContent/' + setId + '/' + language).then(function (response) {
+                    return $http.get('/admin/' + setId + '/review-translations-' + language).then(function (response) {
                         return response.data;
                     });
                 }

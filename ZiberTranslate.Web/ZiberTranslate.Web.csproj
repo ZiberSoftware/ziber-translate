@@ -136,6 +136,7 @@
     </Compile>
     <Compile Include="IoC\CoreWindsorInstaller.cs" />
     <Compile Include="IoC\WindsorControllerFactory.cs" />
+    <Compile Include="Models\Admin.cs" />
     <Compile Include="Models\Entity.cs" />
     <Compile Include="Models\Language.cs" />
     <Compile Include="Models\Member.cs">
@@ -173,7 +174,6 @@
     <Compile Include="Services\TranslationVoteService.cs" />
     <Compile Include="Services\TranslatorService.cs" />
     <Compile Include="Services\User.cs" />
-    <Compile Include="ViewModels\ReviewViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\Translate.mdf" />
@@ -212,13 +212,15 @@
     <Content Include="Scripts\controllers\changeset.js" />
     <Content Include="Scripts\controllers\controllers.js" />
     <Content Include="Scripts\controllers\header.js" />
+    <Content Include="Scripts\directives\admintranslation.js" />
     <Content Include="Scripts\directives\translation.js" />
     <Content Include="Scripts\libs\jsdiff.js" />
     <Content Include="Scripts\libs\angular-route.js" />
     <Content Include="Scripts\libs\angular-sanitize.js" />
     <Content Include="Scripts\libs\angular.js" />
     <Content Include="Scripts\libs\bindonce.js" />
-    <Content Include="Scripts\partials\Admin.html" />
+    <Content Include="Scripts\partials\AdminSets.html" />
+    <Content Include="Scripts\partials\AdminTranslations.html" />
     <Content Include="Scripts\partials\Changeset.html" />
     <Content Include="Scripts\partials\Login.html" />
     <Content Include="Scripts\partials\Sets.html" />
@@ -242,6 +244,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Maps\" />
+    <Folder Include="ViewModels\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

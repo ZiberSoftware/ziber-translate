@@ -27,6 +27,7 @@
             });
 
             $scope.currentFilter = 'all';
+            $scope.isAdmin = false;
 
             $scope.$watch('currentFilter', function () {
                 
@@ -87,8 +88,17 @@
                 $scope.votes = changeSet.votes;                
             });
         }])
-        .controller('AdminCtrl', ['$scope', '$http', '$location', '$rootScope', 'AdminService', function ($scope, $http, $location, $rootScope, AdminService) {
-            $scope.isAdmin = false;
+        .controller('AdminSetCtrl', ['$scope', 'AdminService', function ($scope, AdminService) {
+
+            AdminService.reviewSets().then(function (sets) {
+                $scope.sets = sets.setsWithReviews.ChangedSets;
+            });           
+        }])
+        .controller('AdminTranslationCtrl', ['$rootScope', '$scope', '$http', '$routeParams', '$location', 'AdminService', function ($rootScope, $scope, $http, $routeParams, $location, AdminService) {           
+
+            AdminService.reviewTranslations($routeParams['id'], $routeParams['language']).then(function (data) {
+                $scope.translations = data.setContent;
+            });
         }])
         .controller('LoginCtrl', ['$scope', '$http', '$location', '$rootScope', 'AuthenticationService', function ($scope, $http, $location, $rootScope, authService) {
             //$rootScope.hideHeader = true;

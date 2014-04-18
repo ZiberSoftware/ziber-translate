@@ -1,0 +1,7 @@
+﻿<ul id="translate-sets" ng-controller="AdminSetCtrl">
+
+    <li ng-repeat="set in sets">
+        <a ng-bind="set.SetName + ' (' + set.Language + ')'" ng-href="#/admin/{{set.SetId}}/translations/{{set.Language}}"></a>
+    </li>
+
+</ul>

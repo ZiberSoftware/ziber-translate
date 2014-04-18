@@ -18,7 +18,10 @@
                 templateUrl: '/Scripts/partials/Changeset.html'
             })
             .when('/admin', {
-                templateUrl: '/Scripts/partials/Admin.html'
+                templateUrl: '/Scripts/partials/AdminSets.html'
+            })
+            .when('/admin/:id/translations/:language', {
+                templateUrl: '/Scripts/partials/AdminTranslations.html'
             })
             .otherwise({
                 redirectTo: '/sets'

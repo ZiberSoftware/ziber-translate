@@ -7,14 +7,13 @@ using ZiberTranslate.Web.Models;
 using ZiberTranslate.Web.Services;
 using NHibernate.Criterion;
 using NHibernate.Transform;
-using ZiberTranslate.Web.ViewModels;
 
 namespace ZiberTranslate.Web.Controllers
 {
     public class AdminController : BaseController
     {
         private log4net.ILog logger = log4net.LogManager.GetLogger(typeof(AdminController));
-
+        [HttpGet]
         public ActionResult Index()
         {
             var sets = DbSession.CreateCriteria<TranslateSet>()
@@ -29,22 +28,28 @@ namespace ZiberTranslate.Web.Controllers
                     .Add(Projections.Property("s.Id"), "SetId")
                     .Add(Projections.Property("s.Name"), "SetName")
                     .Add(Projections.Property("l.IsoCode"), "Language"))
-                .SetResultTransformer(Transformers.AliasToBean<ViewModels.ReviewViewModel.SetWithReviews>())
-                .List<ViewModels.ReviewViewModel.SetWithReviews>();
+                .SetResultTransformer(Transformers.AliasToBean<Admin.SetWithReviews>())
+                .List<Admin.SetWithReviews>();
 
-            var vm = new ReviewViewModel() { ChangedSets = setsWithChanges.Distinct() };
+            var setsWithReviews = new Admin() { ChangedSets = setsWithChanges.Distinct() };
 
-            return View(vm);
+            return Json(new 
+                {
+                    setsWithReviews
+                }, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpGet]
         public ActionResult SetContent(int setId, string language)
         {
-            var content = BuildSetContent(setId, language);
-            var vm = new ReviewViewModel() { Content = content };
+            var setContent = BuildSetContent(setId, language);
 
-            return View("AdminReview", vm);
-
+            return Json(new 
+                { 
+                    setContent 
+                }, JsonRequestBehavior.AllowGet);
         }
+
 
         public ActionResult Submit (string language, int setId, int[] TranslationId=null)
         {
@@ -119,7 +124,7 @@ namespace ZiberTranslate.Web.Controllers
             return RedirectToAction("Index");
         }
 
-        public IEnumerable<ViewModels.ReviewViewModel.SetContent> BuildSetContent(int id, string language)
+        public IEnumerable<Admin.SetContent> BuildSetContent(int id, string language)
         {
             var translationsNeedsAdminReviewing = DbSession.CreateCriteria<Translation>()
                 .CreateAlias("Key", "k")
@@ -150,7 +155,7 @@ namespace ZiberTranslate.Web.Controllers
                 var leadingTranslation = leadingTranslations.Where(x => x.Key == translation.Key).SingleOrDefault();
                 var voted = votes.Any(x => x.Key == translation.Key);
 
-                var c = new ReviewViewModel.SetContent();
+                var c = new Admin.SetContent();
                 c.KeyId = translation.Key.Id;
                 c.SetId = id;
                 c.SetName = translation.Key.Set.Name;

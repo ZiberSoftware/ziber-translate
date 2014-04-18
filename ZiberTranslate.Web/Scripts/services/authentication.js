@@ -12,6 +12,11 @@
                 },
                 logout: function () {
                     SessionService.currentUser = null;
+                },
+                translatorInfo: function() {
+                    return $http.get('/Security/TranslatorRank').then(function (response) {
+                        return response.data;
+                    });
                 }
             };
         }])

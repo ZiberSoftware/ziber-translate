@@ -50,5 +50,22 @@ namespace ZiberTranslate.Web.Controllers
           
             return new HttpStatusCodeResult(200);
         }
+
+        [HttpGet]
+        public ActionResult TranslatorRank()
+        {
+            var emailAddress = HttpContext.User.Identity.Name;
+            var translator = TranslatorService.FindByEmail(emailAddress);
+
+            if (translator != null)
+            {
+                return Json(new
+                {
+                    rank = translator.Rank
+                }, JsonRequestBehavior.AllowGet);
+            }
+            else
+                return new EmptyResult();
+        }
     }
 }

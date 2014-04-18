@@ -17,7 +17,7 @@
     };
 
     angular.module('Translate.Directives', ['pasvaz.bindonce'])
-        .directive('zbrTranslation', ['$rootScope', '$sce', 'TranslationService', function ($rootScope, $sce, translationService) {
+        .directive('zbrAdminTranslation', ['$rootScope', '$sce', 'AdminService', function ($rootScope, $sce, AdminService) {
             return {
                 restrict: 'AE',
                 template:
@@ -35,17 +35,11 @@
                             '<div class="field" ng-show=\'editMode\'>' +
                                 '<textarea class="inline-edit" autocomplete="off" ng-model="editingValue" ng-keydown=\'editorKeyDown($event)\'></textarea>' +
                             '</div>' +
-                        '</div>' +
-                        '<div class=\'actions\'>' +
-                            '<span class=\'view-actions\' ng-hide=\'editMode\'>' +
-                                '<a ng-click=\'undo()\' ng-if="translation.changed" class="ajax delete" title="Undo changes">Undo changes</a>' +
-                                '<a ng-click=\'disapprove()\' ng-if="translation.voted" class="ajax unapprove" title="Remove approval">UnApprove</a>' +
-                                '<a ng-click=\'approve()\' ng-if="!translation.voted" class="ajax approve" title="Approve">Approve</a> ' +
+                        '</div>' +     
+                        '<div class=\'admin\'>' +
+                            '<span class=\'adminApproval\'>' +
+                                '<input type="checkbox" value="translation.Id" name="translationId" />' +
                             '</span>' +
-                            '<span class="edit-actions" ng-show=\'editMode\'>' +
-                                '<input ng-click=\'exitEditMode()\' class="save" type="button" value="&gt;" /> ' +
-                            '</span>' +
-                        '</div>' +                       
                     '</div>',
                 scope: {
                     translation: '='
@@ -84,33 +78,7 @@
                         $scope.value = $scope.editingValue;
                     };
 
-                    $scope.approve = function () {
-                        $scope.translation.approved = true;
-                        $scope.translation.Votes += 1;
-
-                        translationService.approve($scope.translation).then(function (result) {
-                            var changeSet = result.data;
-                            $rootScope.$broadcast('changesetUpdated', changeSet);
-                        });
-                    };
-
-                    $scope.disapprove = function () {
-                        $scope.translation.approved = false;
-                        $scope.translation.Votes -= 1;
-
-                        translationService.disapprove($scope.translation).then(function (result) {
-                            var changeSet = result.data;
-                            $rootScope.$broadcast('changesetUpdated', changeSet);
-                        });
-                    };
-
-                    $scope.editorKeyDown = function ($event) {
-                        if ($event.which == 9) { //tab key
-                            $scope.exitEditMode();
-
-                            $rootScope.$broadcast('leftEditMode', $element, $event.shiftKey ? 'prev' : 'next');
-                        }
-                    };
+                    
                 }
             };
         }]);

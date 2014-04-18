@@ -4,7 +4,6 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using ZiberTranslate.Web.Models;
-using ZiberTranslate.Web.ViewModels;
 using NHibernate;
 
 namespace ZiberTranslate.Web.Controllers

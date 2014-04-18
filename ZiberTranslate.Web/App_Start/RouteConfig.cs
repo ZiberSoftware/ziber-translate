@@ -45,6 +45,12 @@ namespace ZiberTranslate.Web.App_Start
                 defaults: new { controller = "Translation", action = "Index", language = "", setId = 0, filter = "All" }
             );
 
+            routes.MapRoute(
+                name: "AdminTranslations",
+                url: "admin/{setId}/review-translations-{language}",
+                defaults: new { controller = "Admin", action = "SetContent", language = "", setId = 0 }
+            );
+
             //fallback
             routes.MapRoute(
                 "Default", // Route name
