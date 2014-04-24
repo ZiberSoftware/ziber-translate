@@ -22,9 +22,17 @@ namespace ZiberTranslate.Web.Controllers
         {
             this.securityService = securityService;
         }        
+        
+        [HttpGet]
+        public ActionResult Login(string redirectUrl = "")
+        {
+            ViewBag.RedirectUrl = redirectUrl;
+
+            return View();
+        }
 
         [HttpPost]
-        public ActionResult Login(string emailAddress, string password)
+        public ActionResult Login(string emailAddress, string password, string redirectUrl = "")
         {
             var userHasAccount = securityService.Login(emailAddress, password);           
             
@@ -39,33 +47,21 @@ namespace ZiberTranslate.Web.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
 
             FormsAuthentication.SetAuthCookie(userHasAccount.Email, false);
-            
-            return new HttpStatusCodeResult(HttpStatusCode.OK);
-        }
 
-        [HttpPost]
-        public ActionResult Logout()
-        { 
-            FormsAuthentication.SignOut();
-          
-            return new HttpStatusCodeResult(200);
+            if (!string.IsNullOrEmpty(redirectUrl))
+            {
+                return Redirect(redirectUrl);
+            }
+
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpGet]
-        public ActionResult TranslatorRank()
-        {
-            var emailAddress = HttpContext.User.Identity.Name;
-            var translator = TranslatorService.FindByEmail(emailAddress);
+        public ActionResult Logout()
+        { 
+            FormsAuthentication.SignOut();
 
-            if (translator != null)
-            {
-                return Json(new
-                {
-                    rank = translator.Rank
-                }, JsonRequestBehavior.AllowGet);
-            }
-            else
-                return new EmptyResult();
+            return RedirectToAction("Index", "Home");
         }
     }
 }

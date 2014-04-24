@@ -1,7 +1,23 @@
-﻿<div ng-controller="AdminTranslationCtrl">
-    <ul id="table" class="translations">
-        <li ng-repeat="translation in translations">
-            <zbr-admin-translation translation="translation"></zbr-admin-translation>
-        </li>
-    </ul>
-</div>
+﻿<form name="adminForm" ng-submit="submit()" method="post" ng-controller ="AdminTranslationCtrl">
+    <section id="selectall">
+        <div class="float-box checkbox-right">
+            <span class="label">Selecteer alles</span>
+            <input type="checkbox" value="Selecteer Alle" />
+        </div>
+    </section>
+
+    <div>
+        <ul id="table" class="translations">
+            <li ng-repeat="translation in translations">
+                <zbr-admin-translation translation="translation"></zbr-admin-translation>
+            </li>
+        </ul>
+    </div>
+    <section id="adminsubmit">
+        <div class="float-box float-box-right">
+            <input type="submit"  class="button button-gray" value="Weiger vertaling(en)" />
+            <input type="submit"  class="button button-green" value="Accepteer & bewaar overige" />
+            <input type="submit"  class="button button-green" value="Accepteer & verwijder overige" />
+        </div>
+    </section>
+</form>

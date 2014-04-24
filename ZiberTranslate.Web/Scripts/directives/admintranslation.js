@@ -16,7 +16,7 @@
         });
     };
 
-    angular.module('Translate.Directives', ['pasvaz.bindonce'])
+    angular.module('Translate.Directives')
         .directive('zbrAdminTranslation', ['$rootScope', '$sce', 'AdminService', function ($rootScope, $sce, AdminService) {
             return {
                 restrict: 'AE',
@@ -30,55 +30,31 @@
                             '</span>' +
                         '</div>' +
                         '<div class=\'translation\'>' +
-                            '<p ng-show=\'asHtml && !editMode\' class="edit" ng-bind-html="valueAsHtml" ng-bind=\'value\' ng-click=\'editMode = true; editingValue = value\'></p>' +
-                            '<p ng-hide=\'asHtml || editMode\' class="edit" ng-bind="value" ng-bind=\'value\' ng-click=\'editMode = true; editingValue = value\'></p>' +
-                            '<div class="field" ng-show=\'editMode\'>' +
-                                '<textarea class="inline-edit" autocomplete="off" ng-model="editingValue" ng-keydown=\'editorKeyDown($event)\'></textarea>' +
+                            '<p class=\'values\' ng-bind-html="valueAsHtml" ng-bind=\'value\'></p>' +                          
+                        '</div>' +
+                        '<div class =\'userinfo\'>' +
+                            '<p class =\'translatorname\' ng-bind="translation.TranslatorName"></p>' +
+                        '</div>' +
+                        '<div class=\'adminCheckbox\'>' +
+                            '<div class=\'adminApproval\'>' +
+                                '<input type="checkbox" value="translation.TranslationId" ng-model="translation.TranslationId" name="translationId" />' +
                             '</div>' +
-                        '</div>' +     
-                        '<div class=\'admin\'>' +
-                            '<span class=\'adminApproval\'>' +
-                                '<input type="checkbox" value="translation.Id" name="translationId" />' +
-                            '</span>' +
+                        '</div>' +
                     '</div>',
                 scope: {
                     translation: '='
                 },
                 replace: true,
-                link: function ($scope, $element, $attr) {
+                link: function ($scope, $attr) {
                     $scope.value = $scope.translation.Value;
 
-                    var initial = true;
-                    $scope.$watch('editMode', function (newValue) {
-                        if (newValue) {
-                            var key = $element.find('.term');
-                            var editor = $element.find('textarea');
-                            editor.css('height', key.height()).setCaretPosition(0);
-                        }
-                    });
-
                     $scope.$watch('value', function (newValue, oldValue) {
-                        if (!initial) {
-                            $rootScope.$broadcast('translationChanged', $scope.translation, newValue);
-                        }
-
+                       
                         if (newValue != $scope.translation.LeadingValue) {
                             $scope.valueAsHtml = $sce.trustAsHtml(diffString($scope.translation.LeadingValue, newValue));
-                            $scope.asHtml = true;
-
-                            initial = false;
-                        } else {
-                            $scope.asHtml = false;
-                            initial = false;
                         }
-                    });
-
-                    $scope.exitEditMode = function () {
-                        $scope.editMode = false;
-                        $scope.value = $scope.editingValue;
-                    };
-
-                    
+                      
+                    });                   
                 }
             };
         }]);

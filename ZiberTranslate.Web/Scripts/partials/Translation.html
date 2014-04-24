@@ -8,19 +8,19 @@
     <section id="filters">
         <ul class="stats">
             <li class="needs-translation">
-                <a ng-bind="filters.needsTranslation" ng-click="currentFilter='needsTranslation'"></a>
+                <a ng-bind="filters.needsTranslation" ng-click="currentFilter='needsTranslation'" ng-class="{selected : currentFilter == 'needsTranslation', notselected : currentFilter != 'needsTranslation'}"></a>
                 <span class="label">Onvertaald</span>
             </li>
             <li class="needs-review">
-                <a ng-bind="filters.needsReview" ng-click="currentFilter='needsReview'"></a>
+                <a ng-bind="filters.needsReview" ng-click="currentFilter='needsReview'" ng-class="{selected : currentFilter == 'needsReview', notselected : currentFilter != 'needsReview'}"></a>
                 <span class="label">In afwachting</span>
             </li>
             <li class="reviewed">
-                <a ng-bind="filters.reviewed" ng-click="currentFilter='reviewed'"></a>
+                <a ng-bind="filters.reviewed" ng-click="currentFilter='reviewed'" ng-class="{selected : currentFilter == 'reviewed', notselected : currentFilter != 'reviewed'}"></a>
                 <span class="label">Beoordeeld</span>
             </li>
             <li class="all">
-                <a ng-bind="filters.total" ng-click="currentFilter='all'"></a>
+                <a ng-bind="filters.total" ng-click="currentFilter='all'" ng-class="{selected : currentFilter == 'all', notselected : currentFilter != 'all'}"></a>
                 <span class="label">Totaal</span>
             </li>
         </ul>

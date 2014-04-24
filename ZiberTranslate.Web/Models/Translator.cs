@@ -14,6 +14,14 @@ namespace ZiberTranslate.Web.Models
         public virtual int Rank { get; set; }
         public virtual bool IsBlocked { get; set; }
 
+        public virtual bool IsAdmin
+        {
+            get
+            {
+                return Rank == 0;
+            }
+        }
+
         public virtual Iesi.Collections.Generic.ISet<Translation> Translations { get; set; }
         public virtual Iesi.Collections.Generic.ISet<Translator> Translators { get; set; }
     }

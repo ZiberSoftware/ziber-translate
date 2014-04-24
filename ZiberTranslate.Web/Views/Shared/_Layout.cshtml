@@ -11,10 +11,10 @@
         <header id="header" ng-hide="!!hideHeader" ng-controller="HeaderCtrl" bindonce>
             <div class="float-box float-box-right">
                 <span  class="username" bo-text="user.username"></span>
-                <a class="button button-lightblue" href="#/admin" ng-if="isAdminRank">Admin Review</a>
-                <a class="button button-lightblue" ng-click="login()" ng-if="isAuthenticated==false">Login</a>
-                <a class="button button-lightblue" ng-click="logout()" ng-if="isAuthenticated">Logout</a>
-                <a class="button button-lightblue">Instellingen</a>
+                <a class="button button-lightblue" href="#/admin" ng-if="user.isAdmin">Admin Review</a>
+                <a class="button button-lightblue" ng-click="login()" ng-if="isAuthenticated==false">Inloggen</a>
+                <a class="button button-lightblue" ng-click="logout()" ng-if="isAuthenticated">Uitloggen</a>
+                <a class="button button-lightblue" ng-if="isAuthenticated">Instellingen</a>
             </div>
         </header>
         <section id="page">

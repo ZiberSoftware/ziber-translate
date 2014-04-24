@@ -4,16 +4,17 @@
             <span>The world is not enough</span>
             <span>Ziber Translate</span>
         </div>
-        <ng-form name="loginForm" ng-controller="LoginCtrl">
+        <form name="loginForm" action="@Url.Action("Login", "Security")" method="post">
+            <input type="hidden" name="redirectUrl" value="@ViewBag.RedirectUrl"/>
             <div class="wrapper">
                 <label>Gebruikersnaam</label>
-                <input type="email" ng-model="user.username" ng-required="true"/>
+                <input type="email" name="emailAddress" required="true" />
             </div>
             <div class="wrapper">
                 <label>Wachtwoord</label>
-                <input type="password" ng-model="user.password" ng-required="true"/>
-                <input type="submit" ng-click="login(user)"/>
+                <input type="password" name="password" required="true" />
+                <input type="submit" />
             </div>
-        </ng-form>
+        </form>
     </div>
 </section>

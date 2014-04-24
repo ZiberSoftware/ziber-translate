@@ -20,6 +20,12 @@ namespace ZiberTranslate.Web.Controllers
             {
                 ViewBag.IsAuthenticated = true;
                 ViewBag.Username = HttpContext.User.Identity.Name;
+                
+
+                var emailAddress = HttpContext.User.Identity.Name;
+                var translator = TranslatorService.FindByEmail(emailAddress);
+
+                ViewBag.IsAdmin = translator.IsAdmin;
             }
             else
             {

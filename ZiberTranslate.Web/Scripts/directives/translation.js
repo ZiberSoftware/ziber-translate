@@ -16,7 +16,7 @@
         });
     };
 
-    angular.module('Translate.Directives', ['pasvaz.bindonce'])
+    angular.module('Translate.Directives')
         .directive('zbrTranslation', ['$rootScope', '$sce', 'TranslationService', function ($rootScope, $sce, translationService) {
             return {
                 restrict: 'AE',

@@ -26,8 +26,7 @@
                 });
             });
 
-            $scope.currentFilter = 'all';
-            $scope.isAdmin = false;
+            $scope.currentFilter = 'all';            
 
             $scope.$watch('currentFilter', function () {
                 
@@ -58,7 +57,7 @@
 
             $scope.checkUser = function () {
                 if (!authService.isLoggedIn()) {
-                    $location.search('redirectUrl', $location.path()).path('/login');
+                    window.location = '/Security/Login?redirectUrl=' + encodeURIComponent('/#' + $location.path());
                 }
             };
             
@@ -99,26 +98,6 @@
             AdminService.reviewTranslations($routeParams['id'], $routeParams['language']).then(function (data) {
                 $scope.translations = data.setContent;
             });
-        }])
-        .controller('LoginCtrl', ['$scope', '$http', '$location', '$rootScope', 'AuthenticationService', function ($scope, $http, $location, $rootScope, authService) {
-            //$rootScope.hideHeader = true;
-            
-            $scope.login = function(user) {
-                $http.post('/Security/Login', { emailAddress: user.username, password: user.password })
-                    .success(function() {
-                        authService.login(user);
-
-                        var redirectUrl = $location.search().redirectUrl;
-                        
-                        if (redirectUrl) {
-                            $location.url(redirectUrl);
-                        }
-                        else
-                            $location.path('/');
-                    }).error(function() {
-                        //TODO: implement error handling
-                    });
-            };
         }])
         .controller('InitCtrl', ['UserConfig', 'AuthenticationService', function(userconfig, authService) {
             if (userconfig.authenticated) {

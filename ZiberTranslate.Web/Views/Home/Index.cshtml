@@ -11,7 +11,8 @@
                 return {
                     authenticated: @(ViewBag.IsAuthenticated.ToString().ToLower()),
                     user: {
-                        username: '@ViewBag.Username'
+                        username: '@ViewBag.Username',
+                        isAdmin : @(ViewBag.IsAdmin == true ? "true" : "false")
                     }
                 };
             });
