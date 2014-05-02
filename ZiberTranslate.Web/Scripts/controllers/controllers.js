@@ -7,7 +7,7 @@
             service.sets().then(function(sets) {
                 $scope.sets = sets;
             });
-
+            $scope.currentFilter = 'all';
             $scope.language = 'nl';
         }])
         .controller('TranslationCtrl', ['$scope', '$routeParams', '$http', '$location', 'TranslationService', 'AuthenticationService', function ($scope, $routeParams, $http, $location, service, authService) {
@@ -19,18 +19,16 @@
             //fires when a translation for a user changes
             $scope.$on('translationChanged', function(e, translation, newValue) {
                 translation.Value = newValue;
-                service.update(translation).then(function (result) {
+                service.update(translation, $routeParams['language']).then(function (result) {
                     var changeSet = result.data;
 
                     $scope.$broadcast('changesetUpdated', changeSet);
                 });
-            });
-
-            $scope.currentFilter = 'all';            
+            });                      
+            $scope.currentFilter = $routeParams['filter'];
 
             $scope.$watch('currentFilter', function () {
-                
-                $scope.filter($scope.currentFilter);
+                $location.path('/sets/' + $routeParams['id'] + '/translations/' + $routeParams['language'] + '/' + $scope.currentFilter + '/' + $routeParams['page']);
             }, true);            
 
             $scope.$on('changesetUpdated', function (changeset) {
@@ -43,7 +41,7 @@
             }
 
             $scope.gotoPage = function (page) {
-                $location.path('/sets/' + $routeParams['id'] + '/translations/' + $routeParams['language'] + '/' + page);
+                $location.path('/sets/' + $routeParams['id'] + '/translations/' + $routeParams['language'] + '/' + $routeParams['filter'] + '/' + page);
             };
 
             $scope.filter = function(filter) {
@@ -95,9 +93,51 @@
         }])
         .controller('AdminTranslationCtrl', ['$rootScope', '$scope', '$http', '$routeParams', '$location', 'AdminService', function ($rootScope, $scope, $http, $routeParams, $location, AdminService) {           
 
-            AdminService.reviewTranslations($routeParams['id'], $routeParams['language']).then(function (data) {
+            AdminService.getReviewTranslations($routeParams['id'], $routeParams['language']).then(function (data) {
                 $scope.translations = data.setContent;
             });
+
+            $scope.removeSelected = function () {
+                var filtered = [];
+                angular.forEach($scope.translations, function (translation) {
+                    if (translation.checked) {
+                        filtered.push(translation.TranslationId);
+                    }
+                })
+                AdminService.removeTranslations($routeParams['id'], $routeParams['language'], filtered).then(function () {
+                    $location.path('/sets');
+                });
+                //submit array to /Admin/Submit
+                console.log(filtered);
+            };
+            $scope.acceptKeep = function () {
+                var filtered = [];
+                angular.forEach($scope.translations, function (translation) {
+                    if (translation.checked) {
+                        filtered.push(translation.TranslationId);
+                    }
+                })
+                AdminService.acceptKeepTranslations($routeParams['id'], $routeParams['language'], filtered).then(function () {
+                    $location.path('/sets');
+                });
+                //submit array to /Admin/Submit
+                console.log(filtered);
+            };
+            $scope.acceptRemove = function () {
+                var filtered = [];
+                angular.forEach($scope.translations, function (translation) {
+                    if (translation.checked) {
+                        filtered.push(translation.TranslationId);
+                    }
+                })
+                AdminService.acceptRemoveTranslations($routeParams['id'], $routeParams['language'], filtered).then(function () {
+                    $location.path('/sets');
+                });
+                //submit array to /Admin/Submit
+                console.log(filtered);
+            };
+          
+
         }])
         .controller('InitCtrl', ['UserConfig', 'AuthenticationService', function(userconfig, authService) {
             if (userconfig.authenticated) {

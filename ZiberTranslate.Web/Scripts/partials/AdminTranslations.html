@@ -1,13 +1,13 @@
-﻿<form name="adminForm" ng-submit="submit()" method="post" ng-controller ="AdminTranslationCtrl">
+﻿<form name="adminForm" method="post" ng-controller ="AdminTranslationCtrl">
     <section id="selectall">
         <div class="float-box checkbox-right">
             <span class="label">Selecteer alles</span>
-            <input type="checkbox" value="Selecteer Alle" />
+            <input type="checkbox" value="Selecteer Alle" ng-click="selectAll()" />
         </div>
     </section>
 
     <div>
-        <ul id="table" class="translations">
+        <ul id="tableadmin" class="translations">
             <li ng-repeat="translation in translations">
                 <zbr-admin-translation translation="translation"></zbr-admin-translation>
             </li>
@@ -15,9 +15,9 @@
     </div>
     <section id="adminsubmit">
         <div class="float-box float-box-right">
-            <input type="submit"  class="button button-gray" value="Weiger vertaling(en)" />
-            <input type="submit"  class="button button-green" value="Accepteer & bewaar overige" />
-            <input type="submit"  class="button button-green" value="Accepteer & verwijder overige" />
+            <button ng-click="removeSelected()"  class="button button-gray">Weiger vertaling(en)</button>
+            <button ng-click="acceptKeep()"  class="button button-green">Accepteer & bewaar overige</button>
+            <button ng-click="acceptRemove()"  class="button button-green">Accepteer & verwijder overige</button>
         </div>
     </section>
 </form>

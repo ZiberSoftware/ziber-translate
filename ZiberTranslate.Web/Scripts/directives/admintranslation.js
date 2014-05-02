@@ -37,7 +37,7 @@
                         '</div>' +
                         '<div class=\'adminCheckbox\'>' +
                             '<div class=\'adminApproval\'>' +
-                                '<input type="checkbox" value="translation.TranslationId" ng-model="translation.TranslationId" name="translationId" />' +
+                                '<input type="checkbox" value="translation.TranslationId" ng-model="translation.checked" name="translationId" />' +
                             '</div>' +
                         '</div>' +
                     '</div>',

@@ -41,6 +41,7 @@ em {
 }
 #change-set.summary {
   display: inline-block;
+  padding-left: 20px;
 }
 #change-set.summary h3 {
   font-weight: normal;
@@ -86,8 +87,47 @@ em {
 .float-box.checkbox-right {
   float: right;
 }
+#translatetable
+{
+    position:absolute;
+    width: 100%;
+}
+#sets
+{ 
+    width: 30%;
+    display: block;
+    float: left;
+}
+#languageoptions
+{
+    border-bottom: 1px solid #cccccc;
+}
+#languageoptions p
+{
+    font-size: 12px;
+    padding: 5px 5px 5px 10px;
+    display: inline-block;
+    margin: 5px;
+}
+.dropdown
+{
+    display: inline-block;
+    margin: 5px;
+}
 #table {
-    padding-left: 10px;
+    padding-left: 0px;
+    margin: 0pt;
+    display: block;
+    float: left;
+    width: 70%;
+    border-right: 1px solid #cccccc;    
+    -webkit-box-sizing:border-box;
+    -ms-box-sizing:border-box;
+    -moz-box-sizing:border-box;
+    box-sizing:border-box;
+}
+#tableadmin {
+    padding-left: 0px;
     margin: 0pt;
 }
 #selectall {
@@ -101,6 +141,9 @@ em {
 #filters {
   padding: 20px;
   border-bottom: 1px solid #cccccc;
+}
+#filters .stats {
+    padding-left:0px;
 }
 #filters .stats li {
   display: inline-block;
@@ -144,7 +187,7 @@ em {
     opacity: 0.6;
 }
 .translations {
-  width: calc(100%-10px);
+  width: 100%;
   color: #333;
   font-size: 12px;
   list-style: none;
@@ -152,6 +195,7 @@ em {
 .translations .translation-root {
   border-bottom: 1px dotted #CCC;
   padding: 5px;
+  padding-left: 10px;
 }
 .translations .translation-root > div {
   display: inline-block;
@@ -341,6 +385,11 @@ em {
   width: 50%;
   height: 150px;
   position: relative;
+}
+.pagination 
+{
+    width: 70%;
+    display: block;
 }
 .pagination .page {
   display: inline-block;

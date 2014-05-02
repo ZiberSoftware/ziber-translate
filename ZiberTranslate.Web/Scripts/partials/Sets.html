@@ -1,7 +1,18 @@
-﻿<ul id="translate-sets" ng-controller="SetsCtrl">
+﻿<div ng-controller="SetsCtrl">
+    <section id="languageoptions">
+        Vertalen naar:
+        <select class="dropdown" ng-model="language">
+            <option value="nl">Nederlands</option>
+            <option value="en">Engels</option>
+            <option value="de">Duits</option>
+        </select>
+    </section>
 
-    <li ng-repeat="set in sets">
-        <a ng-bind="set.name" ng-href="#/sets/{{set.id}}/translations/nl/1"></a>
-    </li>
-    
-</ul>
+    <ul id="translate-sets">
+
+        <li ng-repeat="set in sets">
+            <a ng-bind="set.name + ' (' + language + ')'" ng-href="#/sets/{{set.id}}/translations/{{language}}/{{currentFilter}}/1"></a>
+        </li>
+
+    </ul>
+</div>

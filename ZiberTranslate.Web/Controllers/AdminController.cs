@@ -33,7 +33,7 @@ namespace ZiberTranslate.Web.Controllers
 
             var setsWithReviews = new Admin() { ChangedSets = setsWithChanges.Distinct() };
 
-            return Json(new 
+            return Json(new
                 {
                     setsWithReviews
                 }, JsonRequestBehavior.AllowGet);
@@ -44,67 +44,117 @@ namespace ZiberTranslate.Web.Controllers
         {
             var setContent = BuildSetContent(setId, language);
 
-            return Json(new 
-                { 
-                    setContent 
+            return Json(new
+                {
+                    setContent
                 }, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
+        public ActionResult Remove(string language, int setId, int[] TranslationId)
+        {
+            using (var t = DbSession.BeginTransaction())
+            {
+                foreach (var id in TranslationId)
+                {
+                    DbSession.Delete(TranslationService.FindById(id));
+                }
+                t.Commit();
+            }
 
-        public ActionResult Submit (string language, int setId, int[] TranslationId=null)
+
+            return new EmptyResult();
+        }
+
+        [HttpPost]
+        public ActionResult AcceptKeep(string language, int setId, int[] TranslationId)
+        {
+            using (var t = DbSession.BeginTransaction())
+            {
+                foreach (var id in TranslationId)
+                {
+                    var translationsToBeApproved = TranslationService.FindById(id);
+                    var leading = TranslationService.FindByKey(translationsToBeApproved.Key.Id, language);
+                    if (leading != null)
+                    {
+                        if (translationsToBeApproved.NeedsAdminReviewing && translationsToBeApproved.Value != leading.Value)
+                        {
+                            leading.Value = translationsToBeApproved.Value;
+
+                            DbSession.Update(leading);
+                            DbSession.Delete(translationsToBeApproved);
+                        }
+                    }
+
+                    else
+                    {
+                        // check if translation still needs adminreviewing(in case 2 admins are reviewing)
+                        if (translationsToBeApproved.NeedsAdminReviewing)
+                        {
+                            leading = translationsToBeApproved;
+                            leading.Translator = null;
+                            leading.NeedsAdminReviewing = false;
+
+                            DbSession.Save(leading);
+                        }
+                    }
+                }
+                t.Commit();
+            }
+            return new EmptyResult();
+        }
+
+        [HttpPost]
+        public ActionResult AcceptRemove(string language, int setId, int[] TranslationId)
         {
             using (var t = DbSession.BeginTransaction())
             {
                 if (TranslationId == null)
                 {
-
-                    var translationsToBeDisapproved = DbSession.CreateCriteria<Translation>()
-                    .CreateAlias("Key", "k")
-                    .CreateAlias("Language", "l")
-                    .Add(Restrictions.Eq("k.Set.Id", setId))
-                    .Add(Restrictions.Eq("NeedsAdminReviewing", true))
-                    .Add(Restrictions.Eq("l.IsoCode", language))
-                    .List<Translation>();
-
-                    foreach (var translation in translationsToBeDisapproved)
+                    var translationsToBeRemoved = DbSession.CreateCriteria<Translation>()
+                                    .CreateAlias("Key", "k")
+                                    .CreateAlias("Language", "l")
+                                    .Add(Restrictions.Eq("k.Set.Id", setId))
+                                    .Add(Restrictions.Eq("NeedsAdminReviewing", true))
+                                    .Add(Restrictions.Eq("l.IsoCode", language))
+                                    .List<Translation>();
+                    foreach (var translation in translationsToBeRemoved)
                     {
                         DbSession.Delete(translation);
                     }
                 }
-
                 else
                 {
                     foreach (var id in TranslationId)
                     {
-                        var translationsToBeApproved = TranslationService.FindById(id);
-                        var leading = TranslationService.FindByKey(translationsToBeApproved.Key.Id, language);
+                        var translationsToBeAccepted = TranslationService.FindById(id);
+                        var leading = TranslationService.FindByKey(translationsToBeAccepted.Key.Id, language);
                         if (leading != null)
                         {
-                            if (translationsToBeApproved.NeedsAdminReviewing && translationsToBeApproved.Value != leading.Value)
+                            if (translationsToBeAccepted.NeedsAdminReviewing && translationsToBeAccepted.Value != leading.Value)
                             {
-                                leading.Value = translationsToBeApproved.Value;
+                                leading.Value = translationsToBeAccepted.Value;
 
                                 DbSession.Update(leading);
-                                DbSession.Delete(translationsToBeApproved);
+                                DbSession.Delete(translationsToBeAccepted);
                             }
                         }
 
                         else
                         {
                             // check if translation still needs adminreviewing(in case 2 admins are reviewing)
-                            if (translationsToBeApproved.NeedsAdminReviewing)
+                            if (translationsToBeAccepted.NeedsAdminReviewing)
                             {
-                                leading = translationsToBeApproved;
+                                leading = translationsToBeAccepted;
                                 leading.Translator = null;
                                 leading.NeedsAdminReviewing = false;
 
                                 DbSession.Save(leading);
                             }
                         }
-
                     }
 
-                    var translationsToBeDisapproved = DbSession.CreateCriteria<Translation>()
+                    var translationsToBeRemoved = DbSession.CreateCriteria<Translation>()
                     .CreateAlias("Key", "k")
                     .CreateAlias("Language", "l")
                     .Add(Restrictions.Eq("k.Set.Id", setId))
@@ -112,17 +162,16 @@ namespace ZiberTranslate.Web.Controllers
                     .Add(Restrictions.Eq("l.IsoCode", language))
                     .List<Translation>();
 
-                    foreach (var translation in translationsToBeDisapproved)
+                    foreach (var translation in translationsToBeRemoved)
                     {
                         DbSession.Delete(translation);
                     }
-
-                } 
+                }
                 t.Commit();
-                
             }
-            return RedirectToAction("Index");
+            return new EmptyResult();
         }
+
 
         public IEnumerable<Admin.SetContent> BuildSetContent(int id, string language)
         {
@@ -170,7 +219,7 @@ namespace ZiberTranslate.Web.Controllers
 
                 yield return c;
             }
-            
+
         }
     }
 }

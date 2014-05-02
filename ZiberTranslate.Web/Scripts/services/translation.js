@@ -10,7 +10,7 @@
                     });
                 },
                 translations: function (setId, language, filter, page) {                
-                    
+                   
                     if (typeof(page) === 'undefined') {
                         page = 1;
                     }
@@ -23,14 +23,14 @@
                         return response.data;
                     });
                 },
-                update: function (translation) {
-                    return $http.post('sets/' + translation.SetId + '/translations-nl/' + translation.KeyId + '/update', { value: translation.Value });
+                update: function (translation, language) {
+                    return $http.post('sets/' + translation.SetId + '/translations-' + language + '/' + translation.KeyId + '/update', { value: translation.Value });
                 },
-                approve: function (translation) {
-                    return $http.post('sets/' + translation.SetId + '/translations-nl/' + translation.KeyId + '/approve', { value: translation.Value });
+                approve: function (translation, language) {
+                    return $http.post('sets/' + translation.SetId + '/translations-' + language + '/' + translation.KeyId + '/approve', { value: translation.Value });
                 },
-                disapprove: function (translation) {
-                    return $http.post('sets/' + translation.SetId + '/translations-nl/' + translation.KeyId + '/disapprove', { value: translation.Value });
+                disapprove: function (translation, language) {
+                    return $http.post('sets/' + translation.SetId + '/translations-' + language + '/' + translation.KeyId + '/disapprove', { value: translation.Value });
                 }
             };
         }])
@@ -56,10 +56,21 @@
                         return result.data;
                     });
                 },
-                reviewTranslations: function (setId, language) {
+                getReviewTranslations: function (setId, language) {
                     return $http.get('/admin/' + setId + '/review-translations-' + language).then(function (response) {
                         return response.data;
                     });
+                },
+                removeTranslations: function (setId, language, translationId) {
+                    return $http.post('/Admin/Remove?language=' + language + '&setId=' + setId + '&translationId=' + translationId);
+                },
+                acceptKeepTranslations: function (setId, language, translationId) {
+                    return $http.post('/Admin/AcceptKeep?language=' + language + '&setId=' + setId + '&translationId=' + translationId);
+                },
+                acceptRemoveTranslations: function (setId, language, translationId) {
+                    if (translationId.length == 0)
+                        translationId = null;
+                    return $http.post('/Admin/AcceptRemove?language=' + language + '&setId=' + setId + '&translationId=' + translationId);
                 }
            };
         }])

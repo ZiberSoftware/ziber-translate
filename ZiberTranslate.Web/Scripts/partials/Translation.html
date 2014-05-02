@@ -20,20 +20,39 @@
                 <span class="label">Beoordeeld</span>
             </li>
             <li class="all">
-                <a ng-bind="filters.total" ng-click="currentFilter='all'" ng-class="{selected : currentFilter == 'all', notselected : currentFilter != 'all'}"></a>
+                <a ng-bind="filters.total" ng-click="currentFilter='all'" ng-class="{selected : currentFilter == 'all' || currentFilter == '', notselected : currentFilter != 'all'}"></a>
                 <span class="label">Totaal</span>
             </li>
         </ul>
     </section>
-    
-    
-    <ul id="table" class="translations">
-        <li ng-repeat="translation in translations" ng-click="checkUser()">
-            <zbr-translation translation="translation"></zbr-translation>
-        </li>
-    </ul>
 
-    <div class="pagination">
-        <a class="page" ng-repeat="page in pages" ng-bind="page" ng-class="{selected : page == currentPage}" ng-click="gotoPage(page)" ></a>
+    <div id="translatetable" ng-controller="TranslationCtrl">
+        <ul id="table" class="translations">
+            <li ng-repeat="translation in translations" ng-click="checkUser()">
+                <zbr-translation translation="translation"></zbr-translation>
+            </li>
+        </ul>
+        <div id="sets" ng-controller="SetsCtrl">
+            <section id="languageoptions">
+                <p>Vertalen naar:</p>
+                <select class="dropdown" ng-model="language">
+                    <option value="nl">Nederlands</option>
+                    <option value="en">Engels</option>
+                    <option value="de">Duits</option>
+                </select>
+            </section>
+
+            <ul id="translate-sets">
+
+                <li ng-repeat="set in sets">
+                    <a ng-bind="set.name + ' (' + language + ')'" ng-href="#/sets/{{set.id}}/translations/{{language}}/{{currentFilter}}/1"></a>
+                </li>
+
+            </ul>
+
+        </div>
+        <div class="pagination">
+            <a class="page" ng-repeat="page in pages" ng-bind="page" ng-class="{selected : page == currentPage}" ng-click="gotoPage(page)"></a>
+        </div>
     </div>
 </div>

@@ -17,7 +17,7 @@
     };
 
     angular.module('Translate.Directives')
-        .directive('zbrTranslation', ['$rootScope', '$sce', 'TranslationService', function ($rootScope, $sce, translationService) {
+        .directive('zbrTranslation', ['$rootScope', '$sce', '$routeParams', 'TranslationService', function ($rootScope, $sce, $routeParams, translationService) {
             return {
                 restrict: 'AE',
                 template:
@@ -88,7 +88,7 @@
                         $scope.translation.approved = true;
                         $scope.translation.Votes += 1;
 
-                        translationService.approve($scope.translation).then(function (result) {
+                        translationService.approve($scope.translation, $routeParams['language']).then(function (result) {
                             var changeSet = result.data;
                             $rootScope.$broadcast('changesetUpdated', changeSet);
                         });
@@ -98,7 +98,7 @@
                         $scope.translation.approved = false;
                         $scope.translation.Votes -= 1;
 
-                        translationService.disapprove($scope.translation).then(function (result) {
+                        translationService.disapprove($scope.translation, $routeParams['language']).then(function (result) {
                             var changeSet = result.data;
                             $rootScope.$broadcast('changesetUpdated', changeSet);
                         });

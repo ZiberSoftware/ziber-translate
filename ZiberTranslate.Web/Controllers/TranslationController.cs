@@ -113,7 +113,7 @@ namespace ZiberTranslate.Web.Controllers
                             Value = userTranslation == null ? string.Empty : userTranslation.Value,
                             LeadingValue = leadingTranslation == null ? neutralTranslation.Value : leadingTranslation.Value,
                             Votes = leadingTranslation == null ? 0 : userTranslation.Votes,
-                            UserVotes = userTranslation.UserVotes,
+                            UserVotes = userTranslation == null ? 0 : userTranslation.UserVotes,
                             Voted = votedOnKeys.Contains(key.Id),
                             SetId = id
                         }
